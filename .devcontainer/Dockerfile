@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 
-FROM ubuntu:24.04
+FROM debian:trixie
 
 # =============================================================================
 # Toolchain setup
@@ -50,14 +50,15 @@ RUN echo "deb [trusted=yes] http://apt.llvm.org/noble/ llvm-toolchain-noble-21 m
 # =============================================================================
 # User setup
 # =============================================================================
-ENV UBUNTU_USER=ubuntu
+ARG USERNAME=dev
 
-# Allow ubuntu user to run sudo without password
-RUN echo "${UBUNTU_USER} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${UBUNTU_USER} \
-    && chmod 0440 /etc/sudoers.d/${UBUNTU_USER}
+RUN useradd -m $USERNAME \
+    && echo "$USERNAME ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME \
+    && chmod 0440 /etc/sudoers.d/$USERNAME \
+    && usermod -a -G dialout,plugdev $USERNAME
 
-# Switch to ubuntu user
-USER ${UBUNTU_USER}
+USER $USERNAME
+ENV SHELL=/bin/bash
 
 # Set default shell
 SHELL ["/bin/bash", "-c"]
@@ -67,8 +68,6 @@ RUN echo "=== Development Environment ===" \
     && echo "GCC: $(gcc --version | head -1)" \
     && echo "CMake: $(cmake --version | head -1)" \
     && echo "Ninja: $(ninja --version)" \
-    && echo "ARM GCC: $(arm-none-eabi-gcc --version | head -1)" \
-    && echo "Flutter: $(flutter --version | head -1)" \
     && echo "================================"
 
 # Default command
