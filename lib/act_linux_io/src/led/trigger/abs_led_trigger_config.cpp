@@ -15,41 +15,46 @@
 /* # Extern includes: Global */
 #include <optional>
 
-/* # Constructors */
-
-AbsLedTriggerConfig::AbsLedTriggerConfig(std::string name)
-    : m_name(std::move(name))
+namespace act::linux_io
 {
-}
 
-/* # Methods */
+    /* # Constructors */
 
-bool AbsLedTriggerConfig::isLedAlreadyConfigured(const LinuxLed &led) const
-{
-    return led.hasAnyTrigger() && (led.getTrigger().value() == m_name);
-}
-
-bool AbsLedTriggerConfig::applyToLeds(const std::vector<std::reference_wrapper<LinuxLed>> &leds,
-                                      bool force) const
-{
-    bool success = true;
-
-    // Prepare all LEDs first
-    for (auto &ledRef : leds)
+    AbsLedTriggerConfig::AbsLedTriggerConfig(std::string name)
+        : m_name(std::move(name))
     {
-        success &= prepareLed(ledRef.get(), force);
     }
 
-    // Then fire trigger over all LEDs
-    for (auto &ledRef : leds)
+    /* # Methods */
+
+    bool AbsLedTriggerConfig::isLedAlreadyConfigured(const LinuxLed &led) const
     {
-        success &= fireOnLed(ledRef.get());
+        return led.hasAnyTrigger() && (led.getTrigger().value() == m_name);
     }
 
-    return success;
-}
+    bool AbsLedTriggerConfig::applyToLeds(const std::vector<std::reference_wrapper<LinuxLed>> &leds,
+                                          bool force) const
+    {
+        bool success = true;
 
-bool AbsLedTriggerConfig::prepareLed(LinuxLed &led, bool force) const
-{
-    return led.setTrigger(m_name, force) && prepareLedExtra(led);
-}
+        // Prepare all LEDs first
+        for (auto &ledRef : leds)
+        {
+            success &= prepareLed(ledRef.get(), force);
+        }
+
+        // Then fire trigger over all LEDs
+        for (auto &ledRef : leds)
+        {
+            success &= fireOnLed(ledRef.get());
+        }
+
+        return success;
+    }
+
+    bool AbsLedTriggerConfig::prepareLed(LinuxLed &led, bool force) const
+    {
+        return led.setTrigger(m_name, force) && prepareLedExtra(led);
+    }
+
+} // namespace act::linux_io
