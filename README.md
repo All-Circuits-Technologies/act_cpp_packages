@@ -61,9 +61,11 @@ locking.
 
 ### [`act_sqlite`](lib/act_sqlite)
 
-SQLite database management library providing database abstraction layer, connection management, and logging integration.
+SQLite database management library providing database abstraction layer, connection management, and
+logging integration.
 
 **Features:**
+
 - Database connection management
 - Query execution helpers
 - Logging integration for database operations
@@ -92,6 +94,7 @@ Linux-specific I/O library for GPIO control and LED management via sysfs and lib
 Each library has its own dependencies. Refer to individual library READMEs for specific requirements.
 
 Common dependencies include:
+
 - libgpiod (for `act_linux_io`)
 - SQLite3 (for `act_sqlite`)
 - nlohmann-json (for JSON utilities in `act_misc`)
@@ -132,7 +135,8 @@ target_link_libraries(your_target PRIVATE act_logger)
 
 ### Development Container
 
-A development container configuration is provided in [`.devcontainer/`](.devcontainer/) for VSCode with all required tools and dependencies pre-installed.
+A development container configuration is provided in [`.devcontainer/`](.devcontainer/) for VSCode
+with all required tools and dependencies pre-installed.
 
 ### Code Style
 
@@ -142,11 +146,14 @@ A development container configuration is provided in [`.devcontainer/`](.devcont
 
 ## License
 
-This project is licensed under the AllCircuits ACT License 1.1. See [LICENSES/LicenseRef-ALLCircuits-ACT-1.1.txt](LICENSES/LicenseRef-ALLCircuits-ACT-1.1.txt) for details.
+This project is licensed under the AllCircuits ACT License 1.1. See
+[LICENSES/LicenseRef-ALLCircuits-ACT-1.1.txt](LICENSES/LicenseRef-ALLCircuits-ACT-1.1.txt) for
+details.
 
 ## Contributing
 
-This is an internal All-Circuits Technologies repository. For contribution guidelines, please contact the development team.
+This is an internal All-Circuits Technologies repository. For contribution guidelines, please
+contact the development team.
 
 ## Maintainers
 
