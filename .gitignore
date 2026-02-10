@@ -8,6 +8,9 @@ Build/
 cmake-build-*/
 out/
 
+# Ignore clang cache
+.cache/
+
 # CMake files
 CMakeCache.txt
 CMakeFiles/
