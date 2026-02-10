@@ -18,7 +18,6 @@
 
 /* # Forward declaration */
 
-
 /**
  * @brief This class helps registering and unregistering non-keyed callbacks.
  * @note A default global key is used to store all callbacks.
@@ -85,4 +84,3 @@ inline void CallbacksRegister<CallbackArgs...>::callCallbacks(CallbackArgs &&...
 {
     this->callCallbacksForKey(GLOBAL_KEY, std::forward<CallbackArgs>(args)...);
 }
-

@@ -16,7 +16,6 @@
 
 /* # Forward declaration */
 
-
 /** @brief This is the status of the Firmware update */
 class LogsLevel : private NotCopiableNotMovable
 {
@@ -103,4 +102,3 @@ class LogsLevel : private NotCopiableNotMovable
     /** @brief String representation of the none level */
     static constexpr const char *NONE_STR = "NONE";
 };
-

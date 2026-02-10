@@ -18,7 +18,6 @@
 
 /* # Forward declaration */
 
-
 /**
  * @brief This class helps registering and unregistering callbacks associated with keys.
  * @tparam K Type of keys
@@ -284,4 +283,3 @@ inline void KeyedCallbacksRegister<K, CallbackArgs...>::callCallbacksOnPred(
         }
     }
 }
-

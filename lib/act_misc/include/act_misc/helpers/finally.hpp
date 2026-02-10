@@ -17,7 +17,6 @@
 
 /* # Forward declaration */
 
-
 class AbsLogger;
 
 /**
@@ -99,4 +98,3 @@ class Finally
      */
     AbsLogger &m_logger;
 };
-

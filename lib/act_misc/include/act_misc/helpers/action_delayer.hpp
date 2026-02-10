@@ -17,7 +17,6 @@
 
 /* # Forward declaration */
 
-
 class AbsLogger;
 class RestartableTimer;
 
@@ -124,4 +123,3 @@ class ActionDelayer
     /** @brief Optional timer for the maximum delay */
     RestartableTimer *m_maxDelayRestartableTimer{nullptr};
 };
-

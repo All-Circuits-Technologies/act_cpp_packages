@@ -15,7 +15,6 @@
 
 /* # Forward declaration */
 
-
 class ReusableThreadResult : private NotCopiableNotMovable
 {
   public:
@@ -27,4 +26,3 @@ class ReusableThreadResult : private NotCopiableNotMovable
         INTERNAL_ERROR
     };
 };
-

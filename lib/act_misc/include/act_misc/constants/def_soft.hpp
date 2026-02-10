@@ -18,7 +18,6 @@
 
 /* # Forward declaration */
 
-
 #define OFF 0
 #define ON 1
 
@@ -75,4 +74,3 @@ namespace HexConstants
     /** @brief Base used for hexadecimal conversion */
     constexpr int HEXADECIMAL_BASE = 16;
 } /* namespace HexConstants */
-

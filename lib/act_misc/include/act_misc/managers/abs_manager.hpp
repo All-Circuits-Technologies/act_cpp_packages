@@ -15,7 +15,6 @@
 
 /* # Forward declaration */
 
-
 /** @brief Managers shared behavior */
 class AbsManager : private NotCopiableNotMovable
 {
@@ -32,4 +31,3 @@ class AbsManager : private NotCopiableNotMovable
      */
     virtual bool init(void) = 0;
 };
-

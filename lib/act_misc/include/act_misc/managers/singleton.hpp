@@ -6,7 +6,6 @@
 
 #include "not_copiable_not_movable.hpp"
 
-
 /** @brief Singletons shared behavior */
 template <typename T>
 class Singleton : private NotCopiableNotMovable
@@ -20,7 +19,6 @@ class Singleton : private NotCopiableNotMovable
     /// @brief Destructor is only accessible to subclasses
     virtual ~Singleton() = default;
 };
-
 
 // Note that superclass can not provide static members to its subclasses.
 // Here are some #define to help you call creating singleton subclasses.

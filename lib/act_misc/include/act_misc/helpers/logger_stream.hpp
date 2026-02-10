@@ -16,7 +16,6 @@
 
 /* # Forward declaration */
 
-
 class AbsLogger;
 
 /** @brief This class helps to log messages using stream syntax */
@@ -54,4 +53,3 @@ class LoggerStream
     /** @brief The level of the log */
     LogsLevel::Enum m_level;
 };
-

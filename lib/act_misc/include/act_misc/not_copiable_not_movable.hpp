@@ -14,7 +14,6 @@
 
 /* # Forward declaration */
 
-
 /** @brief Deny copy and moves of classes inheriting it */
 class NotCopiableNotMovable
 {
@@ -38,4 +37,3 @@ class NotCopiableNotMovable
     /// @brief Move assignment operator (deleted)
     NotCopiableNotMovable &operator=(NotCopiableNotMovable &&) = delete;
 };
-

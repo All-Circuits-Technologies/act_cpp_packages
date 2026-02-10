@@ -18,7 +18,6 @@
 
 /* # Forward declaration */
 
-
 class AbsLogger;
 
 /** @brief This defines an useful file class to act on file and get its path */
@@ -139,4 +138,3 @@ class ExtFile
     /** @brief Whether the file is temporary and should be deleted upon closing */
     bool m_isTemp{false};
 };
-

@@ -18,7 +18,6 @@
 
 /* # Forward declaration */
 
-
 class AbsLogger
 {
   public:
@@ -128,4 +127,3 @@ class AbsLogger
     [[nodiscard]] virtual std::shared_ptr<AbsLogger> createAbsSubLogger(
         LogsLevel::Enum minLevel) = 0;
 };
-

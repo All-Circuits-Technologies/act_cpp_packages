@@ -16,7 +16,6 @@
 
 /* # Forward declaration */
 
-
 /**
  * @brief Object holding a value and a mutex to protect it, with few helpers around
  *
@@ -133,4 +132,3 @@ class Mutexed
      */
     mutable std::mutex mtx;
 };
-

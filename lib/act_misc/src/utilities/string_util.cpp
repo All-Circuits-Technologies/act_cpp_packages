@@ -56,9 +56,9 @@ int StringUtil::CompareNoCase(const std::string &lhs, const std::string &rhs)
 
 bool StringUtil::AreStringEqualNoCase(const std::string &lhs, const std::string &rhs)
 {
-    return std::ranges::equal(lhs,
-                              rhs,
-                              [](char a, char b) { return (std::tolower(a) == std::tolower(b)); });
+    return std::ranges::equal(lhs, rhs, [](char a, char b) {
+        return (std::tolower(a) == std::tolower(b));
+    });
 }
 
 std::string StringUtil::BinToHex(const std::string &bin)

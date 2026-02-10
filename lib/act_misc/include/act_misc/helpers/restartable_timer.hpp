@@ -20,7 +20,6 @@
 
 /* # Forward declaration */
 
-
 class AbsLogger;
 
 /**
@@ -186,4 +185,3 @@ class RestartableTimer
     /** @brief The duration of the timer in milliseconds */
     std::atomic<unsigned int> m_durationMs{0};
 };
-

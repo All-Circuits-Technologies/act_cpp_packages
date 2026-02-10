@@ -21,7 +21,6 @@
 
 /* # Forward declaration */
 
-
 /**
  * @brief A reusable thread that can be started multiple times
  * @note If the thread is already running, starting it again will either wait for it to finish
@@ -219,4 +218,3 @@ inline ReusableThreadResult::Enum ReusableThread::start(const AbsLogger &logger,
 {
     return start(false, logger, std::forward<Func>(func), std::forward<Args>(args)...);
 }
-
