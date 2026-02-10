@@ -8,8 +8,8 @@
 #
 # Modular C++ library collection:
 #
+#   - logger    : Logging infrastructure (base logger abstractions)
 #   - misc      : Base utilities (threading, file ops, string utils)
-#   - logger    : Logging infrastructure and services
 #   - system    : System-level utilities (critical sections)
 #   - sqlite    : SQLite database management layer
 #   - linux_io  : Linux-specific I/O (GPIO, LEDs)
@@ -36,9 +36,15 @@ option(BUILD_TESTS "Build tests" OFF)
 # -----------------------------------------------------------------------------
 # Library Modules
 # -----------------------------------------------------------------------------
+# Note: Order matters due to dependencies:
+#   - act_logger has no dependencies (base)
+#   - act_misc depends on act_logger
+#   - act_system depends on act_misc
+#   - act_sqlite depends on act_misc
+#   - act_linux_io depends on act_misc
 
-add_subdirectory(lib/act_misc)
 add_subdirectory(lib/act_logger)
+add_subdirectory(lib/act_misc)
 add_subdirectory(lib/act_system)
 add_subdirectory(lib/act_sqlite)
 add_subdirectory(lib/act_linux_io)
