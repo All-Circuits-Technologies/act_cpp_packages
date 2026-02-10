@@ -1,0 +1,36 @@
+# SPDX-FileCopyrightText: 2026 All Circuits Technologies
+#
+# SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
+
+# -----------------------------------------------------------------------------
+# act_system - System-level utilities
+# -----------------------------------------------------------------------------
+# System-level utilities including multi-process critical sections
+# using flock-based locking for safe cross-process synchronization.
+#
+# Dependencies: act_misc
+# -----------------------------------------------------------------------------
+
+add_library(act_system STATIC
+    src/system_critical_section.cpp
+)
+
+target_include_directories(act_system
+    PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
+
+target_compile_features(act_system PUBLIC cxx_std_20)
+
+target_link_libraries(act_system
+    PUBLIC
+    act_misc
+)
+
+install(TARGETS act_system DESTINATION lib)
+install(
+    DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/"
+    DESTINATION "include"
+    FILES_MATCHING PATTERN "*.hpp"
+)
