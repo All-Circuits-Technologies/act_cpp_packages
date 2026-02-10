@@ -9,7 +9,7 @@
 
 /* # Internal includes library */
 #include "act_misc/constants/def_soft.hpp"
-#include "act_misc/models/abs_logger.hpp"
+#include "act_logger/models/abs_logger.hpp"
 
 /* # Extern includes: Library */
 

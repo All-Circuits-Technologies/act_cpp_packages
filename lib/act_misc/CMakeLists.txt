@@ -13,7 +13,6 @@
 add_library(act_misc STATIC
     # Helpers
     src/helpers/action_delayer.cpp
-    src/helpers/logger_stream.cpp
     src/helpers/restartable_timer.cpp
 
     # Managers
@@ -43,9 +42,15 @@ target_include_directories(act_misc
 # C++20 required for std::ranges and other features
 target_compile_features(act_misc PUBLIC cxx_std_20)
 
+# Dependencies
+# Note: act_misc depends on act_logger for the AbsLogger interface
+# This is intentional - logger abstractions are in act_logger
+
 # Link pthread for threading support
 find_package(Threads REQUIRED)
 target_link_libraries(act_misc
+    PUBLIC
+    act_logger
     PRIVATE
     Threads::Threads
 )

@@ -5,9 +5,9 @@
 #pragma once
 
 /* # App includes (in alphabetical order) */
-#include "act_misc/helpers/logger_stream.hpp"
-#include "act_misc/models/abs_logger.hpp"
-#include "act_misc/types/logs_level.hpp"
+#include "act_logger/helpers/logger_stream.hpp"
+#include "act_logger/models/abs_logger.hpp"
+#include "act_logger/types/logs_level.hpp"
 
 /* # Internal includes library */
 

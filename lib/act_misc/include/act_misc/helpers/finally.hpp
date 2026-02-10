@@ -5,7 +5,7 @@
 #pragma once
 
 /* # App includes (in alphabetical order) */
-#include "act_misc/models/abs_logger.hpp"
+#include "act_logger/models/abs_logger.hpp"
 
 /* # Internal includes library */
 

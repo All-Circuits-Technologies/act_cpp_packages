@@ -5,7 +5,7 @@
 #pragma once
 
 /* # App includes (in alphabetical order) */
-#include "act_misc/types/logs_level.hpp"
+#include "act_logger/types/logs_level.hpp"
 
 /* # Internal includes library */
 
