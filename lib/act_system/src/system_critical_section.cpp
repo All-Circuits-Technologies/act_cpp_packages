@@ -8,8 +8,8 @@
 /* # App includes (in alphabetical order) */
 
 /* # Internal includes library */
+#include "act_foundation/constants/def_soft.hpp"
 #include "act_logger/models/abs_logger.hpp"
-#include "act_misc/constants/def_soft.hpp"
 
 /* # Extern includes: Library */
 

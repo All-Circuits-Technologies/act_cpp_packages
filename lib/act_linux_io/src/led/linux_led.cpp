@@ -9,8 +9,8 @@
 #include "act_linux_io/led/trigger/abs_led_trigger_config.hpp"
 
 /* # Internal includes library */
+#include "act_files/file_util.hpp"
 #include "act_logger/helpers/logger_helper.hpp"
-#include "act_misc/utilities/file_util.hpp"
 
 /* # Extern includes: Library */
 

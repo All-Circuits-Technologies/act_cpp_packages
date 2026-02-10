@@ -7,7 +7,7 @@
 /* # App includes (in alphabetical order) */
 
 /* # Internal includes library */
-#include "act_misc/managers/abs_manager.hpp"
+#include "act_foundation/abs_manager.hpp"
 
 /* # Extern includes: Library */
 

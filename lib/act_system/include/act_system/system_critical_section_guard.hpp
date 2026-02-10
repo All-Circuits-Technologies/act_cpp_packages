@@ -8,7 +8,7 @@
 #include "system_critical_section.hpp"
 
 /* # Internal includes library */
-#include "act_misc/constants/def_soft.hpp"
+#include "act_foundation/constants/def_soft.hpp"
 
 /* # Extern includes: Library */
 

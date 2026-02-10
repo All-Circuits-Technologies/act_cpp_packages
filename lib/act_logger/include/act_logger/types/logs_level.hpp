@@ -9,7 +9,7 @@
 /* # Internal includes library */
 
 /* # Extern includes: Library */
-#include "act_misc/not_copiable_not_movable.hpp"
+#include "act_foundation/not_copiable_not_movable.hpp"
 
 /* # Extern includes: Library */
 

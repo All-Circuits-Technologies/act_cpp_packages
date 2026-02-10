@@ -8,11 +8,15 @@
 #
 # Modular C++ library collection:
 #
-#   - logger    : Logging infrastructure (base logger abstractions)
-#   - misc      : Base utilities (threading, file ops, string utils)
-#   - system    : System-level utilities (critical sections)
-#   - sqlite    : SQLite database management layer
-#   - linux_io  : Linux-specific I/O (GPIO, LEDs)
+#   - foundation : Base classes and design patterns (no dependencies)
+#   - logger     : Logging infrastructure and services
+#   - threading  : Threading utilities and synchronization
+#   - text       : String and text processing utilities
+#   - files      : File system operations and utilities
+#   - time       : Date, time, and timing utilities
+#   - system     : System-level utilities (critical sections, system management)
+#   - sqlite     : SQLite database management layer
+#   - linux_io   : Linux-specific I/O (GPIO, LEDs)
 #
 # =============================================================================
 
@@ -37,14 +41,22 @@ option(BUILD_TESTS "Build tests" OFF)
 # Library Modules
 # -----------------------------------------------------------------------------
 # Note: Order matters due to dependencies:
-#   - act_logger has no dependencies (base)
-#   - act_misc depends on act_logger
-#   - act_system depends on act_misc
-#   - act_sqlite depends on act_misc
-#   - act_linux_io depends on act_misc
+#   - act_foundation: No dependencies (foundational)
+#   - act_logger: Depends on act_foundation
+#   - act_threading: Depends on act_foundation, act_logger
+#   - act_text: Depends on act_foundation, act_logger
+#   - act_files: Depends on act_foundation, act_logger
+#   - act_time: Depends on act_foundation, act_logger, act_threading
+#   - act_system: Depends on act_foundation, act_logger, act_threading, act_text
+#   - act_sqlite: Depends on act_foundation
+#   - act_linux_io: Depends on act_files
 
+add_subdirectory(lib/act_foundation)
 add_subdirectory(lib/act_logger)
-add_subdirectory(lib/act_misc)
+add_subdirectory(lib/act_threading)
+add_subdirectory(lib/act_text)
+add_subdirectory(lib/act_files)
+add_subdirectory(lib/act_time)
 add_subdirectory(lib/act_system)
 add_subdirectory(lib/act_sqlite)
 add_subdirectory(lib/act_linux_io)

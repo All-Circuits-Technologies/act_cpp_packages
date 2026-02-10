@@ -8,7 +8,7 @@
 # Logging infrastructure providing logger managers, external loggers,
 # console output, and helper utilities for consistent logging across modules.
 #
-# Dependencies: act_misc
+# Dependencies: act_foundation, act_text
 # -----------------------------------------------------------------------------
 
 add_library(act_logger STATIC
@@ -34,13 +34,14 @@ target_include_directories(act_logger
     $<INSTALL_INTERFACE:include>
 )
 
-# C++20 required (inherited from misc)
+# C++20 required
 target_compile_features(act_logger PUBLIC cxx_std_20)
 
 # Dependencies
 target_link_libraries(act_logger
     PUBLIC
-    act_misc
+    act_foundation
+    act_text
 )
 
 # Install targets

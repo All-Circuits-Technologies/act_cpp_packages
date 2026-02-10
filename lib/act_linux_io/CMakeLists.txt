@@ -8,7 +8,7 @@
 # Platform-specific library for Linux I/O operations including GPIO control
 # and LED management via sysfs and libgpiod.
 #
-# Dependencies: act_misc, act_logger
+# Dependencies: act_files, act_logger
 # External: libgpiod v2.x (libgpiod-dev)
 # -----------------------------------------------------------------------------
 
@@ -36,7 +36,7 @@ target_compile_features(act_linux_io PUBLIC cxx_std_20)
 
 target_link_libraries(act_linux_io
     PUBLIC
-    act_misc
+    act_files
     act_logger
     PRIVATE
     ${LIBGPIOD_LIBRARIES}

@@ -3,40 +3,40 @@
 # SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 
 # -----------------------------------------------------------------------------
-# act_sqlite - SQLite database management library
+# act_text - Text and string processing
 # -----------------------------------------------------------------------------
-# Database abstraction layer providing SQLite database management,
-# migrations, and logging integration.
+# String manipulation, parsing, and text formatting utilities.
+# Provides string utilities, vector string operations, and CSV parsing.
 #
-# Dependencies: act_foundation, act_logger, act_system
-# External: SQLiteCpp (libsqlitecpp-dev)
+# Dependencies: act_foundation, act_logger
 # -----------------------------------------------------------------------------
 
-find_package(SQLiteCpp REQUIRED)
-
-add_library(act_sqlite STATIC
-    src/abs_db_manager.cpp
-    src/sqlite_db_manager.cpp
+add_library(act_text STATIC
+    src/string_util.cpp
+    src/vector_string_util.cpp
+    src/csv_util.cpp
 )
 
-target_include_directories(act_sqlite
+# Public headers are exposed via include/<module_name>/
+target_include_directories(act_text
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )
 
-target_compile_features(act_sqlite PUBLIC cxx_std_20)
+# C++20 required
+target_compile_features(act_text PUBLIC cxx_std_20)
 
-target_link_libraries(act_sqlite
+# Dependencies
+target_link_libraries(act_text
     PUBLIC
     act_foundation
     act_logger
-    act_system
-    PRIVATE
-    SQLiteCpp
+    act_files
 )
 
-install(TARGETS act_sqlite DESTINATION lib)
+# Install targets
+install(TARGETS act_text DESTINATION lib)
 install(
     DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/"
     DESTINATION "include"

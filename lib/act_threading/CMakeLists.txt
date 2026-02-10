@@ -3,40 +3,40 @@
 # SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 
 # -----------------------------------------------------------------------------
-# act_sqlite - SQLite database management library
+# act_threading - Threading utilities
 # -----------------------------------------------------------------------------
-# Database abstraction layer providing SQLite database management,
-# migrations, and logging integration.
+# Thread management, synchronization, and concurrent programming utilities.
+# Provides reusable thread abstractions and thread-safe wrappers.
 #
-# Dependencies: act_foundation, act_logger, act_system
-# External: SQLiteCpp (libsqlitecpp-dev)
+# Dependencies: act_foundation, act_logger
 # -----------------------------------------------------------------------------
 
-find_package(SQLiteCpp REQUIRED)
-
-add_library(act_sqlite STATIC
-    src/abs_db_manager.cpp
-    src/sqlite_db_manager.cpp
+add_library(act_threading STATIC
+    src/reusable_thread.cpp
 )
 
-target_include_directories(act_sqlite
+# Public headers are exposed via include/<module_name>/
+target_include_directories(act_threading
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )
 
-target_compile_features(act_sqlite PUBLIC cxx_std_20)
+# C++20 required
+target_compile_features(act_threading PUBLIC cxx_std_20)
 
-target_link_libraries(act_sqlite
+# Dependencies
+find_package(Threads REQUIRED)
+target_link_libraries(act_threading
     PUBLIC
     act_foundation
     act_logger
-    act_system
     PRIVATE
-    SQLiteCpp
+    Threads::Threads
 )
 
-install(TARGETS act_sqlite DESTINATION lib)
+# Install targets
+install(TARGETS act_threading DESTINATION lib)
 install(
     DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/"
     DESTINATION "include"

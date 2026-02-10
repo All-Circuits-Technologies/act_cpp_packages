@@ -9,7 +9,7 @@
 #include "act_logger/printers/abs_external_logger.hpp"
 
 /* # Internal includes library */
-#include "act_misc/utilities/vector_string_util.hpp"
+#include "act_text/vector_string_util.hpp"
 
 /* # Extern includes: Library */
 

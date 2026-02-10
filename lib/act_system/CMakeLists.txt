@@ -8,11 +8,12 @@
 # System-level utilities including multi-process critical sections
 # using flock-based locking for safe cross-process synchronization.
 #
-# Dependencies: act_misc
+# Dependencies: act_foundation, act_logger, act_threading, act_text
 # -----------------------------------------------------------------------------
 
 add_library(act_system STATIC
     src/system_critical_section.cpp
+    src/system_manager.cpp
 )
 
 target_include_directories(act_system
@@ -25,7 +26,10 @@ target_compile_features(act_system PUBLIC cxx_std_20)
 
 target_link_libraries(act_system
     PUBLIC
-    act_misc
+    act_foundation
+    act_logger
+    act_threading
+    act_text
 )
 
 install(TARGETS act_system DESTINATION lib)
