@@ -1,3 +1,6 @@
+<!-- SPDX-FileCopyrightText: 2026 Théo Magne <theo.magne@allcircuits.com> -->
+<!-- SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1 -->
+
 # act_time
 
 Date, time, and timing utilities for ACT C++ modules.

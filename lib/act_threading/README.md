@@ -1,10 +1,14 @@
+<!-- SPDX-FileCopyrightText: 2026 Théo Magne <theo.magne@allcircuits.com> -->
+<!-- SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1 -->
+
 # act_threading
 
 Threading utilities for concurrent programming in ACT C++ modules.
 
 ## Description
 
-This module provides thread management utilities, synchronization primitives, and abstractions for concurrent programming.
+This module provides thread management utilities, synchronization primitives, and abstractions for
+concurrent programming.
 
 ## Contents
 
