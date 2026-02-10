@@ -8,8 +8,8 @@
 #include "act_logger/helpers/logger_helper.hpp"
 
 /* # Internal includes library */
-#include "act_misc/managers/abs_manager.hpp"
 #include "act_logger/models/abs_logger.hpp"
+#include "act_misc/managers/abs_manager.hpp"
 
 /* # Extern includes: Library */
 

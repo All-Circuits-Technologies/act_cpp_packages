@@ -5,8 +5,8 @@
 #pragma once
 
 /* # App includes (in alphabetical order) */
-#include "act_misc/managers/abs_manager.hpp"
 #include "act_logger/models/abs_logger.hpp"
+#include "act_misc/managers/abs_manager.hpp"
 #include "act_misc/types/reusable_thread_result.hpp"
 
 /* # Internal includes library */
