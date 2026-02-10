@@ -17,7 +17,11 @@
 
 /* # Forward declaration */
 class AbsLedTriggerConfig;
-class LoggerHelper;
+
+namespace act::logger
+{
+    class LoggerHelper;
+} // namespace act::logger
 
 /**
  * @brief Linux (single) LED interface
@@ -33,7 +37,7 @@ class LinuxLed
      * @param parentLogger Logger to use
      * @note Caller must call init before using other methods
      */
-    explicit LinuxLed(std::string ledName, LoggerHelper &parentLogger);
+    explicit LinuxLed(std::string ledName, act::logger::LoggerHelper &parentLogger);
 
     /**
      * @brief Destructor
@@ -286,7 +290,7 @@ class LinuxLed
     const std::string m_ledName;
 
     /** @brief Logger helper */
-    std::shared_ptr<LoggerHelper> m_logger;
+    std::shared_ptr<act::logger::LoggerHelper> m_logger;
 
     // Cache
     /** @brief Biggest supported brightness level for this led */

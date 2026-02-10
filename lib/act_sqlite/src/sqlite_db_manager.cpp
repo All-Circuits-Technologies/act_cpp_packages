@@ -15,25 +15,24 @@
 #include <SQLiteCpp/SQLiteCpp.h>
 
 /* # Extern includes: Global */
-#include <iostream>
 #include <regex>
 #include <sqlite3.h>
 
-SQLiteDbManager::SQLiteDbManager(std::filesystem::path dbFilePath,
-                                 const std::string &dbSlug,
-                                 const std::optional<std::filesystem::path> &migrationDataDir,
-                                 const LoggerManager &loggerManager)
+ASqLiteDbManager::ASqLiteDbManager(std::filesystem::path dbFilePath,
+                                   const std::string &dbSlug,
+                                   const std::optional<std::filesystem::path> &migrationDataDir,
+                                   const act::logger::LoggerManager &loggerManager)
     : AbsDbManager(dbSlug, migrationDataDir, loggerManager),
       m_dbFilePath(std::move(dbFilePath))
 {
 }
 
-int SQLiteDbManager::getMigrationVersion() const
+int ASqLiteDbManager::getMigrationVersion() const
 {
-    return const_cast<SQLiteDbManager *>(this)->execAndGetInt("PRAGMA user_version;").value_or(0);
+    return const_cast<ASqLiteDbManager *>(this)->execAndGetInt("PRAGMA user_version;").value_or(0);
 }
 
-bool SQLiteDbManager::setMigrationVersion(int version)
+bool ASqLiteDbManager::setMigrationVersion(int version)
 {
     FALSE_IF_NO_DB(setMigrationVersion, getLogger());
 
@@ -44,7 +43,7 @@ bool SQLiteDbManager::setMigrationVersion(int version)
     return true;
 }
 
-bool SQLiteDbManager::defrag()
+bool ASqLiteDbManager::defrag()
 {
     const auto &logger = getLogger();
     FALSE_IF_NO_DB(defrag, logger);
@@ -54,7 +53,7 @@ bool SQLiteDbManager::defrag()
     return true;
 }
 
-bool SQLiteDbManager::sync()
+bool ASqLiteDbManager::sync()
 {
     FALSE_IF_NO_DB(sync, getLogger());
 
@@ -62,7 +61,7 @@ bool SQLiteDbManager::sync()
     return false;
 }
 
-bool SQLiteDbManager::exec(const std::string &sql)
+bool ASqLiteDbManager::exec(const std::string &sql)
 {
     const auto &logger = getLogger();
     FALSE_IF_NO_DB(exec, logger);
@@ -72,7 +71,7 @@ bool SQLiteDbManager::exec(const std::string &sql)
     return true;
 }
 
-std::optional<int> SQLiteDbManager::execAndGetInt(const std::string &sql)
+std::optional<int> ASqLiteDbManager::execAndGetInt(const std::string &sql)
 {
     const auto &logger = getLogger();
     EMPTY_IF_NO_DB(execAndGetInt, logger);
@@ -87,7 +86,7 @@ std::optional<int> SQLiteDbManager::execAndGetInt(const std::string &sql)
     return result;
 }
 
-bool SQLiteDbManager::setBusyTimeout(int busyTimeoutMs)
+bool ASqLiteDbManager::setBusyTimeout(int busyTimeoutMs)
 {
     const auto &logger = getLogger();
     FALSE_IF_NO_DB(setBusyTimeout, logger);
@@ -97,7 +96,7 @@ bool SQLiteDbManager::setBusyTimeout(int busyTimeoutMs)
     return true;
 }
 
-bool SQLiteDbManager::openImpl()
+bool ASqLiteDbManager::openImpl()
 {
     const auto &logger = getLogger();
     if (m_db)

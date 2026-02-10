@@ -15,46 +15,52 @@
 #include <memory>
 
 /* # Forward declaration */
-class StdConsoleLogger;
 
-/** @brief The LoggerManager class handles logging operations */
-class LoggerManager : public AbsLoggerManager
+namespace act::logger
 {
-  public:
-    /**
-     * @brief Constructor
-     */
-    explicit LoggerManager(LogsLevel::Enum minLevelToPrintToStdErr = LogsLevel::Enum::ERROR);
 
-    /**
-     * @brief Destructor
-     */
-    ~LoggerManager() override = default;
+    class StdConsoleLogger;
 
-  public:
-    /**
-     * @brief Initialize the manager
-     * @return true if initialization was successful, false otherwise
-     */
-    bool init() override;
+    /** @brief The LoggerManager class handles logging operations */
+    class LoggerManager : public AbsLoggerManager
+    {
+      public:
+        /**
+         * @brief Constructor
+         */
+        explicit LoggerManager(LogsLevel::Enum minLevelToPrintToStdErr = LogsLevel::Enum::ERROR);
 
-    /**
-     * @brief Set the console logger minimum log level
-     * @param minLevel The new minimum log level for the console logger
-     */
-    void setCslMinLogLevel(LogsLevel::Enum minLevel);
+        /**
+         * @brief Destructor
+         */
+        ~LoggerManager() override = default;
 
-  protected:
-    /**
-     * @brief Get the external logger
-     * @return The external logger
-     */
-    [[nodiscard]] std::shared_ptr<AbsExternalLogger> getExternalLogger() const override;
+      public:
+        /**
+         * @brief Initialize the manager
+         * @return true if initialization was successful, false otherwise
+         */
+        bool init() override;
 
-  private:
-    /** @brief The console logger */
-    std::shared_ptr<StdConsoleLogger> m_consoleLogger;
+        /**
+         * @brief Set the console logger minimum log level
+         * @param minLevel The new minimum log level for the console logger
+         */
+        void setCslMinLogLevel(LogsLevel::Enum minLevel);
 
-    /** @brief The minimum logs level to print to standard error (stderr) */
-    LogsLevel::Enum m_minLevelToPrintToStdErr;
-};
+      protected:
+        /**
+         * @brief Get the external logger
+         * @return The external logger
+         */
+        [[nodiscard]] std::shared_ptr<AbsExternalLogger> getExternalLogger() const override;
+
+      private:
+        /** @brief The console logger */
+        std::shared_ptr<StdConsoleLogger> m_consoleLogger;
+
+        /** @brief The minimum logs level to print to standard error (stderr) */
+        LogsLevel::Enum m_minLevelToPrintToStdErr;
+    };
+
+} // namespace act::logger

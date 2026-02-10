@@ -34,7 +34,9 @@
 
 /* # Methods */
 
-LinuxGpio::LinuxGpio(const std::string &chipName, unsigned int lineNum, LoggerHelper &parentLogger)
+LinuxGpio::LinuxGpio(const std::string &chipName,
+                     unsigned int lineNum,
+                     act::logger::LoggerHelper &parentLogger)
     : m_chip(std::make_unique<gpiod::chip>(std::string(CHIPS_DEV_DIR) + "/" + chipName)),
       m_lineNum(lineNum),
       m_lineSettings(std::make_unique<gpiod::line_settings>()),
@@ -171,7 +173,8 @@ bool LinuxGpio::listenEvents(const std::function<void(bool)> &callback)
     return true;
 }
 
-LinuxGpio *LinuxGpio::FindGpioByName(const std::string &lineName, LoggerHelper &parentLogger)
+LinuxGpio *LinuxGpio::FindGpioByName(const std::string &lineName,
+                                     act::logger::LoggerHelper &parentLogger)
 {
     for (const auto &entry : ::std::filesystem::directory_iterator(CHIPS_DEV_DIR))
     {

@@ -15,29 +15,35 @@
 
 /* # Extern includes: Global */
 
-LoggerManager::LoggerManager(LogsLevel::Enum minLevelToPrintToStdErr)
-    : AbsLoggerManager(),
-      m_minLevelToPrintToStdErr{minLevelToPrintToStdErr}
+namespace act::logger
 {
-}
 
-bool LoggerManager::init()
-{
-    m_consoleLogger = std::make_shared<StdConsoleLogger>(LogsConstants::DEFAULT_CONSOLE_LOGS_LEVEL,
-                                                         m_minLevelToPrintToStdErr);
-
-    return AbsLoggerManager::init();
-}
-
-void LoggerManager::setCslMinLogLevel(LogsLevel::Enum minLevel)
-{
-    if (m_consoleLogger)
+    LoggerManager::LoggerManager(LogsLevel::Enum minLevelToPrintToStdErr)
+        : AbsLoggerManager(),
+          m_minLevelToPrintToStdErr{minLevelToPrintToStdErr}
     {
-        m_consoleLogger->setMinLevel(minLevel);
     }
-}
 
-std::shared_ptr<AbsExternalLogger> LoggerManager::getExternalLogger() const
-{
-    return m_consoleLogger;
-}
+    bool LoggerManager::init()
+    {
+        m_consoleLogger =
+            std::make_shared<StdConsoleLogger>(LogsConstants::DEFAULT_CONSOLE_LOGS_LEVEL,
+                                               m_minLevelToPrintToStdErr);
+
+        return AbsLoggerManager::init();
+    }
+
+    void LoggerManager::setCslMinLogLevel(LogsLevel::Enum minLevel)
+    {
+        if (m_consoleLogger)
+        {
+            m_consoleLogger->setMinLevel(minLevel);
+        }
+    }
+
+    std::shared_ptr<AbsExternalLogger> LoggerManager::getExternalLogger() const
+    {
+        return m_consoleLogger;
+    }
+
+} // namespace act::logger

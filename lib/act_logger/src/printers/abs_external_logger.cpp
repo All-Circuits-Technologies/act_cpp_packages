@@ -13,58 +13,63 @@
 
 /* # Extern includes: Global */
 
-AbsExternalLogger::AbsExternalLogger(
-    LogsLevel::Enum minLevel, const std::map<std::string, LogsLevel::Enum> &minLevelByCategory)
-    : m_minLevel{minLevel},
-      m_minLevelByCategory{minLevelByCategory}
+namespace act::logger
 {
-}
 
-bool AbsExternalLogger::isLoggable(LogsLevel::Enum level,
-                                   const std::vector<std::string> &categories) const
-{
-    bool categoryMatched = false;
-    if (m_minLevelByCategory.size() > 0)
+    AbsExternalLogger::AbsExternalLogger(
+        LogsLevel::Enum minLevel, const std::map<std::string, LogsLevel::Enum> &minLevelByCategory)
+        : m_minLevel{minLevel},
+          m_minLevelByCategory{minLevelByCategory}
     {
-        // Check if any category has a specific min level
-        for (const auto &category : categories)
+    }
+
+    bool AbsExternalLogger::isLoggable(LogsLevel::Enum level,
+                                       const std::vector<std::string> &categories) const
+    {
+        bool categoryMatched = false;
+        if (m_minLevelByCategory.size() > 0)
         {
-            auto it = m_minLevelByCategory.find(category);
-            if (it != m_minLevelByCategory.end())
+            // Check if any category has a specific min level
+            for (const auto &category : categories)
             {
-                // Found a matching category, check its min level
-                if (level < it->second)
+                auto it = m_minLevelByCategory.find(category);
+                if (it != m_minLevelByCategory.end())
                 {
-                    // We skip log because the level is lower than the category's minLevel
-                    // Continue to check other categories
-                    continue;
+                    // Found a matching category, check its min level
+                    if (level < it->second)
+                    {
+                        // We skip log because the level is lower than the category's minLevel
+                        // Continue to check other categories
+                        continue;
+                    }
+                    // We found a matching category and its log level match the requirement, no
+                    // need to check further
+                    categoryMatched = true;
+                    break;
                 }
-                // We found a matching category and its log level match the requirement, no need to
-                // check further
-                categoryMatched = true;
-                break;
             }
         }
+
+        if (!categoryMatched && level < m_minLevel)
+        {
+            // We skip log because the level is lower than the minLevel
+            return false;
+        }
+
+        return true;
     }
 
-    if (!categoryMatched && level < m_minLevel)
+    void AbsExternalLogger::log(LogsLevel::Enum level,
+                                const std::string &message,
+                                const std::vector<std::string> &categories)
     {
-        // We skip log because the level is lower than the minLevel
-        return false;
+        if (!isLoggable(level, categories))
+        {
+            // Nothing to do
+            return;
+        }
+
+        logToExternal(level, message, categories);
     }
 
-    return true;
-}
-
-void AbsExternalLogger::log(LogsLevel::Enum level,
-                            const std::string &message,
-                            const std::vector<std::string> &categories)
-{
-    if (!isLoggable(level, categories))
-    {
-        // Nothing to do
-        return;
-    }
-
-    logToExternal(level, message, categories);
-}
+} // namespace act::logger

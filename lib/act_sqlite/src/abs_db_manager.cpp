@@ -20,7 +20,7 @@
 
 AbsDbManager::AbsDbManager(const std::string &dbSlug,
                            const std::optional<std::filesystem::path> &migrationDataDir,
-                           const LoggerManager &loggerManager)
+                           const act::logger::LoggerManager &loggerManager)
     : AbsManager(),
       m_dbSlug(dbSlug + "-db"),
       m_migrationDataDir(migrationDataDir),

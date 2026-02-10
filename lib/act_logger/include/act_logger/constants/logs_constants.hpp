@@ -15,8 +15,8 @@
 
 /* # Forward declaration */
 
-namespace LogsConstants
+namespace act::logger::LogsConstants
 {
     /** @brief Default console logs level */
     constexpr const LogsLevel::Enum DEFAULT_CONSOLE_LOGS_LEVEL = LogsLevel::Enum::INFO;
-} // namespace LogsConstants
+} // namespace act::logger::LogsConstants

@@ -8,29 +8,31 @@
 /* # App includes (in alphabetical order) */
 #include "act_logger/helpers/logger_helper.hpp"
 
-/* # Internal includes library */
-#include "act_misc/constants/def_soft.hpp"
-
 /* # Extern includes: Library */
 
 /* # Extern includes: Global */
 
-MultiExternalLogger::MultiExternalLogger(
-    const std::vector<std::shared_ptr<AbsExternalLogger>> &loggers)
-    : AbsExternalLogger(LogsLevel::Enum::TRACE),
-      m_loggers{loggers}
+namespace act::logger
 {
-}
 
-void MultiExternalLogger::log(LogsLevel::Enum level,
-                              const std::string &message,
-                              const std::vector<std::string> &categories)
-{
-    for (const auto &logger : m_loggers)
+    MultiExternalLogger::MultiExternalLogger(
+        const std::vector<std::shared_ptr<AbsExternalLogger>> &loggers)
+        : AbsExternalLogger(LogsLevel::Enum::TRACE),
+          m_loggers{loggers}
     {
-        if (logger)
+    }
+
+    void MultiExternalLogger::log(LogsLevel::Enum level,
+                                  const std::string &message,
+                                  const std::vector<std::string> &categories)
+    {
+        for (const auto &logger : m_loggers)
         {
-            logger->log(level, message, categories);
+            if (logger)
+            {
+                logger->log(level, message, categories);
+            }
         }
     }
-}
+
+} // namespace act::logger

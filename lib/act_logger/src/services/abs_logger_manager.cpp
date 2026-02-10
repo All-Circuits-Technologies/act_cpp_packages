@@ -15,16 +15,21 @@
 /* # Extern includes: Global */
 #include <memory>
 
-AbsLoggerManager::AbsLoggerManager()
-    : AbsManager()
+namespace act::logger
 {
-}
 
-bool AbsLoggerManager::init()
-{
-    auto externalLogger = getExternalLogger();
-    m_loggerHelper = std::make_shared<LoggerHelper>(externalLogger);
+    AbsLoggerManager::AbsLoggerManager()
+        : AbsManager()
+    {
+    }
 
-    info("LoggerManager initialized successfully.");
-    return true;
-}
+    bool AbsLoggerManager::init()
+    {
+        auto externalLogger = getExternalLogger();
+        m_loggerHelper = std::make_shared<LoggerHelper>(externalLogger);
+
+        info("LoggerManager initialized successfully.");
+        return true;
+    }
+
+} // namespace act::logger

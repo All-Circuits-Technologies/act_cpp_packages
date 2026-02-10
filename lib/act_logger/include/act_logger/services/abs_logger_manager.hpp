@@ -17,221 +17,229 @@
 #include <memory>
 
 /* # Forward declaration */
-class AbsExternalLogger;
 
-/** @brief The LoggerManager class handles logging operations */
-class AbsLoggerManager : public AbsManager, public AbsLogger
+namespace act::logger
 {
-  public:
-    /**
-     * @brief Constructor
-     */
-    explicit AbsLoggerManager();
 
-    /**
-     * @brief Destructor
-     */
-    ~AbsLoggerManager() override = default;
+    class AbsExternalLogger;
+    class LoggerHelper;
 
-  public:
-    /**
-     * @brief Create a sub-logger with an additional category
-     * @param category The additional category for the sub-logger
-     * @param minLevel The minimum logs level for the sub-logger
-     * @return The sub-logger
-     */
-    [[nodiscard]] std::shared_ptr<LoggerHelper> createSubLogger(
-        const std::string &category, LogsLevel::Enum minLevel = LogsLevel::Enum::TRACE) const
+    /** @brief The LoggerManager class handles logging operations */
+    class AbsLoggerManager : public AbsManager, public AbsLogger
     {
-        return m_loggerHelper->createSubLogger(category, minLevel);
-    }
+      public:
+        /**
+         * @brief Constructor
+         */
+        explicit AbsLoggerManager();
 
-    /**
-     * @brief Create a sub-logger with an additional category
-     * @param minLevel The minimum logs level for the sub-logger
-     * @return The sub-logger
-     */
-    [[nodiscard]] std::shared_ptr<LoggerHelper> createSubLogger(
-        LogsLevel::Enum minLevel = LogsLevel::Enum::TRACE) const
-    {
-        return m_loggerHelper->createSubLogger(minLevel);
-    }
+        /**
+         * @brief Destructor
+         */
+        ~AbsLoggerManager() override = default;
 
-    /**
-     * @brief Create an abstract sub-logger with an additional category
-     * @param category The additional category for the sub-logger
-     * @param minLevel The minimum logs level for the sub-logger
-     * @return The sub-logger
-     */
-    [[nodiscard]] std::shared_ptr<AbsLogger> createAbsSubLogger(const std::string &category,
-                                                                LogsLevel::Enum minLevel) override
-    {
-        return m_loggerHelper->createSubLogger(category, minLevel);
-    }
+      public:
+        /**
+         * @brief Create a sub-logger with an additional category
+         * @param category The additional category for the sub-logger
+         * @param minLevel The minimum logs level for the sub-logger
+         * @return The sub-logger
+         */
+        [[nodiscard]] std::shared_ptr<LoggerHelper> createSubLogger(
+            const std::string &category, LogsLevel::Enum minLevel = LogsLevel::Enum::TRACE) const
+        {
+            return m_loggerHelper->createSubLogger(category, minLevel);
+        }
 
-    /**
-     * @brief Create an abstract sub-logger with an additional category
-     * @param minLevel The minimum logs level for the sub-logger
-     * @return The sub-logger
-     */
-    [[nodiscard]] std::shared_ptr<AbsLogger> createAbsSubLogger(LogsLevel::Enum minLevel) override
-    {
-        return m_loggerHelper->createSubLogger(minLevel);
-    }
+        /**
+         * @brief Create a sub-logger with an additional category
+         * @param minLevel The minimum logs level for the sub-logger
+         * @return The sub-logger
+         */
+        [[nodiscard]] std::shared_ptr<LoggerHelper> createSubLogger(
+            LogsLevel::Enum minLevel = LogsLevel::Enum::TRACE) const
+        {
+            return m_loggerHelper->createSubLogger(minLevel);
+        }
 
-    /**
-     * @brief Initialize the manager
-     * @return true if initialization was successful, false otherwise
-     */
-    bool init() override;
+        /**
+         * @brief Create an abstract sub-logger with an additional category
+         * @param category The additional category for the sub-logger
+         * @param minLevel The minimum logs level for the sub-logger
+         * @return The sub-logger
+         */
+        [[nodiscard]] std::shared_ptr<AbsLogger> createAbsSubLogger(
+            const std::string &category, LogsLevel::Enum minLevel) override
+        {
+            return m_loggerHelper->createSubLogger(category, minLevel);
+        }
 
-    /**
-     * @brief Log a message
-     * @param level The logs level
-     * @param message The message to log
-     */
-    void log(LogsLevel::Enum level, const std::string &message) const override
-    {
-        m_loggerHelper->log(level, message);
-    }
+        /**
+         * @brief Create an abstract sub-logger with an additional category
+         * @param minLevel The minimum logs level for the sub-logger
+         * @return The sub-logger
+         */
+        [[nodiscard]] std::shared_ptr<AbsLogger> createAbsSubLogger(
+            LogsLevel::Enum minLevel) override
+        {
+            return m_loggerHelper->createSubLogger(minLevel);
+        }
 
-    /**
-     * @brief Get a logger stream to log using stream syntax
-     * @param level The logs level
-     * @return The logger stream
-     */
-    [[nodiscard]] LoggerStream logStream(LogsLevel::Enum level) const override
-    {
-        return m_loggerHelper->logStream(level);
-    }
+        /**
+         * @brief Initialize the manager
+         * @return true if initialization was successful, false otherwise
+         */
+        bool init() override;
 
-    /**
-     * @brief Log a trace message
-     * @param message The message to log
-     */
-    void trace(const std::string &message) const override
-    {
-        m_loggerHelper->trace(message);
-    }
+        /**
+         * @brief Log a message
+         * @param level The logs level
+         * @param message The message to log
+         */
+        void log(LogsLevel::Enum level, const std::string &message) const override
+        {
+            m_loggerHelper->log(level, message);
+        }
 
-    /**
-     * @brief Get a trace logger stream to log using stream syntax
-     * @return The logger stream
-     */
-    [[nodiscard]] LoggerStream traceStream() const override
-    {
-        return m_loggerHelper->traceStream();
-    }
+        /**
+         * @brief Get a logger stream to log using stream syntax
+         * @param level The logs level
+         * @return The logger stream
+         */
+        [[nodiscard]] LoggerStream logStream(LogsLevel::Enum level) const override
+        {
+            return m_loggerHelper->logStream(level);
+        }
 
-    /**
-     * @brief Log a debug message
-     * @param message The message to log
-     */
-    void debug(const std::string &message) const override
-    {
-        m_loggerHelper->debug(message);
-    }
+        /**
+         * @brief Log a trace message
+         * @param message The message to log
+         */
+        void trace(const std::string &message) const override
+        {
+            m_loggerHelper->trace(message);
+        }
 
-    /**
-     * @brief Get a debug logger stream to log using stream syntax
-     * @return The logger stream
-     */
-    [[nodiscard]] LoggerStream debugStream() const override
-    {
-        return m_loggerHelper->debugStream();
-    }
+        /**
+         * @brief Get a trace logger stream to log using stream syntax
+         * @return The logger stream
+         */
+        [[nodiscard]] LoggerStream traceStream() const override
+        {
+            return m_loggerHelper->traceStream();
+        }
 
-    /**
-     * @brief Log an info message
-     * @param message The message to log
-     */
-    void info(const std::string &message) const override
-    {
-        m_loggerHelper->info(message);
-    }
+        /**
+         * @brief Log a debug message
+         * @param message The message to log
+         */
+        void debug(const std::string &message) const override
+        {
+            m_loggerHelper->debug(message);
+        }
 
-    /**
-     * @brief Get an info logger stream to log using stream syntax
-     * @return The logger stream
-     */
-    [[nodiscard]] LoggerStream infoStream() const override
-    {
-        return m_loggerHelper->infoStream();
-    }
+        /**
+         * @brief Get a debug logger stream to log using stream syntax
+         * @return The logger stream
+         */
+        [[nodiscard]] LoggerStream debugStream() const override
+        {
+            return m_loggerHelper->debugStream();
+        }
 
-    /**
-     * @brief Log a warning message
-     * @param message The message to log
-     */
-    void warning(const std::string &message) const override
-    {
-        m_loggerHelper->warning(message);
-    }
+        /**
+         * @brief Log an info message
+         * @param message The message to log
+         */
+        void info(const std::string &message) const override
+        {
+            m_loggerHelper->info(message);
+        }
 
-    /**
-     * @brief Get a warning logger stream to log using stream syntax
-     * @return The logger stream
-     */
-    [[nodiscard]] LoggerStream warningStream() const override
-    {
-        return m_loggerHelper->warningStream();
-    }
+        /**
+         * @brief Get an info logger stream to log using stream syntax
+         * @return The logger stream
+         */
+        [[nodiscard]] LoggerStream infoStream() const override
+        {
+            return m_loggerHelper->infoStream();
+        }
 
-    /**
-     * @brief Log an error message
-     * @param message The message to log
-     */
-    void error(const std::string &message) const override
-    {
-        m_loggerHelper->error(message);
-    }
+        /**
+         * @brief Log a warning message
+         * @param message The message to log
+         */
+        void warning(const std::string &message) const override
+        {
+            m_loggerHelper->warning(message);
+        }
 
-    /**
-     * @brief Get an error logger stream to log using stream syntax
-     * @return The logger stream
-     */
-    [[nodiscard]] LoggerStream errorStream() const override
-    {
-        return m_loggerHelper->errorStream();
-    }
+        /**
+         * @brief Get a warning logger stream to log using stream syntax
+         * @return The logger stream
+         */
+        [[nodiscard]] LoggerStream warningStream() const override
+        {
+            return m_loggerHelper->warningStream();
+        }
 
-    /**
-     * @brief Log a fatal message
-     * @param message The message to log
-     */
-    void fatal(const std::string &message) const override
-    {
-        m_loggerHelper->fatal(message);
-    }
+        /**
+         * @brief Log an error message
+         * @param message The message to log
+         */
+        void error(const std::string &message) const override
+        {
+            m_loggerHelper->error(message);
+        }
 
-    /**
-     * @brief Get a fatal logger stream to log using stream syntax
-     * @return The logger stream
-     */
-    [[nodiscard]] LoggerStream fatalStream() const override
-    {
-        return m_loggerHelper->fatalStream();
-    }
+        /**
+         * @brief Get an error logger stream to log using stream syntax
+         * @return The logger stream
+         */
+        [[nodiscard]] LoggerStream errorStream() const override
+        {
+            return m_loggerHelper->errorStream();
+        }
 
-    /**
-     * @brief Test if a log message with the given level would be logged
-     * @note The method also tests the external logger if set
-     * @param level The logs level
-     * @return True if the message would be logged, false otherwise
-     */
-    [[nodiscard]] bool wouldBeLogged(LogsLevel::Enum level) const override
-    {
-        return m_loggerHelper->wouldBeLogged(level);
-    }
+        /**
+         * @brief Log a fatal message
+         * @param message The message to log
+         */
+        void fatal(const std::string &message) const override
+        {
+            m_loggerHelper->fatal(message);
+        }
 
-  protected:
-    /**
-     * @brief Get the external logger
-     * @return The external logger
-     */
-    [[nodiscard]] virtual std::shared_ptr<AbsExternalLogger> getExternalLogger() const = 0;
+        /**
+         * @brief Get a fatal logger stream to log using stream syntax
+         * @return The logger stream
+         */
+        [[nodiscard]] LoggerStream fatalStream() const override
+        {
+            return m_loggerHelper->fatalStream();
+        }
 
-  private:
-    /** @brief The logger helper */
-    std::shared_ptr<LoggerHelper> m_loggerHelper;
-};
+        /**
+         * @brief Test if a log message with the given level would be logged
+         * @note The method also tests the external logger if set
+         * @param level The logs level
+         * @return True if the message would be logged, false otherwise
+         */
+        [[nodiscard]] bool wouldBeLogged(LogsLevel::Enum level) const override
+        {
+            return m_loggerHelper->wouldBeLogged(level);
+        }
+
+      protected:
+        /**
+         * @brief Get the external logger
+         * @return The external logger
+         */
+        [[nodiscard]] virtual std::shared_ptr<AbsExternalLogger> getExternalLogger() const = 0;
+
+      private:
+        /** @brief The logger helper */
+        std::shared_ptr<LoggerHelper> m_loggerHelper;
+    };
+
+} // namespace act::logger

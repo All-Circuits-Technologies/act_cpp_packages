@@ -18,46 +18,52 @@
 
 /* # Forward declaration */
 
-/** @brief This is an external logger that can log to multiple external loggers */
-class MultiExternalLogger : public AbsExternalLogger
+namespace act::logger
 {
-  public:
-    /** @brief Class constructor */
-    explicit MultiExternalLogger(const std::vector<std::shared_ptr<AbsExternalLogger>> &loggers);
 
-    /** @brief Class destructor */
-    ~MultiExternalLogger() override = default;
-
-  public:
-    /**
-     * @brief Log a message
-     * @param level The logs level
-     * @param message The message to log
-     * @param categories The categories associated to the log message. This is ignored in this
-     *                   implementation, because we use the categories of each logger.
-     */
-    void log(LogsLevel::Enum level,
-             const std::string &message,
-             const std::vector<std::string> &categories) override;
-
-  protected:
-    /**
-     * @brief Log a message to the external loggers
-     * @param level The logs level
-     * @param message The message to log
-     * @param categories The categories associated to the log message
-     */
-    void logToExternal(LogsLevel::Enum level,
-                       const std::string &message,
-                       const std::vector<std::string> &categories) override
+    /** @brief This is an external logger that can log to multiple external loggers */
+    class MultiExternalLogger : public AbsExternalLogger
     {
-        // This method is not used in this implementation
-        UNUSED(level);
-        UNUSED(message);
-        UNUSED(categories);
-    }
+      public:
+        /** @brief Class constructor */
+        explicit MultiExternalLogger(
+            const std::vector<std::shared_ptr<AbsExternalLogger>> &loggers);
 
-  private:
-    /** @brief The list of loggers to use */
-    std::vector<std::shared_ptr<AbsExternalLogger>> m_loggers;
-};
+        /** @brief Class destructor */
+        ~MultiExternalLogger() override = default;
+
+      public:
+        /**
+         * @brief Log a message
+         * @param level The logs level
+         * @param message The message to log
+         * @param categories The categories associated to the log message. This is ignored in
+         * this implementation, because we use the categories of each logger.
+         */
+        void log(LogsLevel::Enum level,
+                 const std::string &message,
+                 const std::vector<std::string> &categories) override;
+
+      protected:
+        /**
+         * @brief Log a message to the external loggers
+         * @param level The logs level
+         * @param message The message to log
+         * @param categories The categories associated to the log message
+         */
+        void logToExternal(LogsLevel::Enum level,
+                           const std::string &message,
+                           const std::vector<std::string> &categories) override
+        {
+            // This method is not used in this implementation
+            UNUSED(level);
+            UNUSED(message);
+            UNUSED(categories);
+        }
+
+      private:
+        /** @brief The list of loggers to use */
+        std::vector<std::shared_ptr<AbsExternalLogger>> m_loggers;
+    };
+
+} // namespace act::logger

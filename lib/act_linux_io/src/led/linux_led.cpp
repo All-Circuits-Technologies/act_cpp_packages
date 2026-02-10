@@ -25,7 +25,7 @@ const std::string LinuxLed::TRIGGER_NONE_VALUE = "none";
 
 /* # Constructors */
 
-LinuxLed::LinuxLed(std::string ledName, LoggerHelper &parentLogger)
+LinuxLed::LinuxLed(std::string ledName, act::logger::LoggerHelper &parentLogger)
     : m_ledName(std::move(ledName)),
       m_logger{parentLogger.createSubLogger(m_ledName)}
 {

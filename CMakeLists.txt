@@ -18,6 +18,8 @@
 
 cmake_minimum_required(VERSION 3.23)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 project(act_cpp_packages
     VERSION 1.0.0
     DESCRIPTION "ACT C++ modular library packages"

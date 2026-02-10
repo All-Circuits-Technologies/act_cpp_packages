@@ -16,8 +16,12 @@
 #include <optional>
 
 /* # Forward declaration */
-class LoggerHelper;
-class LoggerManager;
+
+namespace act::logger
+{
+    class LoggerHelper;
+    class LoggerManager;
+} // namespace act::logger
 
 /**
  * @brief This abstract manager contains db-engine-agnostic shared code
@@ -35,7 +39,7 @@ class AbsDbManager : public AbsManager
      */
     AbsDbManager(const std::string &dbSlug,
                  const std::optional<std::filesystem::path> &migrationDataDir,
-                 const LoggerManager &loggerManager);
+                 const act::logger::LoggerManager &loggerManager);
 
     /// @brief Destructor
     ~AbsDbManager() override = default;
@@ -123,7 +127,7 @@ class AbsDbManager : public AbsManager
      * @brief Get the logger helper
      * @return The logger helper
      */
-    [[nodiscard]] const std::shared_ptr<LoggerHelper> &getLogger() const
+    [[nodiscard]] const std::shared_ptr<act::logger::LoggerHelper> &getLogger() const
     {
         return m_logger;
     }
@@ -144,5 +148,5 @@ class AbsDbManager : public AbsManager
     const std::optional<std::filesystem::path> m_migrationDataDir;
 
     /** @brief Logger helper */
-    std::shared_ptr<LoggerHelper> m_logger;
+    std::shared_ptr<act::logger::LoggerHelper> m_logger;
 };

@@ -17,7 +17,12 @@
 #include <string>
 
 /* # Forward declaration */
-class LoggerHelper;
+
+namespace act::logger
+{
+    class LoggerHelper;
+} // namespace act::logger
+
 namespace gpiod
 {
     class chip;
@@ -41,7 +46,7 @@ class LinuxGpio
      */
     explicit LinuxGpio(const std::string &chipName,
                        unsigned int lineNum,
-                       LoggerHelper &parentLogger);
+                       act::logger::LoggerHelper &parentLogger);
 
     /**
      * @brief Destructor
@@ -128,7 +133,7 @@ class LinuxGpio
      * @note Caller is responsible for deleting the returned LinuxGpio object
      */
     [[nodiscard]] static LinuxGpio *FindGpioByName(const std::string &lineName,
-                                                   LoggerHelper &parentLogger);
+                                                   act::logger::LoggerHelper &parentLogger);
 
     /* ## Constants */
   private:
@@ -156,5 +161,5 @@ class LinuxGpio
     bool m_found{false};
 
     /** @brief Logger */
-    std::shared_ptr<LoggerHelper> m_logger;
+    std::shared_ptr<act::logger::LoggerHelper> m_logger;
 };

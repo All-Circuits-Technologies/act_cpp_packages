@@ -18,12 +18,16 @@
 #include <optional>
 
 /* # Forward declaration */
-class LoggerManager;
+
+namespace act::logger
+{
+    class LoggerManager;
+} // namespace act::logger
 
 /**
  * @brief This manager handles SQLite3 databases
  */
-class SQLiteDbManager : public AbsDbManager
+class ASqLiteDbManager : public AbsDbManager
 {
   public:
     /** @brief Create the manager
@@ -33,13 +37,13 @@ class SQLiteDbManager : public AbsDbManager
      * @param migrationDataPath The path to the migration data directory, if any
      * @param loggerManager The logger manager to use to create loggers
      */
-    explicit SQLiteDbManager(std::filesystem::path dbFilePath,
-                             const std::string &dbSlug,
-                             const std::optional<std::filesystem::path> &migrationDataDir,
-                             const LoggerManager &loggerManager);
+    explicit ASqLiteDbManager(std::filesystem::path dbFilePath,
+                              const std::string &dbSlug,
+                              const std::optional<std::filesystem::path> &migrationDataDir,
+                              const act::logger::LoggerManager &loggerManager);
 
     /** @brief Destructor */
-    ~SQLiteDbManager() override = default;
+    ~ASqLiteDbManager() override = default;
 
   public:
     /** @brief Tells if database is opened */
