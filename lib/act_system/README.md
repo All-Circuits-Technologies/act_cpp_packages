@@ -1,3 +1,6 @@
+<!-- SPDX-FileCopyrightText: 2026 Théo Magne <theo.magne@allcircuits.com> -->
+<!-- SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1 -->
+
 # act_system
 
 System-level utilities library providing multi-process synchronization primitives using flock-based locking.

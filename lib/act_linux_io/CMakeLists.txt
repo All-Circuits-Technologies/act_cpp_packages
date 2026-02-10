@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 All Circuits Technologies
+# SPDX-FileCopyrightText: 2026 Théo Magne <theo.magne@allcircuits.com>
 #
 # SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 

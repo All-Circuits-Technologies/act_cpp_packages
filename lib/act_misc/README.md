@@ -1,3 +1,6 @@
+<!-- SPDX-FileCopyrightText: 2026 Théo Magne <theo.magne@allcircuits.com> -->
+<!-- SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1 -->
+
 # act_misc
 
 Base utility library providing common helpers, threading utilities, file operations, string manipulation, and other miscellaneous functionalities.

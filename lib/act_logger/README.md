@@ -1,3 +1,6 @@
+<!-- SPDX-FileCopyrightText: 2026 Théo Magne <theo.magne@allcircuits.com> -->
+<!-- SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1 -->
+
 # act_logger
 
 Logging infrastructure library providing logger managers, external loggers, console output, and helper utilities for consistent logging across modules.

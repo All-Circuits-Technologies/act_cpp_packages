@@ -1,3 +1,6 @@
+<!-- SPDX-FileCopyrightText: 2026 Théo Magne <theo.magne@allcircuits.com> -->
+<!-- SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1 -->
+
 # act_sqlite
 
 SQLite database management library providing database abstraction layer, connection management, and logging integration.
