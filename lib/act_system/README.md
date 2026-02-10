@@ -3,7 +3,8 @@
 
 # act_system
 
-System-level utilities library providing multi-process synchronization primitives using flock-based locking.
+System-level utilities library providing multi-process synchronization primitives using flock-based
+locking.
 
 ## Dependencies
 

@@ -3,7 +3,8 @@
 
 # act_misc
 
-Base utility library providing common helpers, threading utilities, file operations, string manipulation, and other miscellaneous functionalities.
+Base utility library providing common helpers, threading utilities, file operations, string
+manipulation, and other miscellaneous functionalities.
 
 ## Dependencies
 

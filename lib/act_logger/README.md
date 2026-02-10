@@ -3,7 +3,8 @@
 
 # act_logger
 
-Logging infrastructure library providing logger managers, external loggers, console output, and helper utilities for consistent logging across modules.
+Logging infrastructure library providing logger managers, external loggers, console output, and
+helper utilities for consistent logging across modules.
 
 ## Dependencies
 

@@ -3,7 +3,8 @@
 
 # act_sqlite
 
-SQLite database management library providing database abstraction layer, connection management, and logging integration.
+SQLite database management library providing database abstraction layer, connection management, and
+logging integration.
 
 ## Dependencies
 
