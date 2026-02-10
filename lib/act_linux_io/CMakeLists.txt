@@ -15,14 +15,6 @@
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(LIBGPIOD libgpiodcxx)
 
-# Check for libgpiod v2.x (required for this module)
-if(NOT LIBGPIOD_FOUND OR LIBGPIOD_VERSION VERSION_LESS "2.0")
-    message(WARNING "libgpiod v2.x not found (have: ${LIBGPIOD_VERSION}). "
-                    "act_linux_io module will be skipped. "
-                    "Install libgpiod-dev >= 2.0 to enable.")
-    return()
-endif()
-
 add_library(act_linux_io STATIC
     src/gpio/linux_gpio.cpp
     src/led/linux_led.cpp
