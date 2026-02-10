@@ -30,8 +30,9 @@ AbsDbManager::AbsDbManager(const std::string &dbSlug,
 
 bool AbsDbManager::applyMigrationUpdates()
 {
-    SystemCriticalSection criticalSection(getDbSlug() + "-database-migration", *m_logger);
-    SystemCriticalSectionGuard guard(criticalSection);
+    act::system::SystemCriticalSection criticalSection(getDbSlug() + "-database-migration",
+                                                       *m_logger);
+    act::system::SystemCriticalSectionGuard guard(criticalSection);
 
     if (!m_migrationDataDir.has_value())
     {

@@ -16,26 +16,34 @@
 
 /* # Forward declaration */
 
-/** @brief Lock a critical section during entire object life type */
-class SystemCriticalSectionGuard
+namespace act
 {
-  public:
-    /**  @brief Lock criticalSection until destructor
-     * @param criticalSection Critical section to lock
-     */
-    explicit SystemCriticalSectionGuard(SystemCriticalSection &criticalSection)
-        : m_criticalSection(criticalSection)
+    namespace system
     {
-        UNUSED(m_criticalSection.enter());
-    }
 
-    /** @brief Unlock critical section */
-    virtual ~SystemCriticalSectionGuard()
-    {
-        UNUSED(m_criticalSection.leave());
-    }
+        /** @brief Lock a critical section during entire object life type */
+        class SystemCriticalSectionGuard
+        {
+          public:
+            /**  @brief Lock criticalSection until destructor
+             * @param criticalSection Critical section to lock
+             */
+            explicit SystemCriticalSectionGuard(SystemCriticalSection &criticalSection)
+                : m_criticalSection(criticalSection)
+            {
+                UNUSED(m_criticalSection.enter());
+            }
 
-  private:
-    /** @brief Critical section */
-    SystemCriticalSection &m_criticalSection;
-};
+            /** @brief Unlock critical section */
+            virtual ~SystemCriticalSectionGuard()
+            {
+                UNUSED(m_criticalSection.leave());
+            }
+
+          private:
+            /** @brief Critical section */
+            SystemCriticalSection &m_criticalSection;
+        };
+
+    } // namespace system
+} // namespace act
