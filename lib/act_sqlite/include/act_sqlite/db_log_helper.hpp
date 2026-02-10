@@ -7,7 +7,6 @@
 /* # App includes (in alphabetical order) */
 
 /* # Internal includes library */
-#include "act_logger/helpers/logger_helper.hpp"
 
 /* # Extern includes: Library */
 
