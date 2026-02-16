@@ -1,4 +1,5 @@
 <!-- SPDX-FileCopyrightText: 2026 Théo Magne <theo.magne@allcircuits.com> -->
+
 <!-- SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1 -->
 
 # act_sqlite
@@ -8,8 +9,10 @@ logging integration.
 
 ## Dependencies
 
-- **Internal:** act_misc, act_logger, act_system
-- **External:** SQLiteCpp (libsqlitecpp-dev)
+- act_foundation
+- act_logger
+- act_system
+- SQLiteCpp (libsqlitecpp-dev)
 
 ## Debian Packages
 
@@ -20,5 +23,5 @@ sudo apt install libsqlitecpp-dev
 ## Features
 
 - **Abstract DB Manager:** Base class for database managers with critical section support
-- **SQLite DB Manager:** SQLite-specific database manager implementation
 - **DB Log Helper:** Logging utilities for database operations
+- **SQLite DB Manager:** SQLite-specific database manager implementation

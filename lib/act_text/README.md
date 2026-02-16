@@ -1,4 +1,5 @@
 <!-- SPDX-FileCopyrightText: 2026 Théo Magne <theo.magne@allcircuits.com> -->
+
 <!-- SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1 -->
 
 # act_text
@@ -11,21 +12,21 @@ This module provides utilities for string manipulation, parsing, and text format
 
 ## Contents
 
+- **CsvUtil:** CSV file parsing and processing
 - **StringUtil:** String manipulation and conversion utilities
 - **VectorStringUtil:** Operations on vectors of strings
-- **CsvUtil:** CSV file parsing and processing
 
 ## Dependencies
 
-- act_foundation (base classes)
-- act_logger (logging interface)
+- act_foundation
+- act_logger
 
 ## Usage
 
 ```cpp
-#include "act_text/string_util.hpp"
-#include "act_text/vector_string_util.hpp"
-#include "act_text/csv_util.hpp"
+#include <act_text/string_util.hpp>
+#include <act_text/vector_string_util.hpp>
+#include <act_text/csv_util.hpp>
 ```
 
 ## License

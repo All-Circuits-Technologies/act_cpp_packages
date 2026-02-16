@@ -1,4 +1,5 @@
 <!-- SPDX-FileCopyrightText: 2026 Théo Magne <theo.magne@allcircuits.com> -->
+
 <!-- SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1 -->
 
 # act_linux_io
@@ -7,8 +8,9 @@ Linux-specific I/O library for GPIO control and LED management via sysfs and lib
 
 ## Dependencies
 
-- **Internal:** act_misc, act_logger
-- **External:** libgpiod v2.x (libgpiodcxx)
+- act_files
+- act_logger
+- libgpiod v2.x (libgpiodcxx)
 
 ## Debian Packages
 
@@ -25,7 +27,8 @@ sudo apt install libgpiod-dev
 
 - **GPIO:** Linux GPIO control using libgpiod v2 API
 - **LED:** LED control via sysfs
-  - Abstract LED trigger configuration
-  - Oneshot trigger configuration
-  - Pattern trigger configuration
-  - Simple (on/off) trigger configuration
+  - Manual ON/OFF control
+  - Trigger-based control
+    - oneshot
+    - pattern
+    - triggers without settings (panic, etc)

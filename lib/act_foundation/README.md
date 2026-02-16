@@ -1,4 +1,5 @@
 <!-- SPDX-FileCopyrightText: 2026 Théo Magne <theo.magne@allcircuits.com> -->
+
 <!-- SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1 -->
 
 # act_foundation
@@ -24,9 +25,9 @@ None - this is a foundational module.
 ## Usage
 
 ```cpp
-#include "act_foundation/not_copiable_not_movable.hpp"
-#include "act_foundation/abs_manager.hpp"
-#include "act_foundation/constants/def_soft.hpp"
+#include <act_foundation/not_copiable_not_movable.hpp>
+#include <act_foundation/abs_manager.hpp>
+#include <act_foundation/constants/def_soft.hpp>
 ```
 
 ## License

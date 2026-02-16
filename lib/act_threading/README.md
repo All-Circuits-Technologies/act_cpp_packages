@@ -1,4 +1,5 @@
 <!-- SPDX-FileCopyrightText: 2026 Théo Magne <theo.magne@allcircuits.com> -->
+
 <!-- SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1 -->
 
 # act_threading
@@ -12,20 +13,20 @@ concurrent programming.
 
 ## Contents
 
-- **ReusableThread:** Thread abstraction that can be restarted
 - **Mutexed:** Template wrapper for thread-safe access to data
+- **ReusableThread:** Thread abstraction that can be restarted
 - **Types:** Threading-related types and results
 
 ## Dependencies
 
-- act_foundation (base classes)
-- act_logger (logging interface)
+- act_foundation
+- act_logger
 
 ## Usage
 
 ```cpp
-#include "act_threading/reusable_thread.hpp"
-#include "act_threading/mutexed.hpp"
+#include <act_threading/reusable_thread.hpp>
+#include <act_threading/mutexed.hpp>
 ```
 
 ## License

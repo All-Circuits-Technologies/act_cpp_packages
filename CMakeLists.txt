@@ -39,27 +39,19 @@ option(BUILD_TESTS "Build tests" OFF)
 
 # -----------------------------------------------------------------------------
 # Library Modules
+#-----------------------------------------------------------------------------
+# Modules are listed alphabetically for simplicity.
 # -----------------------------------------------------------------------------
-# Note: Order matters due to dependencies:
-#   - act_foundation: No dependencies (foundational)
-#   - act_logger: Depends on act_foundation
-#   - act_threading: Depends on act_foundation, act_logger
-#   - act_text: Depends on act_foundation, act_logger
-#   - act_files: Depends on act_foundation, act_logger
-#   - act_time: Depends on act_foundation, act_logger, act_threading
-#   - act_system: Depends on act_foundation, act_logger, act_threading, act_text
-#   - act_sqlite: Depends on act_foundation
-#   - act_linux_io: Depends on act_files
 
-add_subdirectory(lib/act_foundation)
-add_subdirectory(lib/act_logger)
-add_subdirectory(lib/act_threading)
-add_subdirectory(lib/act_text)
 add_subdirectory(lib/act_files)
-add_subdirectory(lib/act_time)
-add_subdirectory(lib/act_system)
-add_subdirectory(lib/act_sqlite)
+add_subdirectory(lib/act_foundation)
 add_subdirectory(lib/act_linux_io)
+add_subdirectory(lib/act_logger)
+add_subdirectory(lib/act_sqlite)
+add_subdirectory(lib/act_system)
+add_subdirectory(lib/act_text)
+add_subdirectory(lib/act_threading)
+add_subdirectory(lib/act_time)
 
 # -----------------------------------------------------------------------------
 # Demo Applications (TODO)

@@ -1,4 +1,5 @@
 <!-- SPDX-FileCopyrightText: 2026 Théo Magne <theo.magne@allcircuits.com> -->
+
 <!-- SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1 -->
 
 # act_logger
@@ -8,14 +9,8 @@ helper utilities for consistent logging across modules.
 
 ## Dependencies
 
-- **Internal:** act_misc
-- **External:** None
-
-## Debian Packages
-
-```bash
-# No additional packages required
-```
+- act_foundation
+- act_text
 
 ## Features
 

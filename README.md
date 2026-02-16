@@ -1,7 +1,10 @@
 <!-- SPDX-FileCopyrightText: 2026 Théo Magne <theo.magne@allcircuits.com> -->
+
 <!-- SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1 -->
 
-# ACT C++ Libraries
+# ACT C++ Libraries <!-- omit from toc -->
+
+## Table of content <!-- omit from toc -->
 
 A collection of modular, reusable C++ libraries for embedded Linux systems and general-purpose
 applications developed by All-Circuits Technologies.
@@ -22,69 +25,21 @@ need in your projects.
 
 ## Libraries
 
-### [`act_logger`](lib/act_logger)
-
-Logging infrastructure providing logger managers, external loggers, console output, and helper
-utilities for consistent logging across modules.
-
-**Features:**
-
-- Multi-logger support with different output backends
-- Configurable log levels and formatting
-- Thread-safe logging operations
-- Integration with external logging systems
-
-### [`act_misc`](lib/act_misc)
-
-Base utility library providing common helpers, threading utilities, file operations, string
-manipulation, and other miscellaneous functionalities.
-
-**Features:**
-
-- Threading utilities (mutexed, reusable threads)
-- File and CSV utilities
-- String and date/time manipulation
-- JSON utilities (Crow and nlohmann JSON support)
-- Event callback systems
-- Action delayer and restartable timers
-
-### [`act_system`](lib/act_system)
-
-System-level utilities library providing multi-process synchronization primitives using flock-based
-locking.
-
-**Features:**
-
-- Critical section management across processes
-- RAII-style critical section guards
-- File-lock based synchronization
-
-### [`act_sqlite`](lib/act_sqlite)
-
-SQLite database management library providing database abstraction layer, connection management, and
-logging integration.
-
-**Features:**
-
-- Database connection management
-- Query execution helpers
-- Logging integration for database operations
-- Transaction support
-
-### [`act_linux_io`](lib/act_linux_io)
-
-Linux-specific I/O library for GPIO control and LED management via sysfs and libgpiod.
-
-**Features:**
-
-- GPIO control using libgpiod
-- LED management via sysfs
-- LED trigger configurations (oneshot, pattern, simple)
-- Hardware abstraction for Linux I/O devices
+| Library                                          | Description                                                                               |
+| ------------------------------------------------ | ----------------------------------------------------------------------------------------- |
+| [`act_files`](lib/act_files/README.md)           | File system operations and file management utilities.                                     |
+| [`act_foundation`](lib/act_foundation/README.md) | Foundational base classes, constants, and design patterns (no dependencies).              |
+| [`act_linux_io`](lib/act_linux_io/README.md)     | Linux-specific I/O for GPIO control and LED management.                                   |
+| [`act_logger`](lib/act_logger/README.md)         | Logging infrastructure with flexible output backends.                                     |
+| [`act_sqlite`](lib/act_sqlite/README.md)         | SQLite database management with abstraction layer.                                        |
+| [`act_system`](lib/act_system/README.md)         | System-level utilities for multi-process synchronization, reboots, and command execution. |
+| [`act_text`](lib/act_text/README.md)             | Text and string processing utilities.                                                     |
+| [`act_threading`](lib/act_threading/README.md)   | Threading utilities and synchronization primitives.                                       |
+| [`act_time`](lib/act_time/README.md)             | Date, time, and timing utilities with timers and delays.                                  |
 
 ## Requirements
 
-- **C++ Standard:** C++17 or later
+- **C++ Standard:** C++20 or later
 - **CMake:** Version 3.23 or later
 - **Compiler:** GCC 9+ or Clang 10+
 - **OS:** Linux (some libraries are Linux-specific)
@@ -93,11 +48,10 @@ Linux-specific I/O library for GPIO control and LED management via sysfs and lib
 
 Each library has its own dependencies. Refer to individual library READMEs for specific requirements.
 
-Common dependencies include:
+Common external dependencies:
 
-- libgpiod (for `act_linux_io`)
-- SQLite3 (for `act_sqlite`)
-- nlohmann-json (for JSON utilities in `act_misc`)
+- libgpiod v2.x (for `act_linux_io`)
+- SQLiteCpp (for `act_sqlite`)
 
 ## Building
 
