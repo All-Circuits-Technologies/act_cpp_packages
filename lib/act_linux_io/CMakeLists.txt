@@ -13,7 +13,7 @@
 # -----------------------------------------------------------------------------
 
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(LIBGPIOD libgpiodcxx)
+pkg_check_modules(LIBGPIOD libgpiodcxx>=2.0 REQUIRED)
 
 add_library(act_linux_io STATIC
     src/gpio/linux_gpio.cpp
