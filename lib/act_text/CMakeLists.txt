@@ -30,9 +30,9 @@ target_compile_features(act_text PUBLIC cxx_std_20)
 # Dependencies
 target_link_libraries(act_text
     PUBLIC
+    act_files
     act_foundation
     act_logger
-    act_files
 )
 
 # Install targets

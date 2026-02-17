@@ -12,9 +12,9 @@
 # -----------------------------------------------------------------------------
 
 add_library(act_time STATIC
+    src/action_delayer.cpp
     src/date_time_util.cpp
     src/restartable_timer.cpp
-    src/action_delayer.cpp
 )
 
 # Public headers are exposed via include/<module_name>/

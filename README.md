@@ -4,24 +4,30 @@
 
 # ACT C++ Libraries <!-- omit from toc -->
 
-## Table of content <!-- omit from toc -->
-
 A collection of modular, reusable C++ libraries for embedded Linux systems and general-purpose
 applications developed by All-Circuits Technologies.
 
+## Table of content <!-- omit from toc -->
+
+- [Overview](#overview)
+- [Libraries](#libraries)
+- [Requirements](#requirements)
+  - [Dependencies](#dependencies)
+- [Building](#building)
+  - [Build All Libraries](#build-all-libraries)
+  - [Build Options](#build-options)
+  - [Use Individual Libraries](#use-individual-libraries)
+- [Development](#development)
+  - [Development Container](#development-container)
+  - [Code Style](#code-style)
+- [License](#license)
+- [Contributing](#contributing)
+- [Maintainers](#maintainers)
+
 ## Overview
 
-This repository provides a set of independent C++ libraries covering common functionality needed
-across multiple projects:
-
-- **Logging infrastructure** with flexible output backends
-- **System utilities** for multi-process synchronization
-- **Database management** with SQLite integration
-- **Linux I/O control** for GPIO and LED management
-- **Common utilities** for threading, file operations, and string manipulation
-
-Each library is self-contained with minimal dependencies, allowing you to include only what you
-need in your projects.
+This repository is a collection of modular, reusable C++ libraries for embedded Linux systems and
+general-purpose applications developed by All-Circuits Technologies.
 
 ## Libraries
 

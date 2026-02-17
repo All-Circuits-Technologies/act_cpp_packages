@@ -12,8 +12,8 @@
 # -----------------------------------------------------------------------------
 
 add_library(act_files STATIC
-    src/file_util.cpp
     src/ext_file.cpp
+    src/file_util.cpp
 )
 
 # Public headers are exposed via include/<module_name>/

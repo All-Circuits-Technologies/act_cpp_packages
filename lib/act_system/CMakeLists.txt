@@ -28,8 +28,8 @@ target_link_libraries(act_system
     PUBLIC
     act_foundation
     act_logger
-    act_threading
     act_text
+    act_threading
 )
 
 install(TARGETS act_system DESTINATION lib)
