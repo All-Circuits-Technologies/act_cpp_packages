@@ -23,7 +23,8 @@
 namespace act::system
 {
 
-    SystemCriticalSection::SystemCriticalSection(const char *slug, const AbsLogger &logger)
+    SystemCriticalSection::SystemCriticalSection(const char *slug,
+                                                 const act::logger::AbsLogger &logger)
         : m_logger(logger)
     {
         const std::string lockFilePath = ComputeLockFilePath(slug);

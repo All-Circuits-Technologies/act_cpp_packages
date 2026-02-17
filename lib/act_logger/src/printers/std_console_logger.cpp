@@ -58,7 +58,7 @@ namespace act::logger
         if (!categories.empty())
         {
             formattedMessage += "[";
-            formattedMessage += VectorStringUtil::join(categories, CATEGORIES_SEPARATOR);
+            formattedMessage += act::text::VectorStringUtil::join(categories, CATEGORIES_SEPARATOR);
             formattedMessage += "] ";
         }
 

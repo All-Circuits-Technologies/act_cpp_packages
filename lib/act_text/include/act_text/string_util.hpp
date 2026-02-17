@@ -17,10 +17,13 @@
 #include <string>
 
 /* # Forward declaration */
-class AbsLogger;
+namespace act::logger
+{
+    class AbsLogger;
+} // namespace act::logger
 
 /** @brief Set of String helpers */
-namespace StringUtil
+namespace act::text::StringUtil
 {
     /* ## Types */
 
@@ -188,4 +191,4 @@ namespace StringUtil
 
     /* ## Constants */
 
-} // namespace StringUtil
+} // namespace act::text::StringUtil

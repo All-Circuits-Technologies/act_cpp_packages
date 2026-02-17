@@ -15,19 +15,24 @@
 
 /* # Forward declaration */
 
-/** @brief Managers shared behavior */
-class AbsManager : private NotCopiableNotMovable
+namespace act::foundation
 {
-  protected:
-    /// @brief Nothing special for default constructor
-    AbsManager() = default;
 
-    /// @brief Nothing special for default destructor
-    ~AbsManager() override = default;
+    /** @brief Managers shared behavior */
+    class AbsManager : private NotCopiableNotMovable
+    {
+      protected:
+        /// @brief Nothing special for default constructor
+        AbsManager() = default;
 
-  public:
-    /**
-     * @brief Start required internals
-     */
-    virtual bool init(void) = 0;
-};
+        /// @brief Nothing special for default destructor
+        ~AbsManager() override = default;
+
+      public:
+        /**
+         * @brief Start required internals
+         */
+        virtual bool init(void) = 0;
+    };
+
+} // namespace act::foundation

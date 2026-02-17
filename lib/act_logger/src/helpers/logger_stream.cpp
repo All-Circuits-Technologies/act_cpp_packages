@@ -14,20 +14,25 @@
 
 /* # Extern includes: Global */
 
-LoggerStream::LoggerStream(LogsLevel::Enum level, const AbsLogger &logger)
-    : m_logger{logger},
-      m_level{level}
+namespace act::logger
 {
-}
 
-LoggerStream::~LoggerStream()
-{
-    auto tmpLog = m_stream.str();
-    if (tmpLog.empty())
+    LoggerStream::LoggerStream(LogsLevel::Enum level, const AbsLogger &logger)
+        : m_logger{logger},
+          m_level{level}
     {
-        // No log to perform
-        return;
     }
 
-    m_logger.log(m_level, tmpLog);
-}
+    LoggerStream::~LoggerStream()
+    {
+        auto tmpLog = m_stream.str();
+        if (tmpLog.empty())
+        {
+            // No log to perform
+            return;
+        }
+
+        m_logger.log(m_level, tmpLog);
+    }
+
+} // namespace act::logger

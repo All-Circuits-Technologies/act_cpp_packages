@@ -25,7 +25,7 @@ namespace act::logger
     class LoggerHelper;
 
     /** @brief The LoggerManager class handles logging operations */
-    class AbsLoggerManager : public AbsManager, public AbsLogger
+    class AbsLoggerManager : public act::foundation::AbsManager, public AbsLogger
     {
       public:
         /**

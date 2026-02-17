@@ -63,14 +63,19 @@
 /** @brief Identity multiplication factor for Modbus (or other protocols) */
 constexpr float IDENTITY_MULTIPLICATION_FACTOR{1.0f};
 
-/**
- * @brief This namespace contains hexadecimal conversion constants
- */
-namespace HexConstants
+namespace act::foundation
 {
-    /** @brief Number of hexadecimal characters per byte */
-    constexpr size_t HEX_CHARS_PER_BYTE = 2;
 
-    /** @brief Base used for hexadecimal conversion */
-    constexpr int HEXADECIMAL_BASE = 16;
-} /* namespace HexConstants */
+    /**
+     * @brief This namespace contains hexadecimal conversion constants
+     */
+    namespace HexConstants
+    {
+        /** @brief Number of hexadecimal characters per byte */
+        constexpr size_t HEX_CHARS_PER_BYTE = 2;
+
+        /** @brief Base used for hexadecimal conversion */
+        constexpr int HEXADECIMAL_BASE = 16;
+    } /* namespace HexConstants */
+
+} // namespace act::foundation

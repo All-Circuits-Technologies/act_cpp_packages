@@ -16,40 +16,45 @@
 
 /* # Forward declaration */
 
-class AbsLogger;
-
-/** @brief This class helps to log messages using stream syntax */
-class LoggerStream
+namespace act::logger
 {
-  public:
-    /** @brief Constructor */
-    explicit LoggerStream(LogsLevel::Enum level, const AbsLogger &logger);
 
-    /** @brief Destructor */
-    virtual ~LoggerStream();
+    class AbsLogger;
 
-  public:
-    /** @brief Get the underlying string stream */
-    std::ostringstream &getStream()
+    /** @brief This class helps to log messages using stream syntax */
+    class LoggerStream
     {
-        return m_stream;
-    }
+      public:
+        /** @brief Constructor */
+        explicit LoggerStream(LogsLevel::Enum level, const AbsLogger &logger);
 
-    /** @brief Overload of the stream operator */
-    template <typename T>
-    LoggerStream &operator<<(const T &value)
-    {
-        m_stream << value;
-        return *this;
-    }
+        /** @brief Destructor */
+        virtual ~LoggerStream();
 
-  private:
-    /** @brief The underlying string stream */
-    std::ostringstream m_stream;
+      public:
+        /** @brief Get the underlying string stream */
+        std::ostringstream &getStream()
+        {
+            return m_stream;
+        }
 
-    /** @brief The logger used to log */
-    const AbsLogger &m_logger;
+        /** @brief Overload of the stream operator */
+        template <typename T>
+        LoggerStream &operator<<(const T &value)
+        {
+            m_stream << value;
+            return *this;
+        }
 
-    /** @brief The level of the log */
-    LogsLevel::Enum m_level;
-};
+      private:
+        /** @brief The underlying string stream */
+        std::ostringstream m_stream;
+
+        /** @brief The logger used to log */
+        const AbsLogger &m_logger;
+
+        /** @brief The level of the log */
+        LogsLevel::Enum m_level;
+    };
+
+} // namespace act::logger

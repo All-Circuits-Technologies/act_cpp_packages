@@ -18,7 +18,7 @@
 /* # Forward declaration */
 
 /** @brief Contains the string list utility functions */
-namespace VectorStringUtil
+namespace act::text::VectorStringUtil
 {
     /**
      * @brief Join the elements of a vector of strings into a single string with a separator.
@@ -35,4 +35,4 @@ namespace VectorStringUtil
      * @return A vector of strings resulting from the split.
      */
     std::vector<std::string> split(const std::string &str, const std::string &separator);
-} // namespace VectorStringUtil
+} // namespace act::text::VectorStringUtil

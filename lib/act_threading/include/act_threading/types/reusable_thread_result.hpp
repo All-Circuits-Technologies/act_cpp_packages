@@ -15,14 +15,19 @@
 
 /* # Forward declaration */
 
-class ReusableThreadResult : private NotCopiableNotMovable
+namespace act::threading
 {
-  public:
-    /** @brief Enum representing the result of starting reusable thread */
-    enum class Enum
+
+    class ReusableThreadResult : private act::foundation::NotCopiableNotMovable
     {
-        OK = 0,
-        ALREADY_RUNNING,
-        INTERNAL_ERROR
+      public:
+        /** @brief Enum representing the result of starting reusable thread */
+        enum class Enum
+        {
+            OK = 0,
+            ALREADY_RUNNING,
+            INTERNAL_ERROR
+        };
     };
-};
+
+} // namespace act::threading

@@ -21,10 +21,10 @@
 #include <iostream>
 #include <sstream>
 
-namespace FileUtil
+namespace act::files::FileUtil
 {
     std::optional<std::string> ReadFile(const std::string &path,
-                                        const AbsLogger &logger,
+                                        const act::logger::AbsLogger &logger,
                                         std::ios::openmode mode)
     {
         std::ifstream file(path, mode);
@@ -43,7 +43,7 @@ namespace FileUtil
     }
 
     std::optional<int> ReadFileAsInt(const std::string &path,
-                                     const AbsLogger &logger,
+                                     const act::logger::AbsLogger &logger,
                                      std::ios::openmode mode)
     {
         auto optContent = ReadFile(path, logger, mode);
@@ -68,7 +68,7 @@ namespace FileUtil
 
     bool WriteFile(const std::string &path,
                    const std::string &content,
-                   const AbsLogger &logger,
+                   const act::logger::AbsLogger &logger,
                    std::ios::openmode mode)
     {
         std::ofstream file(path, mode);
@@ -99,7 +99,7 @@ namespace FileUtil
     }
 
     std::shared_ptr<ExtFile> CreateFile(const std::string &path,
-                                        const AbsLogger &logger,
+                                        const act::logger::AbsLogger &logger,
                                         std::ios::openmode mode,
                                         bool isTemp)
     {
@@ -113,14 +113,16 @@ namespace FileUtil
     }
 
     std::shared_ptr<ExtFile> CreateFile(const std::string &path,
-                                        const AbsLogger &logger,
+                                        const act::logger::AbsLogger &logger,
                                         bool isTemp)
     {
         auto extFile = new ExtFile(path, logger, isTemp);
         return std::shared_ptr<ExtFile>(extFile);
     }
 
-    bool ArePathsEqual(const std::string &path1, const std::string &path2, const AbsLogger &logger)
+    bool ArePathsEqual(const std::string &path1,
+                       const std::string &path2,
+                       const act::logger::AbsLogger &logger)
     {
         if (path1 == path2)
         {
@@ -154,4 +156,4 @@ namespace FileUtil
         std::filesystem::path fsPath(path);
         return fsPath.filename().string();
     }
-} /* namespace FileUtil */
+} /* namespace act::files::FileUtil */

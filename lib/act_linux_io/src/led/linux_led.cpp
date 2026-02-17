@@ -95,12 +95,12 @@ namespace act::linux_io
 
     std::optional<std::string> LinuxLed::readConfString(const std::string &fileName) const
     {
-        return FileUtil::ReadFile(getConfFilePath(fileName), *m_logger);
+        return act::files::FileUtil::ReadFile(getConfFilePath(fileName), *m_logger);
     }
 
     std::optional<int> LinuxLed::readConfInt(const std::string &fileName) const
     {
-        return FileUtil::ReadFileAsInt(getConfFilePath(fileName), *m_logger);
+        return act::files::FileUtil::ReadFileAsInt(getConfFilePath(fileName), *m_logger);
     }
 
     std::optional<unsigned int> LinuxLed::readConfUInt(const std::string &fileName) const
@@ -124,17 +124,17 @@ namespace act::linux_io
 
     bool LinuxLed::writeConfString(const std::string &fileName, const std::string &value)
     {
-        return FileUtil::WriteFile(getConfFilePath(fileName), value, *m_logger);
+        return act::files::FileUtil::WriteFile(getConfFilePath(fileName), value, *m_logger);
     }
 
     bool LinuxLed::writeConfInt(const std::string &fileName, int value)
     {
-        return FileUtil::WriteFile(getConfFilePath(fileName), value, *m_logger);
+        return act::files::FileUtil::WriteFile(getConfFilePath(fileName), value, *m_logger);
     }
 
     bool LinuxLed::writeConfUInt(const std::string &fileName, unsigned int value)
     {
-        return FileUtil::WriteFile(getConfFilePath(fileName), value, *m_logger);
+        return act::files::FileUtil::WriteFile(getConfFilePath(fileName), value, *m_logger);
     }
 
     /* ### Private methods */

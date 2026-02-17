@@ -29,7 +29,7 @@ namespace act::sqlite
     /**
      * @brief This abstract manager contains db-engine-agnostic shared code
      */
-    class AbsDbManager : public AbsManager
+    class AbsDbManager : public act::foundation::AbsManager
     {
       public:
         /** @brief Create the manager

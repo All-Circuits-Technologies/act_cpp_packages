@@ -16,106 +16,112 @@
 #include <filesystem>
 #include <fstream>
 
-ExtFile::ExtFile(std::string filePath, const AbsLogger &logger, bool isTemp)
-    : m_logger{logger},
-      m_fstream{new std::fstream()},
-      m_filePath(std::move(filePath)),
-      m_isTemp(isTemp)
+namespace act::files
 {
-}
 
-ExtFile::~ExtFile()
-{
-    m_fstream->close();
-
-    if (m_isTemp)
+    ExtFile::ExtFile(std::string filePath, const act::logger::AbsLogger &logger, bool isTemp)
+        : m_logger{logger},
+          m_fstream{new std::fstream()},
+          m_filePath(std::move(filePath)),
+          m_isTemp(isTemp)
     {
-        if (std::remove(m_filePath.c_str()) != 0)
-        {
-            m_logger.warningStream() << "Failed to delete temporary file '" << m_filePath << "'";
-        }
     }
 
-    delete m_fstream;
-}
-
-ExtFile::ExtFile(std::fstream *fstream,
-                 std::string filePath,
-                 const AbsLogger &logger,
-                 std::ios::openmode mode,
-                 bool isTemp)
-    : m_logger{logger},
-      m_fstream{fstream},
-      m_mode{mode},
-      m_filePath(std::move(filePath)),
-      m_isTemp(isTemp)
-{
-}
-
-std::string ExtFile::getAbsoluteFilePath() const
-{
-    return std::filesystem::absolute(m_filePath).string();
-}
-
-bool ExtFile::open(std::ios::openmode mode)
-{
-    if (m_mode.has_value() && m_mode.value() == mode)
+    ExtFile::~ExtFile()
     {
-        // File is already opened with the requested mode
-        // Nothing to do
+        m_fstream->close();
+
+        if (m_isTemp)
+        {
+            if (std::remove(m_filePath.c_str()) != 0)
+            {
+                m_logger.warningStream()
+                    << "Failed to delete temporary file '" << m_filePath << "'";
+            }
+        }
+
+        delete m_fstream;
+    }
+
+    ExtFile::ExtFile(std::fstream *fstream,
+                     std::string filePath,
+                     const act::logger::AbsLogger &logger,
+                     std::ios::openmode mode,
+                     bool isTemp)
+        : m_logger{logger},
+          m_fstream{fstream},
+          m_mode{mode},
+          m_filePath(std::move(filePath)),
+          m_isTemp(isTemp)
+    {
+    }
+
+    std::string ExtFile::getAbsoluteFilePath() const
+    {
+        return std::filesystem::absolute(m_filePath).string();
+    }
+
+    bool ExtFile::open(std::ios::openmode mode)
+    {
+        if (m_mode.has_value() && m_mode.value() == mode)
+        {
+            // File is already opened with the requested mode
+            // Nothing to do
+            return true;
+        }
+
+        auto openResult = OpenFile(*m_fstream, m_filePath, mode, m_logger);
+        if (!openResult)
+        {
+            return false;
+        }
+
+        m_mode = mode;
+
         return true;
     }
 
-    auto openResult = OpenFile(*m_fstream, m_filePath, mode, m_logger);
-    if (!openResult)
+    void ExtFile::close()
     {
-        return false;
+        // Close method already test if the file is opened
+        m_fstream->close();
+        m_mode = std::nullopt;
     }
 
-    m_mode = mode;
-
-    return true;
-}
-
-void ExtFile::close()
-{
-    // Close method already test if the file is opened
-    m_fstream->close();
-    m_mode = std::nullopt;
-}
-
-bool ExtFile::isOpen() const
-{
-    return m_fstream->is_open();
-}
-
-ExtFile *ExtFile::CreateFileAndTryToOpenIt(const std::string &filePath,
-                                           std::ios::openmode mode,
-                                           const AbsLogger &logger,
-                                           bool isTemp)
-{
-    auto fstream = new std::fstream();
-    auto openResult = OpenFile(*fstream, filePath, mode, logger);
-    if (!openResult)
+    bool ExtFile::isOpen() const
     {
-        delete fstream;
-        return nullptr;
+        return m_fstream->is_open();
     }
 
-    return new ExtFile(fstream, filePath, logger, mode, isTemp);
-}
-
-bool ExtFile::OpenFile(std::fstream &fstream,
-                       const std::string &filePath,
-                       std::ios::openmode mode,
-                       const AbsLogger &logger)
-{
-    fstream.open(filePath, mode);
-    if (!fstream.is_open())
+    ExtFile *ExtFile::CreateFileAndTryToOpenIt(const std::string &filePath,
+                                               std::ios::openmode mode,
+                                               const act::logger::AbsLogger &logger,
+                                               bool isTemp)
     {
-        logger.errorStream() << "Failed to open file '" << filePath << "'";
-        return false;
+        auto fstream = new std::fstream();
+        auto openResult = OpenFile(*fstream, filePath, mode, logger);
+        if (!openResult)
+        {
+            delete fstream;
+            return nullptr;
+        }
+
+        return new ExtFile(fstream, filePath, logger, mode, isTemp);
     }
 
-    return true;
-}
+    bool ExtFile::OpenFile(std::fstream &fstream,
+                           const std::string &filePath,
+                           std::ios::openmode mode,
+                           const act::logger::AbsLogger &logger)
+    {
+        fstream.open(filePath, mode);
+        if (!fstream.is_open())
+        {
+            logger.errorStream() << "Failed to open file '" << filePath << "'";
+            return false;
+        }
+
+        return true;
+    }
+
+} // namespace act::files

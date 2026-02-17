@@ -16,10 +16,17 @@
 #include <vector>
 
 /* # Forward declaration */
-class AbsLogger;
-class ExtFile;
+namespace act::logger
+{
+    class AbsLogger;
+} // namespace act::logger
 
-namespace CsvUtil
+namespace act::files
+{
+    class ExtFile;
+} // namespace act::files
+
+namespace act::text::CsvUtil
 {
     /** @brief Default CSV separator character */
     const constexpr char *DefaultCsvSeparator = ",";
@@ -42,8 +49,8 @@ namespace CsvUtil
      * @return true upon success, false otherwise
      */
     bool AddCsvLine(const std::vector<std::string> &values,
-                    const AbsLogger &logger,
-                    ExtFile &file,
+                    const act::logger::AbsLogger &logger,
+                    act::files::ExtFile &file,
                     const std::string &separator = DefaultCsvSeparator);
 
     /**
@@ -61,4 +68,4 @@ namespace CsvUtil
      */
     std::vector<std::string> ParseCsvLine(const std::string &csvLine,
                                           const std::string &separator = DefaultCsvSeparator);
-} // namespace CsvUtil
+} // namespace act::text::CsvUtil
