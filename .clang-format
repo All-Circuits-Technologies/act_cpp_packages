@@ -20,7 +20,7 @@ QualifierAlignment: Left
 ReferenceAlignment: Right
 SortIncludes: true
 SpacesBeforeTrailingComments: 1
-NamespaceIndentation: All
+NamespaceIndentation: Inner
 BinPackParameters: OnePerLine
 BinPackArguments: false
 AllowAllArgumentsOnNextLine: false

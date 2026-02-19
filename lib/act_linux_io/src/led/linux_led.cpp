@@ -21,132 +21,132 @@
 namespace act::linux_io
 {
 
-    const std::string LinuxLed::LEDS_DIR = "/sys/class/leds";
-    const std::string LinuxLed::BRIGHTNESS_FILE_NAME = "brightness";
-    const std::string LinuxLed::MAX_BRIGHTNESS_FILE_NAME = "max_brightness";
-    const std::string LinuxLed::TRIGGER_FILE_NAME = "trigger";
-    const std::string LinuxLed::TRIGGER_NONE_VALUE = "none";
+const std::string LinuxLed::LEDS_DIR = "/sys/class/leds";
+const std::string LinuxLed::BRIGHTNESS_FILE_NAME = "brightness";
+const std::string LinuxLed::MAX_BRIGHTNESS_FILE_NAME = "max_brightness";
+const std::string LinuxLed::TRIGGER_FILE_NAME = "trigger";
+const std::string LinuxLed::TRIGGER_NONE_VALUE = "none";
 
-    /* # Constructors */
+/* # Constructors */
 
-    LinuxLed::LinuxLed(std::string ledName, act::logger::LoggerHelper &parentLogger)
-        : m_ledName(std::move(ledName)),
-          m_logger{parentLogger.createSubLogger(m_ledName)}
+LinuxLed::LinuxLed(std::string ledName, act::logger::LoggerHelper &parentLogger)
+    : m_ledName(std::move(ledName)),
+      m_logger{parentLogger.createSubLogger(m_ledName)}
+{
+}
+
+/* # Methods */
+
+unsigned int LinuxLed::getBrightness() const
+{
+    return readConfUInt(BRIGHTNESS_FILE_NAME).value_or(0);
+}
+
+bool LinuxLed::setBrightness(unsigned int brightness)
+{
+    return clearTrigger() &&
+           writeConfUInt(BRIGHTNESS_FILE_NAME, std::min(brightness, getMaxBrightness()));
+}
+
+unsigned int LinuxLed::getMaxBrightness() const
+{
+    if (m_maxBrightnessCache == 0)
     {
+        // Not yet cached
+        // Reminder: value 0 can't be a valid max brightness
+        m_maxBrightnessCache = readConfUInt(MAX_BRIGHTNESS_FILE_NAME).value_or(0);
     }
 
-    /* # Methods */
+    return m_maxBrightnessCache;
+}
 
-    unsigned int LinuxLed::getBrightness() const
+bool LinuxLed::hasTrigger(const AbsLedTriggerConfig &triggerConfig) const
+{
+    return triggerConfig.isLedAlreadyConfigured(*this);
+}
+
+bool LinuxLed::setTrigger(const std::string &trigger, bool force)
+{
+    if (!force && m_currentTriggerCache == trigger)
     {
-        return readConfUInt(BRIGHTNESS_FILE_NAME).value_or(0);
+        // Already set, no need to re-set
+        return true;
     }
 
-    bool LinuxLed::setBrightness(unsigned int brightness)
+    bool result = writeConfString(TRIGGER_FILE_NAME, trigger);
+    if (result)
     {
-        return clearTrigger() &&
-               writeConfUInt(BRIGHTNESS_FILE_NAME, std::min(brightness, getMaxBrightness()));
+        m_currentTriggerCache = trigger;
     }
 
-    unsigned int LinuxLed::getMaxBrightness() const
-    {
-        if (m_maxBrightnessCache == 0)
-        {
-            // Not yet cached
-            // Reminder: value 0 can't be a valid max brightness
-            m_maxBrightnessCache = readConfUInt(MAX_BRIGHTNESS_FILE_NAME).value_or(0);
-        }
+    return result;
+}
 
-        return m_maxBrightnessCache;
+bool LinuxLed::setTrigger(const AbsLedTriggerConfig &triggerConfig, bool force)
+{
+    return triggerConfig.applyToLed(*this, force);
+}
+
+bool LinuxLed::setTriggerIfNotAlreadyConfigured(const AbsLedTriggerConfig &triggerConfig,
+                                                bool force)
+{
+    return triggerConfig.applyToLedIfNotAlreadyConfigured(*this, force);
+}
+
+std::optional<std::string> LinuxLed::readConfString(const std::string &fileName) const
+{
+    return act::files::FileUtil::ReadFile(getConfFilePath(fileName), *m_logger);
+}
+
+std::optional<int> LinuxLed::readConfInt(const std::string &fileName) const
+{
+    return act::files::FileUtil::ReadFileAsInt(getConfFilePath(fileName), *m_logger);
+}
+
+std::optional<unsigned int> LinuxLed::readConfUInt(const std::string &fileName) const
+{
+    std::optional<int> optInt = readConfInt(fileName);
+
+    if (!optInt.has_value())
+    {
+        // Log: already reported by readConfInt
+        return std::nullopt;
     }
 
-    bool LinuxLed::hasTrigger(const AbsLedTriggerConfig &triggerConfig) const
+    if (optInt.value() < 0)
     {
-        return triggerConfig.isLedAlreadyConfigured(*this);
+        m_logger->errorStream() << "Negative value read from " << fileName;
+        return std::nullopt;
     }
 
-    bool LinuxLed::setTrigger(const std::string &trigger, bool force)
-    {
-        if (!force && m_currentTriggerCache == trigger)
-        {
-            // Already set, no need to re-set
-            return true;
-        }
+    return static_cast<unsigned int>(optInt.value());
+}
 
-        bool result = writeConfString(TRIGGER_FILE_NAME, trigger);
-        if (result)
-        {
-            m_currentTriggerCache = trigger;
-        }
+bool LinuxLed::writeConfString(const std::string &fileName, const std::string &value)
+{
+    return act::files::FileUtil::WriteFile(getConfFilePath(fileName), value, *m_logger);
+}
 
-        return result;
-    }
+bool LinuxLed::writeConfInt(const std::string &fileName, int value)
+{
+    return act::files::FileUtil::WriteFile(getConfFilePath(fileName), value, *m_logger);
+}
 
-    bool LinuxLed::setTrigger(const AbsLedTriggerConfig &triggerConfig, bool force)
-    {
-        return triggerConfig.applyToLed(*this, force);
-    }
+bool LinuxLed::writeConfUInt(const std::string &fileName, unsigned int value)
+{
+    return act::files::FileUtil::WriteFile(getConfFilePath(fileName), value, *m_logger);
+}
 
-    bool LinuxLed::setTriggerIfNotAlreadyConfigured(const AbsLedTriggerConfig &triggerConfig,
-                                                    bool force)
-    {
-        return triggerConfig.applyToLedIfNotAlreadyConfigured(*this, force);
-    }
+/* ### Private methods */
 
-    std::optional<std::string> LinuxLed::readConfString(const std::string &fileName) const
-    {
-        return act::files::FileUtil::ReadFile(getConfFilePath(fileName), *m_logger);
-    }
+std::string LinuxLed::getLedDirPath() const
+{
+    return LEDS_DIR + "/" + m_ledName;
+}
 
-    std::optional<int> LinuxLed::readConfInt(const std::string &fileName) const
-    {
-        return act::files::FileUtil::ReadFileAsInt(getConfFilePath(fileName), *m_logger);
-    }
-
-    std::optional<unsigned int> LinuxLed::readConfUInt(const std::string &fileName) const
-    {
-        std::optional<int> optInt = readConfInt(fileName);
-
-        if (!optInt.has_value())
-        {
-            // Log: already reported by readConfInt
-            return std::nullopt;
-        }
-
-        if (optInt.value() < 0)
-        {
-            m_logger->errorStream() << "Negative value read from " << fileName;
-            return std::nullopt;
-        }
-
-        return static_cast<unsigned int>(optInt.value());
-    }
-
-    bool LinuxLed::writeConfString(const std::string &fileName, const std::string &value)
-    {
-        return act::files::FileUtil::WriteFile(getConfFilePath(fileName), value, *m_logger);
-    }
-
-    bool LinuxLed::writeConfInt(const std::string &fileName, int value)
-    {
-        return act::files::FileUtil::WriteFile(getConfFilePath(fileName), value, *m_logger);
-    }
-
-    bool LinuxLed::writeConfUInt(const std::string &fileName, unsigned int value)
-    {
-        return act::files::FileUtil::WriteFile(getConfFilePath(fileName), value, *m_logger);
-    }
-
-    /* ### Private methods */
-
-    std::string LinuxLed::getLedDirPath() const
-    {
-        return LEDS_DIR + "/" + m_ledName;
-    }
-
-    std::string LinuxLed::getConfFilePath(const std::string &fileName) const
-    {
-        return getLedDirPath() + "/" + fileName;
-    }
+std::string LinuxLed::getConfFilePath(const std::string &fileName) const
+{
+    return getLedDirPath() + "/" + fileName;
+}
 
 } // namespace act::linux_io

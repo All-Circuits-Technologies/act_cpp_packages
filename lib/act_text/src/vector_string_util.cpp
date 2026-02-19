@@ -19,58 +19,58 @@
 namespace act::text::VectorStringUtil
 {
 
-    std::string join(const std::vector<std::string> &vec, const std::string &separator)
+std::string join(const std::vector<std::string> &vec, const std::string &separator)
+{
+    auto citer = vec.cbegin();
+    if (citer == vec.cend())
     {
-        auto citer = vec.cbegin();
-        if (citer == vec.cend())
-        {
-            return "";
-        }
-
-        std::stringstream resultStream;
-        resultStream << *citer;
-        ++citer;
-        if (separator.empty())
-        {
-            for (; citer != vec.cend(); ++citer)
-            {
-                resultStream << *citer;
-            }
-        }
-        else
-        {
-            for (; citer != vec.cend(); ++citer)
-            {
-                resultStream << separator << *citer;
-            }
-        }
-
-        return resultStream.str();
+        return "";
     }
 
-    std::vector<std::string> split(const std::string &str, const std::string &separator)
+    std::stringstream resultStream;
+    resultStream << *citer;
+    ++citer;
+    if (separator.empty())
     {
-        std::stringstream stringStream(str);
-        std::vector<std::string> tmpList;
-        std::string element;
-
-        if (!str.empty())
+        for (; citer != vec.cend(); ++citer)
         {
-            int start = 0;
-            size_t idx = str.find(separator, start);
-            while (idx != std::string::npos)
-            {
-                int length = idx - start;
-                tmpList.push_back(str.substr(start, length));
-                start += (length + separator.size());
+            resultStream << *citer;
+        }
+    }
+    else
+    {
+        for (; citer != vec.cend(); ++citer)
+        {
+            resultStream << separator << *citer;
+        }
+    }
 
-                idx = str.find(separator, start);
-            }
+    return resultStream.str();
+}
 
-            tmpList.push_back(str.substr(start));
+std::vector<std::string> split(const std::string &str, const std::string &separator)
+{
+    std::stringstream stringStream(str);
+    std::vector<std::string> tmpList;
+    std::string element;
+
+    if (!str.empty())
+    {
+        int start = 0;
+        size_t idx = str.find(separator, start);
+        while (idx != std::string::npos)
+        {
+            int length = idx - start;
+            tmpList.push_back(str.substr(start, length));
+            start += (length + separator.size());
+
+            idx = str.find(separator, start);
         }
 
-        return tmpList;
+        tmpList.push_back(str.substr(start));
     }
+
+    return tmpList;
+}
 
 } // namespace act::text::VectorStringUtil

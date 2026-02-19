@@ -17,6 +17,6 @@
 
 namespace act::logger::LogsConstants
 {
-    /** @brief Default console logs level */
-    constexpr const LogsLevel::Enum DEFAULT_CONSOLE_LOGS_LEVEL = LogsLevel::Enum::INFO;
+/** @brief Default console logs level */
+constexpr const LogsLevel::Enum DEFAULT_CONSOLE_LOGS_LEVEL = LogsLevel::Enum::INFO;
 } // namespace act::logger::LogsConstants

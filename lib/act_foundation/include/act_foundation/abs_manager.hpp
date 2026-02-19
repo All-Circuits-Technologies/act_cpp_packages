@@ -18,21 +18,21 @@
 namespace act::foundation
 {
 
-    /** @brief Managers shared behavior */
-    class AbsManager : private NotCopiableNotMovable
-    {
-      protected:
-        /// @brief Nothing special for default constructor
-        AbsManager() = default;
+/** @brief Managers shared behavior */
+class AbsManager : private NotCopiableNotMovable
+{
+  protected:
+    /// @brief Nothing special for default constructor
+    AbsManager() = default;
 
-        /// @brief Nothing special for default destructor
-        ~AbsManager() override = default;
+    /// @brief Nothing special for default destructor
+    ~AbsManager() override = default;
 
-      public:
-        /**
-         * @brief Start required internals
-         */
-        virtual bool init(void) = 0;
-    };
+  public:
+    /**
+     * @brief Start required internals
+     */
+    virtual bool init(void) = 0;
+};
 
 } // namespace act::foundation

@@ -15,24 +15,24 @@
 namespace act::logger
 {
 
-    MultiExternalLogger::MultiExternalLogger(
-        const std::vector<std::shared_ptr<AbsExternalLogger>> &loggers)
-        : AbsExternalLogger(LogsLevel::Enum::TRACE),
-          m_loggers{loggers}
-    {
-    }
+MultiExternalLogger::MultiExternalLogger(
+    const std::vector<std::shared_ptr<AbsExternalLogger>> &loggers)
+    : AbsExternalLogger(LogsLevel::Enum::TRACE),
+      m_loggers{loggers}
+{
+}
 
-    void MultiExternalLogger::log(LogsLevel::Enum level,
-                                  const std::string &message,
-                                  const std::vector<std::string> &categories)
+void MultiExternalLogger::log(LogsLevel::Enum level,
+                              const std::string &message,
+                              const std::vector<std::string> &categories)
+{
+    for (const auto &logger : m_loggers)
     {
-        for (const auto &logger : m_loggers)
+        if (logger)
         {
-            if (logger)
-            {
-                logger->log(level, message, categories);
-            }
+            logger->log(level, message, categories);
         }
     }
+}
 
 } // namespace act::logger

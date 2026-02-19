@@ -9,19 +9,19 @@
 namespace act::foundation
 {
 
-    /** @brief Singletons shared behavior */
-    template <typename T>
-    class Singleton : private NotCopiableNotMovable
-    {
-      protected:
-        /** @brief Constructor is only accessible to subclasses
-         * @note Only subclass T::CreateInstance can create a T instance
-         */
-        Singleton() = default;
+/** @brief Singletons shared behavior */
+template <typename T>
+class Singleton : private NotCopiableNotMovable
+{
+  protected:
+    /** @brief Constructor is only accessible to subclasses
+     * @note Only subclass T::CreateInstance can create a T instance
+     */
+    Singleton() = default;
 
-        /// @brief Destructor is only accessible to subclasses
-        virtual ~Singleton() = default;
-    };
+    /// @brief Destructor is only accessible to subclasses
+    virtual ~Singleton() = default;
+};
 
 } // namespace act::foundation
 

@@ -18,18 +18,18 @@
 namespace act::logger
 {
 
-    AbsLoggerManager::AbsLoggerManager()
-        : AbsManager()
-    {
-    }
+AbsLoggerManager::AbsLoggerManager()
+    : AbsManager()
+{
+}
 
-    bool AbsLoggerManager::init()
-    {
-        auto externalLogger = getExternalLogger();
-        m_loggerHelper = std::make_shared<LoggerHelper>(externalLogger);
+bool AbsLoggerManager::init()
+{
+    auto externalLogger = getExternalLogger();
+    m_loggerHelper = std::make_shared<LoggerHelper>(externalLogger);
 
-        info("LoggerManager initialized successfully.");
-        return true;
-    }
+    info("LoggerManager initialized successfully.");
+    return true;
+}
 
 } // namespace act::logger

@@ -16,11 +16,11 @@
 namespace act::linux_io
 {
 
-    /* # Constructors */
+/* # Constructors */
 
-    SimpleLedTriggerConfig::SimpleLedTriggerConfig(std::string name)
-        : AbsLedTriggerConfig(std::move(name))
-    {
-    }
+SimpleLedTriggerConfig::SimpleLedTriggerConfig(std::string name)
+    : AbsLedTriggerConfig(std::move(name))
+{
+}
 
 } // namespace act::linux_io

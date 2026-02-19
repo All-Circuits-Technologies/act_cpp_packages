@@ -19,53 +19,52 @@
 namespace act::logger
 {
 
-    StdConsoleLogger::StdConsoleLogger(
-        LogsLevel::Enum minLevel,
-        LogsLevel::Enum minLevelToPrintToStdErr,
-        const std::map<std::string, LogsLevel::Enum> &minLevelByCategory)
-        : AbsExternalLogger(minLevel, minLevelByCategory),
-          m_minLevelToPrintToStdErr{minLevelToPrintToStdErr}
+StdConsoleLogger::StdConsoleLogger(LogsLevel::Enum minLevel,
+                                   LogsLevel::Enum minLevelToPrintToStdErr,
+                                   const std::map<std::string, LogsLevel::Enum> &minLevelByCategory)
+    : AbsExternalLogger(minLevel, minLevelByCategory),
+      m_minLevelToPrintToStdErr{minLevelToPrintToStdErr}
+{
+}
+
+void StdConsoleLogger::logToExternal(LogsLevel::Enum level,
+                                     const std::string &message,
+                                     const std::vector<std::string> &categories)
+{
+    auto formattedMessage = FormatLogMessage(level, message, categories);
+
+    // Output to standard console
+    if (level < m_minLevelToPrintToStdErr)
     {
+        std::cout << formattedMessage << std::endl;
+    }
+    else
+    {
+        std::cerr << formattedMessage << std::endl;
+    }
+}
+
+std::string StdConsoleLogger::FormatLogMessage(LogsLevel::Enum level,
+                                               const std::string &message,
+                                               const std::vector<std::string> &categories)
+{
+    std::string formattedMessage;
+
+    // Add level
+    formattedMessage += "[" + LogsLevel::ToString(level) + "] ";
+
+    // Add categories if any
+    if (!categories.empty())
+    {
+        formattedMessage += "[";
+        formattedMessage += act::text::VectorStringUtil::join(categories, CATEGORIES_SEPARATOR);
+        formattedMessage += "] ";
     }
 
-    void StdConsoleLogger::logToExternal(LogsLevel::Enum level,
-                                         const std::string &message,
-                                         const std::vector<std::string> &categories)
-    {
-        auto formattedMessage = FormatLogMessage(level, message, categories);
+    // Add the actual message
+    formattedMessage += message;
 
-        // Output to standard console
-        if (level < m_minLevelToPrintToStdErr)
-        {
-            std::cout << formattedMessage << std::endl;
-        }
-        else
-        {
-            std::cerr << formattedMessage << std::endl;
-        }
-    }
-
-    std::string StdConsoleLogger::FormatLogMessage(LogsLevel::Enum level,
-                                                   const std::string &message,
-                                                   const std::vector<std::string> &categories)
-    {
-        std::string formattedMessage;
-
-        // Add level
-        formattedMessage += "[" + LogsLevel::ToString(level) + "] ";
-
-        // Add categories if any
-        if (!categories.empty())
-        {
-            formattedMessage += "[";
-            formattedMessage += act::text::VectorStringUtil::join(categories, CATEGORIES_SEPARATOR);
-            formattedMessage += "] ";
-        }
-
-        // Add the actual message
-        formattedMessage += message;
-
-        return formattedMessage;
-    }
+    return formattedMessage;
+}
 
 } // namespace act::logger

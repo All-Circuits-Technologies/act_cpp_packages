@@ -17,132 +17,132 @@
 namespace act::time
 {
 
-    ActionDelayer::ActionDelayer(const act::logger::AbsLogger &logger,
-                                 unsigned int delayMs,
-                                 const std::function<void()> &callback,
-                                 std::optional<unsigned int> maxDelayMs,
-                                 bool startImmediately)
-        : m_logger{logger},
-          m_callback{callback},
-          m_isRunning{false}
+ActionDelayer::ActionDelayer(const act::logger::AbsLogger &logger,
+                             unsigned int delayMs,
+                             const std::function<void()> &callback,
+                             std::optional<unsigned int> maxDelayMs,
+                             bool startImmediately)
+    : m_logger{logger},
+      m_callback{callback},
+      m_isRunning{false}
+{
+    m_delayRestartableTimer = new RestartableTimer(
+        logger,
+        delayMs,
+        [this]() { internalDelayTimerCallback(); },
+        false,
+        false);
+
+    if (maxDelayMs.has_value())
     {
-        m_delayRestartableTimer = new RestartableTimer(
+        m_maxDelayRestartableTimer = new RestartableTimer(
             logger,
-            delayMs,
-            [this]() { internalDelayTimerCallback(); },
+            maxDelayMs.value(),
+            [this]() { internalMaxDelayTimerCallback(); },
             false,
             false);
-
-        if (maxDelayMs.has_value())
-        {
-            m_maxDelayRestartableTimer = new RestartableTimer(
-                logger,
-                maxDelayMs.value(),
-                [this]() { internalMaxDelayTimerCallback(); },
-                false,
-                false);
-        }
-
-        if (startImmediately)
-        {
-            startOrRestart();
-        }
     }
 
-    ActionDelayer::~ActionDelayer()
+    if (startImmediately)
     {
-        delete m_delayRestartableTimer;
-        delete m_maxDelayRestartableTimer;
+        startOrRestart();
     }
+}
 
-    void ActionDelayer::startOrRestart()
+ActionDelayer::~ActionDelayer()
+{
+    delete m_delayRestartableTimer;
+    delete m_maxDelayRestartableTimer;
+}
+
+void ActionDelayer::startOrRestart()
+{
+    std::lock_guard<std::mutex> lock(m_actionMutex);
+    startOrRestartProcess();
+}
+
+void ActionDelayer::startOrDelay()
+{
+    std::lock_guard<std::mutex> lock(m_actionMutex);
+
+    if (!m_isRunning)
     {
-        std::lock_guard<std::mutex> lock(m_actionMutex);
+        // We start the timers if they were not already running
         startOrRestartProcess();
+        return;
     }
 
-    void ActionDelayer::startOrDelay()
+    // We delay the action by restarting the delay timer, but we do not restart the max delay
+    // timer to keep the original max delay time from the first start
+    m_delayRestartableTimer->startOrRestart();
+}
+
+void ActionDelayer::stop()
+{
+    std::lock_guard<std::mutex> lock(m_actionMutex);
+
+    if (m_maxDelayRestartableTimer != nullptr)
     {
-        std::lock_guard<std::mutex> lock(m_actionMutex);
-
-        if (!m_isRunning)
-        {
-            // We start the timers if they were not already running
-            startOrRestartProcess();
-            return;
-        }
-
-        // We delay the action by restarting the delay timer, but we do not restart the max delay
-        // timer to keep the original max delay time from the first start
-        m_delayRestartableTimer->startOrRestart();
+        m_maxDelayRestartableTimer->stop();
     }
+    m_delayRestartableTimer->stop();
+    m_isRunning = false;
+}
 
-    void ActionDelayer::stop()
+bool ActionDelayer::isRunning()
+{
+    std::lock_guard<std::mutex> lock(m_actionMutex);
+    return m_isRunning;
+}
+
+void ActionDelayer::startOrRestartProcess()
+{
+    if (m_maxDelayRestartableTimer != nullptr)
     {
-        std::lock_guard<std::mutex> lock(m_actionMutex);
-
-        if (m_maxDelayRestartableTimer != nullptr)
-        {
-            m_maxDelayRestartableTimer->stop();
-        }
-        m_delayRestartableTimer->stop();
-        m_isRunning = false;
+        m_maxDelayRestartableTimer->startOrRestart();
     }
+    m_delayRestartableTimer->startOrRestart();
+    m_isRunning = true;
+}
 
-    bool ActionDelayer::isRunning()
+void ActionDelayer::internalDelayTimerCallback()
+{
+    std::unique_lock<std::mutex> lock(m_actionMutex);
+
+    if (!m_isRunning)
     {
-        std::lock_guard<std::mutex> lock(m_actionMutex);
-        return m_isRunning;
+        // The timer callback can be called after stop() is called, in this case we do nothing
+        return;
     }
 
-    void ActionDelayer::startOrRestartProcess()
+    if (m_maxDelayRestartableTimer != nullptr)
     {
-        if (m_maxDelayRestartableTimer != nullptr)
-        {
-            m_maxDelayRestartableTimer->startOrRestart();
-        }
-        m_delayRestartableTimer->startOrRestart();
-        m_isRunning = true;
+        m_maxDelayRestartableTimer->stop();
     }
+    m_isRunning = false;
 
-    void ActionDelayer::internalDelayTimerCallback()
+    lock.unlock();
+
+    m_callback();
+}
+
+void ActionDelayer::internalMaxDelayTimerCallback()
+{
+    std::unique_lock<std::mutex> lock(m_actionMutex);
+
+    if (!m_isRunning)
     {
-        std::unique_lock<std::mutex> lock(m_actionMutex);
-
-        if (!m_isRunning)
-        {
-            // The timer callback can be called after stop() is called, in this case we do nothing
-            return;
-        }
-
-        if (m_maxDelayRestartableTimer != nullptr)
-        {
-            m_maxDelayRestartableTimer->stop();
-        }
-        m_isRunning = false;
-
-        lock.unlock();
-
-        m_callback();
+        // The timer callback can be called after stop() is called, in this case we do nothing
+        return;
     }
 
-    void ActionDelayer::internalMaxDelayTimerCallback()
-    {
-        std::unique_lock<std::mutex> lock(m_actionMutex);
+    m_delayRestartableTimer->stop();
 
-        if (!m_isRunning)
-        {
-            // The timer callback can be called after stop() is called, in this case we do nothing
-            return;
-        }
+    m_isRunning = false;
 
-        m_delayRestartableTimer->stop();
+    lock.unlock();
 
-        m_isRunning = false;
-
-        lock.unlock();
-
-        m_callback();
-    }
+    m_callback();
+}
 
 } // namespace act::time

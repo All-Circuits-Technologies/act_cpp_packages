@@ -18,16 +18,16 @@
 namespace act::threading
 {
 
-    class ReusableThreadResult : private act::foundation::NotCopiableNotMovable
+class ReusableThreadResult : private act::foundation::NotCopiableNotMovable
+{
+  public:
+    /** @brief Enum representing the result of starting reusable thread */
+    enum class Enum
     {
-      public:
-        /** @brief Enum representing the result of starting reusable thread */
-        enum class Enum
-        {
-            OK = 0,
-            ALREADY_RUNNING,
-            INTERNAL_ERROR
-        };
+        OK = 0,
+        ALREADY_RUNNING,
+        INTERNAL_ERROR
     };
+};
 
 } // namespace act::threading

@@ -18,29 +18,27 @@
 namespace act::time
 {
 
-    std::string DateTimeUtil::GetCurrentIsoDateTimeUtc()
-    {
-        return GetCurrentIsoDateTime(std::gmtime);
-    }
+std::string DateTimeUtil::GetCurrentIsoDateTimeUtc()
+{
+    return GetCurrentIsoDateTime(std::gmtime);
+}
 
-    std::string DateTimeUtil::GetCurrentIsoDateTimeLocal()
-    {
-        return GetCurrentIsoDateTime(std::localtime);
-    }
+std::string DateTimeUtil::GetCurrentIsoDateTimeLocal()
+{
+    return GetCurrentIsoDateTime(std::localtime);
+}
 
-    std::string DateTimeUtil::GetCurrentIsoDateTime(
-        const std::function<tm *(const time_t *)> &timeConverter)
-    {
-        const auto now = std::time(nullptr);
-        char buffer[ISO_TIME_PATTERN_BUFFER_SIZE] = {0};
+std::string DateTimeUtil::GetCurrentIsoDateTime(
+    const std::function<tm *(const time_t *)> &timeConverter)
+{
+    const auto now = std::time(nullptr);
+    char buffer[ISO_TIME_PATTERN_BUFFER_SIZE] = {0};
 
-        // No need to test the return value, we assume the buffer is large enough
-        UNUSED(std::strftime(buffer,
-                             ISO_TIME_PATTERN_BUFFER_SIZE,
-                             ISO_TIME_PATTERN,
-                             timeConverter(&now)));
+    // No need to test the return value, we assume the buffer is large enough
+    UNUSED(
+        std::strftime(buffer, ISO_TIME_PATTERN_BUFFER_SIZE, ISO_TIME_PATTERN, timeConverter(&now)));
 
-        return {buffer};
-    }
+    return {buffer};
+}
 
 } // namespace act::time

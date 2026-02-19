@@ -23,68 +23,66 @@
 namespace act::text::CsvUtil
 {
 
-    std::string CreateCsvLine(const std::vector<std::string> &values, const std::string &separator)
+std::string CreateCsvLine(const std::vector<std::string> &values, const std::string &separator)
+{
+    std::stringstream stream;
+    stream << VectorStringUtil::join(values, separator);
+    stream << std::endl;
+    return stream.str();
+}
+
+bool AddCsvLine(const std::vector<std::string> &values,
+                const act::logger::AbsLogger &logger,
+                act::files::ExtFile &file,
+                const std::string &separator)
+{
+    if (!file.isOpen())
     {
-        std::stringstream stream;
-        stream << VectorStringUtil::join(values, separator);
-        stream << std::endl;
-        return stream.str();
+        logger.warningStream() << "CsvUtil::AddCsvLine: File is not open: " << file.getFilePath();
+        return false;
     }
 
-    bool AddCsvLine(const std::vector<std::string> &values,
-                    const act::logger::AbsLogger &logger,
-                    act::files::ExtFile &file,
-                    const std::string &separator)
+    std::fstream &fs = file.accessFilePtr();
+
+    fs << VectorStringUtil::join(values, separator);
+    fs << std::endl;
+    auto errorCode = fs.sync();
+    if (errorCode != 0)
     {
-        if (!file.isOpen())
-        {
-            logger.warningStream()
-                << "CsvUtil::AddCsvLine: File is not open: " << file.getFilePath();
-            return false;
-        }
-
-        std::fstream &fs = file.accessFilePtr();
-
-        fs << VectorStringUtil::join(values, separator);
-        fs << std::endl;
-        auto errorCode = fs.sync();
-        if (errorCode != 0)
-        {
-            logger.warningStream()
-                << "CsvUtil::AddCsvLine: Failed to sync file: " << file.getFilePath()
-                << ", after writing CSV line, error code: " << errorCode;
-            return false;
-        }
-
-        return true;
+        logger.warningStream() << "CsvUtil::AddCsvLine: Failed to sync file: " << file.getFilePath()
+                               << ", after writing CSV line, error code: " << errorCode;
+        return false;
     }
 
-    std::vector<std::string> ParseCsvFile(const std::string &csvContent)
+    return true;
+}
+
+std::vector<std::string> ParseCsvFile(const std::string &csvContent)
+{
+    std::vector<std::string> lines;
+    std::stringstream streamContent(csvContent);
+    std::string line;
+
+    while (std::getline(streamContent, line))
     {
-        std::vector<std::string> lines;
-        std::stringstream streamContent(csvContent);
-        std::string line;
-
-        while (std::getline(streamContent, line))
-        {
-            lines.push_back(line);
-        }
-
-        return lines;
+        lines.push_back(line);
     }
 
-    std::vector<std::string> ParseCsvLine(const std::string &csvLine, const std::string &separator)
-    {
-        auto values = VectorStringUtil::split(csvLine, separator);
-        std::vector<std::string> trimmedValues;
-        trimmedValues.reserve(values.size());
-        for (auto &value : values)
-        {
-            /* Trim whitespace from value */
-            trimmedValues.push_back(act::text::StringUtil::Trim(value));
-        }
+    return lines;
+}
 
-        return trimmedValues;
+std::vector<std::string> ParseCsvLine(const std::string &csvLine, const std::string &separator)
+{
+    auto values = VectorStringUtil::split(csvLine, separator);
+    std::vector<std::string> trimmedValues;
+    trimmedValues.reserve(values.size());
+    for (auto &value : values)
+    {
+        /* Trim whitespace from value */
+        trimmedValues.push_back(act::text::StringUtil::Trim(value));
     }
+
+    return trimmedValues;
+}
 
 } // namespace act::text::CsvUtil

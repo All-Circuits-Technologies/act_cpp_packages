@@ -23,64 +23,63 @@
 namespace act::system
 {
 
-    SystemCriticalSection::SystemCriticalSection(const char *slug,
-                                                 const act::logger::AbsLogger &logger)
-        : m_logger(logger)
-    {
-        const std::string lockFilePath = ComputeLockFilePath(slug);
-        m_fd = ::open(lockFilePath.c_str(), O_CREAT | O_RDWR, LOCK_FILE_ACCESS_RIGHTS);
+SystemCriticalSection::SystemCriticalSection(const char *slug, const act::logger::AbsLogger &logger)
+    : m_logger(logger)
+{
+    const std::string lockFilePath = ComputeLockFilePath(slug);
+    m_fd = ::open(lockFilePath.c_str(), O_CREAT | O_RDWR, LOCK_FILE_ACCESS_RIGHTS);
 
-        if (m_fd == -1)
-        {
-            m_logger.errorStream() << "Failed to create/open lock file " << lockFilePath << ": "
-                                   << std::strerror(errno);
-        }
+    if (m_fd == -1)
+    {
+        m_logger.errorStream() << "Failed to create/open lock file " << lockFilePath << ": "
+                               << std::strerror(errno);
+    }
+}
+
+SystemCriticalSection::~SystemCriticalSection()
+{
+    UNUSED(leave());
+}
+
+bool SystemCriticalSection::enter() const
+{
+    if (m_fd < 0)
+    {
+        m_logger.error("Invalid lock file descriptor");
+        return false;
     }
 
-    SystemCriticalSection::~SystemCriticalSection()
+    bool locked = (flock(m_fd, LOCK_EX) == 0);
+    if (!locked)
     {
-        UNUSED(leave());
+        m_logger.errorStream() << "Failed to lock critical section: " << std::strerror(errno);
+        return false;
     }
 
-    bool SystemCriticalSection::enter() const
+    return true;
+}
+
+bool SystemCriticalSection::leave() const
+{
+    if (m_fd < 0)
     {
-        if (m_fd < 0)
-        {
-            m_logger.error("Invalid lock file descriptor");
-            return false;
-        }
-
-        bool locked = (flock(m_fd, LOCK_EX) == 0);
-        if (!locked)
-        {
-            m_logger.errorStream() << "Failed to lock critical section: " << std::strerror(errno);
-            return false;
-        }
-
-        return true;
+        m_logger.error("Invalid lock file descriptor");
+        return false;
     }
 
-    bool SystemCriticalSection::leave() const
+    bool unlocked = (flock(m_fd, LOCK_UN) == 0);
+    if (!unlocked)
     {
-        if (m_fd < 0)
-        {
-            m_logger.error("Invalid lock file descriptor");
-            return false;
-        }
-
-        bool unlocked = (flock(m_fd, LOCK_UN) == 0);
-        if (!unlocked)
-        {
-            m_logger.errorStream() << "Failed to unlock critical section: " << std::strerror(errno);
-            return false;
-        }
-
-        return true;
+        m_logger.errorStream() << "Failed to unlock critical section: " << std::strerror(errno);
+        return false;
     }
 
-    std::string SystemCriticalSection::ComputeLockFilePath(const char *slug)
-    {
-        return std::string("/tmp/") + slug + ".lock";
-    }
+    return true;
+}
+
+std::string SystemCriticalSection::ComputeLockFilePath(const char *slug)
+{
+    return std::string("/tmp/") + slug + ".lock";
+}
 
 } // namespace act::system
