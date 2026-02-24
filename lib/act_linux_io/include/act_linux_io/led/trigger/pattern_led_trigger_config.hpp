@@ -4,19 +4,11 @@
 
 #pragma once
 
-/* # App includes (in alphabetical order) */
 #include "abs_led_trigger_config.hpp"
 
-/* # Internal includes library */
-
-/* # Extern includes: Library */
-
-/* # Extern includes: Global */
 #include <chrono>
 #include <string>
 #include <vector>
-
-/* # Forward declaration */
 
 namespace act::linux_io
 {

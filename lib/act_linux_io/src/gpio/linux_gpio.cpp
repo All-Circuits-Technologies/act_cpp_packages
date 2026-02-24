@@ -4,17 +4,10 @@
 
 // Note: Algorithms are strongly inspired by libgpiod C++ examples
 
-/* # Include of HPP file linked to the current CPP */
 #include "act_linux_io/gpio/linux_gpio.hpp"
 
-/* # App includes (in alphabetical order) */
-
-/* # Internal includes library */
 #include "act_logger/helpers/logger_helper.hpp"
 
-/* # Extern includes: Library */
-
-/* # Extern includes: Global */
 #include <gpiod.hpp>
 #include <thread>
 

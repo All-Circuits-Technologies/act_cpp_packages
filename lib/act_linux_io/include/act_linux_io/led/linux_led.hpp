@@ -4,18 +4,9 @@
 
 #pragma once
 
-/* # App includes (in alphabetical order) */
-
-/* # Internal includes library */
-
-/* # Extern includes: Library */
-
-/* # Extern includes: Global */
 #include <memory>
 #include <optional>
 #include <string>
-
-/* # Forward declaration */
 
 namespace act::logger
 {

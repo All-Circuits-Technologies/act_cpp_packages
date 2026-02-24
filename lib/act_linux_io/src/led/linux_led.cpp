@@ -2,21 +2,11 @@
 //
 // SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 
-/* # Include of HPP file linked to the current CPP */
 #include "act_linux_io/led/linux_led.hpp"
 
-/* # App includes (in alphabetical order) */
-#include "act_linux_io/led/trigger/abs_led_trigger_config.hpp"
-
-/* # Internal includes library */
 #include "act_files/file_util.hpp"
+#include "act_linux_io/led/trigger/abs_led_trigger_config.hpp"
 #include "act_logger/helpers/logger_helper.hpp"
-
-/* # Extern includes: Library */
-
-/* # Extern includes: Global */
-
-/* # Static allocations */
 
 namespace act::linux_io
 {
