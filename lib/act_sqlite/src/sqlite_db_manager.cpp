@@ -2,22 +2,14 @@
 //
 // SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 
-/* # Include of HPP file linked to the current CPP */
 #include "act_sqlite/sqlite_db_manager.hpp"
-
-/* # App includes (in alphabetical order) */
 
 // NOLINTNEXTLINE: this include is actually needed
 #include "act_logger/helpers/logger_helper.hpp"
 #include "act_sqlite/abs_db_manager.hpp"
 #include "act_sqlite/db_log_helper.hpp"
 
-/* # Internal includes library */
-
-/* # Extern includes: Library */
 #include <SQLiteCpp/SQLiteCpp.h>
-
-/* # Extern includes: Global */
 #include <regex>
 #include <sqlite3.h>
 

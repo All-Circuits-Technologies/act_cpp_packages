@@ -3,20 +3,13 @@
 // SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 
 #pragma once
-/* # App includes (in alphabetical order) */
 
-/* # Internal includes library */
-
-/* # Extern includes: Library */
-
-/* # Extern includes: Global */
 #include <algorithm>
 #include <cctype>
 #include <optional>
 #include <sstream>
 #include <string>
 
-/* # Forward declaration */
 namespace act::logger
 {
 class AbsLogger;

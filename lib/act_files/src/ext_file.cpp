@@ -2,17 +2,10 @@
 //
 // SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 
-/* # Include of HPP file linked to the current CPP */
 #include "act_files/ext_file.hpp"
 
-/* # App includes (in alphabetical order) */
-
-/* # Internal includes library */
 #include "act_logger/models/abs_logger.hpp"
 
-/* # Extern includes: Library */
-
-/* # Extern includes: Global */
 #include <filesystem>
 #include <fstream>
 

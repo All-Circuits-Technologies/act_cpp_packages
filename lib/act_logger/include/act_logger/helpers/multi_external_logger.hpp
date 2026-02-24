@@ -4,19 +4,11 @@
 
 #pragma once
 
-/* # App includes (in alphabetical order) */
+#include "act_foundation/constants/def_soft.hpp"
 #include "act_logger/printers/abs_external_logger.hpp"
 
-/* # Internal includes library */
-#include "act_foundation/constants/def_soft.hpp"
-
-/* # Extern includes: Library */
-
-/* # Extern includes: Global */
 #include <memory>
 #include <vector>
-
-/* # Forward declaration */
 
 namespace act::logger
 {

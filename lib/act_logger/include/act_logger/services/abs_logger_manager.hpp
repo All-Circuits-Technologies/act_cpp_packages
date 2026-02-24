@@ -4,19 +4,11 @@
 
 #pragma once
 
-/* # App includes (in alphabetical order) */
-#include "act_logger/helpers/logger_helper.hpp"
-
-/* # Internal includes library */
 #include "act_foundation/abs_manager.hpp"
+#include "act_logger/helpers/logger_helper.hpp"
 #include "act_logger/models/abs_logger.hpp"
 
-/* # Extern includes: Library */
-
-/* # Extern includes: Global */
 #include <memory>
-
-/* # Forward declaration */
 
 namespace act::logger
 {

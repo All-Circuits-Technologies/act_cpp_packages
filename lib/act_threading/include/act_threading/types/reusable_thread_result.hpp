@@ -4,16 +4,7 @@
 
 #pragma once
 
-/* # App includes (in alphabetical order) */
 #include "act_foundation/not_copiable_not_movable.hpp"
-
-/* # Internal includes library */
-
-/* # Extern includes: Library */
-
-/* # Extern includes: Global */
-
-/* # Forward declaration */
 
 namespace act::threading
 {

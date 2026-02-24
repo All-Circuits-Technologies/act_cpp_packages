@@ -4,17 +4,8 @@
 
 #pragma once
 
-/* # App includes (in alphabetical order) */
-#include "system_critical_section.hpp"
-
-/* # Internal includes library */
 #include "act_foundation/constants/def_soft.hpp"
-
-/* # Extern includes: Library */
-
-/* # Extern includes: Global */
-
-/* # Forward declaration */
+#include "system_critical_section.hpp"
 
 namespace act::system
 {

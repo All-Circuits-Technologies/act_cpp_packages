@@ -4,18 +4,9 @@
 
 #pragma once
 
-/* # App includes (in alphabetical order) */
-
-/* # Internal includes library */
-
-/* # Extern includes: Library */
-
-/* # Extern includes: Global */
 #include <cstdio>
 #include <string>
 #include <vector>
-
-/* # Forward declaration */
 
 /** @brief Contains the string list utility functions */
 namespace act::text::VectorStringUtil
