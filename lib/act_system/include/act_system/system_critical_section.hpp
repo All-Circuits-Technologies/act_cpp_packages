@@ -4,16 +4,8 @@
 
 #pragma once
 
-/* # App includes (in alphabetical order) */
-
-/* # Internal includes library */
-
-/* # Extern includes: Library */
-
-/* # Extern includes: Global */
 #include <string>
 
-/* # Forward declaration */
 namespace act::logger
 {
 class AbsLogger;
