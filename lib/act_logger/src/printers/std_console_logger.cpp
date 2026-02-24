@@ -2,18 +2,11 @@
 //
 // SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 
-/* # Include of HPP file linked to the current CPP */
 #include "act_logger/printers/std_console_logger.hpp"
 
-/* # App includes (in alphabetical order) */
 #include "act_logger/printers/abs_external_logger.hpp"
-
-/* # Internal includes library */
 #include "act_text/vector_string_util.hpp"
 
-/* # Extern includes: Library */
-
-/* # Extern includes: Global */
 #include <iostream>
 
 namespace act::logger

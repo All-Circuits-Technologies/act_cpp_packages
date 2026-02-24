@@ -4,19 +4,9 @@
 
 #pragma once
 
-/* # App includes (in alphabetical order) */
-
-/* # Internal includes library */
-
-/* # Extern includes: Library */
 #include "act_foundation/not_copiable_not_movable.hpp"
 
-/* # Extern includes: Library */
-
-/* # Extern includes: Global */
 #include <string>
-
-/* # Forward declaration */
 
 namespace act::logger
 {
