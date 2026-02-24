@@ -4,17 +4,8 @@
 
 #pragma once
 
-/* # App includes (in alphabetical order) */
-
-/* # Internal includes library */
-
-/* # Extern includes: Library */
-
-/* # Extern includes: Global */
 #include <mutex>
 #include <utility>
-
-/* # Forward declaration */
 
 namespace act::threading
 {

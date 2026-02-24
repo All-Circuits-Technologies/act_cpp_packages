@@ -4,17 +4,9 @@
 
 #pragma once
 
-/* # App includes (in alphabetical order) */
-
-/* # Internal includes library */
-
-/* # Extern includes: Library */
-
-/* # Extern includes: Global */
 #include <functional>
 #include <string>
 
-/* # Forward declaration */
 class tm;
 
 namespace act::time

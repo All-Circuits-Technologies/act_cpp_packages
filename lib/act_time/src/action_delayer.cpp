@@ -2,17 +2,9 @@
 //
 // SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 
-/* # Include of HPP file linked to the current CPP */
 #include "act_time/action_delayer.hpp"
 
-/* # App includes (in alphabetical order) */
 #include "act_time/restartable_timer.hpp"
-
-/* # Internal includes library */
-
-/* # Extern includes: Library */
-
-/* # Extern includes: Global */
 
 namespace act::time
 {

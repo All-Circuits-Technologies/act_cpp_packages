@@ -4,22 +4,14 @@
 
 #pragma once
 
-/* # App includes (in alphabetical order) */
 #include "act_logger/models/abs_logger.hpp"
 #include "act_threading/types/reusable_thread_result.hpp"
 
-/* # Internal includes library */
-
-/* # Extern includes: Library */
-
-/* # Extern includes: Global */
 #include <atomic>
 #include <functional>
 #include <mutex>
 #include <optional>
 #include <thread>
-
-/* # Forward declaration */
 
 namespace act::threading
 {
