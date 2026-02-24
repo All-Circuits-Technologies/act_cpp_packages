@@ -2,19 +2,12 @@
 //
 // SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 
-/* # Include of HPP file linked to the current CPP */
 #include "act_sqlite/abs_db_manager.hpp"
 
-/* # App includes (in alphabetical order) */
-
-/* # Internal includes library */
 #include "act_logger/services/logger_manager.hpp"
 #include "act_system/system_critical_section.hpp"
 #include "act_system/system_critical_section_guard.hpp"
 
-/* # Extern includes: Library */
-
-/* # Extern includes: Global */
 #include <fstream>
 #include <iostream>
 

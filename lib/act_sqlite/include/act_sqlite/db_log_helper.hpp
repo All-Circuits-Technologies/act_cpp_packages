@@ -4,16 +4,6 @@
 
 #pragma once
 
-/* # App includes (in alphabetical order) */
-
-/* # Internal includes library */
-
-/* # Extern includes: Library */
-
-/* # Extern includes: Global */
-
-/* # Forward declaration */
-
 /**
  * @brief Macros to help handling database not opened and exceptions
  * @param caller The caller function name

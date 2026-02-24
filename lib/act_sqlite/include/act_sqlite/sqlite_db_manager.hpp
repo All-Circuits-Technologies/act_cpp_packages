@@ -4,20 +4,12 @@
 
 #pragma once
 
-/* # App includes (in alphabetical order) */
 #include "abs_db_manager.hpp"
 
-/* # Internal includes library */
-
-/* # Extern includes: Library */
 #include <SQLiteCpp/Database.h>
-
-/* # Extern includes: Global */
 #include <filesystem>
 #include <memory>
 #include <optional>
-
-/* # Forward declaration */
 
 namespace act::logger
 {
