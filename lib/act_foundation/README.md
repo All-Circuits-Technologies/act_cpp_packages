@@ -25,9 +25,9 @@ None - this is a foundational module.
 ## Usage
 
 ```cpp
-#include <act_foundation/not_copiable_not_movable.hpp>
-#include <act_foundation/abs_manager.hpp>
-#include <act_foundation/constants/def_soft.hpp>
+#include "act_foundation/abs_manager.hpp"
+#include "act_foundation/constants/def_soft.hpp"
+#include "act_foundation/not_copiable_not_movable.hpp"
 ```
 
 ## License

@@ -25,8 +25,8 @@ concurrent programming.
 ## Usage
 
 ```cpp
-#include <act_threading/reusable_thread.hpp>
-#include <act_threading/mutexed.hpp>
+#include "act_threading/mutexed.hpp"
+#include "act_threading/reusable_thread.hpp"
 ```
 
 ## License

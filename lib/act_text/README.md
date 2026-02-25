@@ -24,9 +24,9 @@ This module provides utilities for string manipulation, parsing, and text format
 ## Usage
 
 ```cpp
-#include <act_text/string_util.hpp>
-#include <act_text/vector_string_util.hpp>
-#include <act_text/csv_util.hpp>
+#include "act_text/csv_util.hpp"
+#include "act_text/string_util.hpp"
+#include "act_text/vector_string_util.hpp"
 ```
 
 ## License
