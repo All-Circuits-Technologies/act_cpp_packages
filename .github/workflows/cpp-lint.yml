@@ -12,64 +12,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  cpp-lint-source:
-    name: C++ Lint (libgpiod v2 from source)
-    runs-on: ubuntu-24.04
-    permissions:
-      contents: read
-      pull-requests: write
-
-    steps:
-      - name: Clone repository
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-
-      - name: Install build dependencies
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install -y \
-            cmake \
-            ninja-build \
-            pkg-config \
-            git \
-            meson \
-            python3 \
-            libsqlitecpp-dev
-
-      - name: Build and install libgpiod v2
-        run: |
-          git clone --depth 1 --branch v2.1.3 https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git
-          meson setup libgpiod/build libgpiod
-          ninja -C libgpiod/build
-          sudo ninja -C libgpiod/build install
-          sudo ldconfig
-
-      - name: Generate compile_commands.json
-        run: cmake -S . -B build
-
-      - name: C/C++ Linter
-        uses: cpp-linter/cpp-linter-action@v2
-        id: linter
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          style: "file" # Use .clang-format
-          tidy-checks: "" # Use .clang-tidy
-          version: 21
-          repo-root: .
-          database: "build"
-          ignore: "build" # Ignore build folder
-          files-changed-only: false
-          lines-changed-only: false
-          extra-args: "-std=c++20"
-          thread-comments: update
-          step-summary: true
-
-      - name: Fail if linter found issues
-        if: steps.linter.outputs.checks-failed > 0
-        run: exit 1
-
   cpp-lint-container:
     name: C++ Lint (debian trixie)
     runs-on: ubuntu-24.04
@@ -85,12 +27,15 @@ jobs:
           apt-get update -y
           apt-get install -y \
             ca-certificates \
+            build-essential \
             cmake \
-            git \
             ninja-build \
             pkg-config \
-            libgpiod-dev \
-            libsqlitecpp-dev
+            git \
+            xz-utils \
+            file \
+            gcc \
+            g++
 
       - name: Clone repository
         uses: actions/checkout@v4
