@@ -37,13 +37,14 @@ jobs:
             gcc \
             g++
 
-      - name: Install required libs to build
-        run: ./tools/install_deps.sh
-
       - name: Clone repository
         uses: actions/checkout@v4
         with:
           submodules: recursive
+
+      - name: Install required libs to build
+        run: ./tools/install_deps.sh
+
 
       - name: Generate compile_commands.json
         run: cmake -S . -B build
