@@ -1,0 +1,88 @@
+# SPDX-FileCopyrightText: 2026 Théo Magne <theo.magne@allcircuits.com>
+#
+# SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
+
+# Build directories
+build/
+Build/
+cmake-build-*/
+out/
+
+# Ignore clang cache
+.cache/
+
+# CMake files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CTestTestfile.cmake
+install_manifest.txt
+Makefile
+
+# Build artifacts
+*.o
+*.a
+*.so
+*.so.*
+*.dylib
+*.dll
+*.exe
+*.out
+*.app
+
+# Compiler outputs
+*.d
+*.obj
+*.lib
+*.exp
+*.pdb
+*.ilk
+
+# IDE and editor files
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.sublime-*
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# QtCreator
+*.user
+*.autosave
+
+# Clion
+.clion/
+
+# Testing
+Testing/
+*.gcov
+*.gcda
+*.gcno
+coverage/
+CTestTestfile.cmake
+
+# Package managers
+conan/
+vcpkg_installed/
+
+# Documentation build
+docs/_build/
+docs/html/
+docs/latex/
+
+# Temporary files
+*.tmp
+*.bak
+*.log
+tmp/
+temp/
+
+# OS files
+Thumbs.db
+.DS_Store
+_codeql_detected_source_root

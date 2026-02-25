@@ -1,0 +1,112 @@
+// SPDX-FileCopyrightText: 2025 Anthony Loiseau <anthony.loiseau@allcircuits.com>
+//
+// SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
+
+#include "act_text/string_util.hpp"
+
+#include "act_foundation/constants/def_soft.hpp"
+
+#include <algorithm>
+#include <cctype>
+#include <iomanip>
+#include <optional>
+#include <regex>
+
+namespace act::text::StringUtil
+{
+
+void ToUpperInPlace(std::string &str)
+{
+    std::transform(str.begin(), str.end(), str.begin(), [](unsigned char c) {
+        return std::toupper(c);
+    });
+}
+
+std::string ToUpper(const std::string &str)
+{
+    std::string copy = str;
+    ToUpperInPlace(copy);
+    return copy;
+}
+
+void ToLowerInPlace(std::string &str)
+{
+    std::transform(str.begin(), str.end(), str.begin(), [](unsigned char c) {
+        return std::tolower(c);
+    });
+}
+
+std::string ToLower(const std::string &str)
+{
+    std::string copy = str;
+    ToLowerInPlace(copy);
+    return copy;
+}
+
+int CompareNoCase(const std::string &lhs, const std::string &rhs)
+{
+    const std::string lhsLowCase = ToLower(lhs);
+    const std::string rhsLowCase = ToLower(rhs);
+    return lhsLowCase.compare(rhsLowCase);
+}
+
+bool AreStringEqualNoCase(const std::string &lhs, const std::string &rhs)
+{
+    return std::ranges::equal(lhs, rhs, [](char a, char b) {
+        return (std::tolower(a) == std::tolower(b));
+    });
+}
+
+std::string BinToHex(const std::string &bin)
+{
+    std::ostringstream hex;
+
+    /* configure hex output */
+    hex << std::hex << std::setw(2) << std::setfill('0');
+    for (unsigned char c : bin)
+    {
+        hex << (int)c;
+    }
+    return hex.str();
+}
+
+std::optional<std::string> HexToBin(const std::string &hex)
+{
+    if (!IsHexOnly(hex))
+    {
+        return std::nullopt;
+    }
+
+    std::string binaryString;
+
+    for (size_t i{0}; i + 1 < hex.length(); i += act::foundation::HexConstants::HEX_CHARS_PER_BYTE)
+    {
+        std::string hexByte{hex.substr(i, act::foundation::HexConstants::HEX_CHARS_PER_BYTE)};
+        char byte{static_cast<char>(
+            std::stoul(hexByte, nullptr, act::foundation::HexConstants::HEXADECIMAL_BASE))};
+        binaryString.push_back(byte);
+    }
+
+    return binaryString;
+}
+
+bool IsHexOnly(const std::string &data)
+{
+    return std::all_of(data.begin(), data.end(), [](char c) {
+        return std::isxdigit(static_cast<unsigned char>(c));
+    });
+}
+
+bool IsValidIpAddress(const std::string &ipAddress)
+{
+    /**
+     * Simple IP address validation using regex
+     * Matches IPv4 addresses (0-255.0-255.0-255.0-255)
+     */
+    std::regex ipPattern(
+        R"(^((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])$)");
+
+    return std::regex_match(ipAddress, ipPattern);
+}
+
+} // namespace act::text::StringUtil

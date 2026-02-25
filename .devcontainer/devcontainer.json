@@ -1,0 +1,58 @@
+// SPDX-FileCopyrightText: 2026 Théo Magne <theo.magne@allcircuits.com>
+//
+// SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/cpp
+{
+	"name": "C++",
+	"build": {
+		"dockerfile": "Dockerfile",
+		// Update the 'context' if your Dockerfile is not in the .devcontainer folder.
+		"context": "."
+	},
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+	// Install additional OS packages for the libs to build
+	"postCreateCommand": "./tools/install_deps.sh",
+	// Configure tool-specific properties.
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-vscode.cmake-tools",
+				"twxs.cmake",
+				"streetsidesoftware.code-spell-checker",
+				"DavidAnson.vscode-markdownlint",
+				"yzhang.markdown-all-in-one",
+				"mhutchie.git-graph",
+				"donjayamanne.githistory",
+				"eamodio.gitlens",
+				"llvm-vs-code-extensions.vscode-clangd",
+				"josetr.cmake-language-support-vscode",
+				"heltonricardo.heltonricardo-vscode-organize-and-format",
+				"KylinIdeTeam.cmake-intellisence",
+				"github.vscode-github-actions",
+				"ms-azuretools.vscode-containers"
+			],
+			"settings": {
+				"terminal.integrated.defaultProfile.linux": "bash",
+				"cmake.configureOnOpen": false,
+				"editor.formatOnSave": true,
+				"editor.tabSize": 4,
+				"files.trimTrailingWhitespace": true,
+				"files.insertFinalNewline": true,
+				"extensions.verifySignature": false,
+				// Clang searches for "clangd" and not "clangd-21" so we need to
+				// point it to the correct path
+				"clangd.path": "/usr/bin/clangd-21",
+				"files.associations": {
+					// File associations for clang-tidy and clang-format file
+					"*.clang*": "yaml"
+				}
+			}
+		}
+	}
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}

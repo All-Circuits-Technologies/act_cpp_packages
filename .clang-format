@@ -1,0 +1,32 @@
+# SPDX-FileCopyrightText: 2024 Damien Manceau <damien.manceau@allcircuits.com>
+# SPDX-FileCopyrightText: 2026 Théo Magne <theo.magne@allcircuits.com>
+#
+# SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
+
+# See https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+
+---
+Language: Cpp
+BasedOnStyle: Microsoft
+
+# Custom configuration
+ColumnLimit: 100
+IncludeBlocks: Preserve
+IndentWidth: 4
+LineEnding: LF
+MaxEmptyLinesToKeep: 1
+PointerAlignment: Right
+QualifierAlignment: Left
+ReferenceAlignment: Right
+SortIncludes: true
+SpacesBeforeTrailingComments: 1
+NamespaceIndentation: Inner
+BinPackParameters: OnePerLine
+BinPackArguments: false
+AllowAllArgumentsOnNextLine: false
+PackConstructorInitializers : Never
+IndentCaseLabels: true
+BreakTemplateDeclarations: true
+BreakBeforeBraces: Custom
+BraceWrapping:
+    AfterCaseLabel : true
