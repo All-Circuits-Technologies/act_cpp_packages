@@ -29,6 +29,7 @@ jobs:
         run: |
           sudo apt-get update -y
           sudo apt-get install -y ninja-build cmake
+          ./tools/install_deps.sh
 
       - name: Generate compile_commands.json
         run: cmake -S . -B build
