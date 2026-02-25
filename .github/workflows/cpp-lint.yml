@@ -35,6 +35,8 @@ jobs:
             xz-utils \
             file \
             gcc \
+            wget \
+            curl \
             g++ \
             libgpiod-dev \
             libsqlitecpp-dev
