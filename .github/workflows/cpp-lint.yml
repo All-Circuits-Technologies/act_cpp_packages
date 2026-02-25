@@ -37,6 +37,9 @@ jobs:
             gcc \
             g++
 
+      - name: Install required libs to build
+        run: ./tools/install_deps.sh
+
       - name: Clone repository
         uses: actions/checkout@v4
         with:
