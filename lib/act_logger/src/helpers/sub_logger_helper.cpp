@@ -21,6 +21,7 @@ SubLoggerHelper::SubLoggerHelper(LoggerHelper &parentLogger, LogsLevel::Enum min
 {
 }
 
+// NOLINTNEXTLINE(readability-identifier-naming, readability-convert-member-functions-to-static)
 std::vector<std::string> SubLoggerHelper::ConcatenateCategories(const std::string &category,
                                                                 const LoggerHelper &parentLogger)
 {

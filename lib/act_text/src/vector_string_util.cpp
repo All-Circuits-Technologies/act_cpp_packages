@@ -19,7 +19,7 @@ std::string join(const std::vector<std::string> &vec, const std::string &separat
         return "";
     }
 
-    std::stringstream resultStream;
+    std::stringstream resultStream; // NOLINT(cppcoreguidelines-init-variables)
     resultStream << *citer;
     ++citer;
     if (separator.empty())
@@ -44,7 +44,7 @@ std::vector<std::string> split(const std::string &str, const std::string &separa
 {
     std::stringstream stringStream(str);
     std::vector<std::string> tmpList;
-    std::string element;
+    std::string element; // NOLINT(cppcoreguidelines-init-variables)
 
     if (!str.empty())
     {

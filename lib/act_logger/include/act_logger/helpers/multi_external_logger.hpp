@@ -42,6 +42,7 @@ class MultiExternalLogger : public AbsExternalLogger
      * @param message The message to log
      * @param categories The categories associated to the log message
      */
+    // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
     void logToExternal(LogsLevel::Enum level,
                        const std::string &message,
                        const std::vector<std::string> &categories) override

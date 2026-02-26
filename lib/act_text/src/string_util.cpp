@@ -59,7 +59,7 @@ bool AreStringEqualNoCase(const std::string &lhs, const std::string &rhs)
 
 std::string BinToHex(const std::string &bin)
 {
-    std::ostringstream hex;
+    std::ostringstream hex; // NOLINT(cppcoreguidelines-init-variables)
 
     /* configure hex output */
     hex << std::hex << std::setw(2) << std::setfill('0');
@@ -77,7 +77,7 @@ std::optional<std::string> HexToBin(const std::string &hex)
         return std::nullopt;
     }
 
-    std::string binaryString;
+    std::string binaryString; // NOLINT(cppcoreguidelines-init-variables)
 
     for (size_t i{0}; i + 1 < hex.length(); i += act::foundation::HexConstants::HEX_CHARS_PER_BYTE)
     {

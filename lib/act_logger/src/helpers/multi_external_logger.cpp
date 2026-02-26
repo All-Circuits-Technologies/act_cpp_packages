@@ -9,10 +9,11 @@
 namespace act::logger
 {
 
+// NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
 MultiExternalLogger::MultiExternalLogger(
     const std::vector<std::shared_ptr<AbsExternalLogger>> &loggers)
     : AbsExternalLogger(LogsLevel::Enum::TRACE),
-      m_loggers{loggers}
+      m_loggers(loggers)
 {
 }
 

@@ -25,6 +25,7 @@ bool AbsLedTriggerConfig::isLedAlreadyConfigured(const LinuxLed &led) const
     return led.hasAnyTrigger() && (led.getTrigger().value() == m_name);
 }
 
+// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
 bool AbsLedTriggerConfig::applyToLeds(const std::vector<std::reference_wrapper<LinuxLed>> &leds,
                                       bool force) const
 {

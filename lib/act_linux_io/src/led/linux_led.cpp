@@ -93,6 +93,7 @@ std::optional<int> LinuxLed::readConfInt(const std::string &fileName) const
     return act::files::FileUtil::ReadFileAsInt(getConfFilePath(fileName), *m_logger);
 }
 
+// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
 std::optional<unsigned int> LinuxLed::readConfUInt(const std::string &fileName) const
 {
     std::optional<int> optInt = readConfInt(fileName);

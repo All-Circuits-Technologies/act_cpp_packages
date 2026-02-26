@@ -1,0 +1,72 @@
+# SPDX-FileCopyrightText: 2026 Théo Magne <theo.magne@allcircuits.com>
+#
+# SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
+
+name: C++ Lint
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  cpp-lint-container:
+    name: C++ Lint (debian trixie)
+    runs-on: ubuntu-24.04
+    container:
+      image: debian:trixie
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Install dependencies
+        run: |
+          apt-get update -y
+          apt-get install -y \
+            ca-certificates \
+            build-essential \
+            cmake \
+            ninja-build \
+            pkg-config \
+            git \
+            xz-utils \
+            file \
+            gcc \
+            wget \
+            curl \
+            g++ \
+            libgpiod-dev \
+            libsqlitecpp-dev
+
+      - name: Clone repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Generate compile_commands.json
+        run: cmake -S . -B build
+
+      - name: C/C++ Linter
+        uses: cpp-linter/cpp-linter-action@v2
+        id: linter
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          style: "file" # Use .clang-format
+          tidy-checks: "" # Use .clang-tidy
+          version: 21
+          repo-root: .
+          database: "build"
+          ignore: "build" # Ignore build folder
+          files-changed-only: false
+          lines-changed-only: false
+          extra-args: "-std=c++20"
+          thread-comments: update
+          step-summary: true
+
+      - name: Fail if linter found issues
+        if: steps.linter.outputs.checks-failed > 0
+        run: exit 1

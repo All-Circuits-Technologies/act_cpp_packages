@@ -7,10 +7,11 @@
 namespace act::logger
 {
 
+// NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
 AbsExternalLogger::AbsExternalLogger(
     LogsLevel::Enum minLevel, const std::map<std::string, LogsLevel::Enum> &minLevelByCategory)
     : m_minLevel{minLevel},
-      m_minLevelByCategory{minLevelByCategory}
+      m_minLevelByCategory(minLevelByCategory)
 {
 }
 
@@ -18,7 +19,7 @@ bool AbsExternalLogger::isLoggable(LogsLevel::Enum level,
                                    const std::vector<std::string> &categories) const
 {
     bool categoryMatched = false;
-    if (m_minLevelByCategory.size() > 0)
+    if (!m_minLevelByCategory.empty())
     {
         // Check if any category has a specific min level
         for (const auto &category : categories)
@@ -50,6 +51,7 @@ bool AbsExternalLogger::isLoggable(LogsLevel::Enum level,
     return true;
 }
 
+// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
 void AbsExternalLogger::log(LogsLevel::Enum level,
                             const std::string &message,
                             const std::vector<std::string> &categories)

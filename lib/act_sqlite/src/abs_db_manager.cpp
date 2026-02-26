@@ -72,6 +72,7 @@ bool AbsDbManager::applyMigrationUpdates()
         bumpCount++;
     }
 
+    // NOLINTNEXTLINE(bugprone-branch-clone)
     if (bumpCount == 0)
     {
         m_logger->debug("No migration found/required");

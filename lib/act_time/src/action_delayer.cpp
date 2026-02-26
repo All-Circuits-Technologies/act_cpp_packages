@@ -81,6 +81,7 @@ void ActionDelayer::stop()
     m_isRunning = false;
 }
 
+// NOLINTNEXTLINE(readability-make-member-function-const)
 bool ActionDelayer::isRunning()
 {
     std::lock_guard<std::mutex> lock(m_actionMutex);

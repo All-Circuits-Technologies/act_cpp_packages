@@ -18,10 +18,12 @@ const std::string PatternLedTriggerConfig::REPEAT_FILE_NAME = "repeat";
 
 /* # Constructors */
 
+// NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
 PatternLedTriggerConfig::PatternLedTriggerConfig(Pattern pattern, int repeatCount)
     : AbsLedTriggerConfig(PATTERN_TRIGGER_NAME),
       m_pattern(std::move(pattern)),
-      m_repeatCount(repeatCount)
+      m_repeatCount(repeatCount),
+      m_patternStringCache{}
 {
 }
 
@@ -52,6 +54,7 @@ bool PatternLedTriggerConfig::prepareLedExtra(LinuxLed &led) const
     return led.writeConfInt(REPEAT_FILE_NAME, m_repeatCount);
 }
 
+// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
 std::string PatternLedTriggerConfig::getPatternString() const
 {
     if (m_patternStringCache.empty())
@@ -62,6 +65,7 @@ std::string PatternLedTriggerConfig::getPatternString() const
     return m_patternStringCache;
 }
 
+// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
 std::string PatternLedTriggerConfig::computePatternString() const
 {
     return std::accumulate(m_pattern.begin(),

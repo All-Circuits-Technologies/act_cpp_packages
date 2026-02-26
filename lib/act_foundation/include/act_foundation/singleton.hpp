@@ -20,7 +20,7 @@ class Singleton : private NotCopiableNotMovable
     Singleton() = default;
 
     /// @brief Destructor is only accessible to subclasses
-    virtual ~Singleton() = default;
+    ~Singleton() override = default;
 };
 
 } // namespace act::foundation

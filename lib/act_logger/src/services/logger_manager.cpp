@@ -24,6 +24,7 @@ bool LoggerManager::init()
     return AbsLoggerManager::init();
 }
 
+// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
 void LoggerManager::setCslMinLogLevel(LogsLevel::Enum minLevel)
 {
     if (m_consoleLogger)
