@@ -40,12 +40,14 @@ void RestartableTimer::stop()
     setRequestedState(RequestedTimerState::STOP);
 }
 
+// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
 void RestartableTimer::setDurationMs(unsigned int durationMs)
 {
     std::lock_guard<std::mutex> lock(m_timerMutex);
     m_durationMs.store(durationMs);
 }
 
+// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
 void RestartableTimer::setPeriodic(bool periodic)
 {
     std::lock_guard<std::mutex> lock(m_timerMutex);

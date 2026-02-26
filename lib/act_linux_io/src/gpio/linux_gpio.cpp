@@ -30,6 +30,7 @@ namespace act::linux_io
 
 /* # Methods */
 
+// NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
 LinuxGpio::LinuxGpio(const std::string &chipName,
                      unsigned int lineNum,
                      act::logger::LoggerHelper &parentLogger)
@@ -61,6 +62,7 @@ LinuxGpio::LinuxGpio(const std::string &chipName,
 // and can't be freed from HPP. Default destructor still fits our needs.
 LinuxGpio::~LinuxGpio() = default;
 
+// NOLINTNEXTLINE(readability-make-member-function-const)
 bool LinuxGpio::prepDirectionInput()
 {
     LINUXGPIO_RETURN_X_IF_NOT_FOUND(false);
@@ -71,6 +73,7 @@ bool LinuxGpio::prepDirectionInput()
     return true;
 }
 
+// NOLINTNEXTLINE(readability-make-member-function-const)
 bool LinuxGpio::prepBiasPullUp()
 {
     LINUXGPIO_RETURN_X_IF_NOT_FOUND(false);
@@ -80,6 +83,7 @@ bool LinuxGpio::prepBiasPullUp()
     return true;
 }
 
+// NOLINTNEXTLINE(readability-make-member-function-const)
 bool LinuxGpio::prepActiveLow()
 {
     LINUXGPIO_RETURN_X_IF_NOT_FOUND(false);
@@ -89,6 +93,7 @@ bool LinuxGpio::prepActiveLow()
     return true;
 }
 
+// NOLINTNEXTLINE(readability-make-member-function-const)
 bool LinuxGpio::prepDebounce(std::chrono::milliseconds debounce)
 {
     LINUXGPIO_RETURN_X_IF_NOT_FOUND(false);

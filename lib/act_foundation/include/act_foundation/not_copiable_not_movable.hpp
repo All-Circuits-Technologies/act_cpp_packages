@@ -4,7 +4,6 @@
 
 #pragma once
 
-
 namespace act::foundation
 {
 

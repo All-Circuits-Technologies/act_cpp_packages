@@ -49,7 +49,7 @@ int SystemManager::CallCommand(const std::string &cmd,
     FILE *pipe = nullptr;
     try
     {
-        pipe = popen(cmd.c_str(), "r");
+        pipe = popen(cmd.c_str(), "r"); // NOLINT(cert-env33-c)
     }
     catch (const std::exception &e)
     {
@@ -72,6 +72,7 @@ int SystemManager::CallCommand(const std::string &cmd,
     return returnCode;
 }
 
+// NOLINTNEXTLINE(readability-identifier-naming, readability-convert-member-functions-to-static)
 int SystemManager::CallCommand(const std::vector<std::string> &cmdParts,
                                std::ostream &output,
                                const act::logger::AbsLogger &logger)

@@ -41,7 +41,7 @@ class LoggerHelper : public AbsLogger
                           LogsLevel::Enum minLevel = LogsLevel::Enum::TRACE);
 
     /** @brief Class destructor */
-    virtual ~LoggerHelper() = default;
+    ~LoggerHelper() override = default;
 
   protected:
     /**

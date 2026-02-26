@@ -10,7 +10,8 @@ namespace act::logger
 {
 
 LoggerStream::LoggerStream(LogsLevel::Enum level, const AbsLogger &logger)
-    : m_logger{logger},
+    : m_stream{},
+      m_logger{logger},
       m_level{level}
 {
 }

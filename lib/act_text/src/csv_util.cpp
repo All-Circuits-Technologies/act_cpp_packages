@@ -18,7 +18,7 @@ namespace act::text::CsvUtil
 
 std::string CreateCsvLine(const std::vector<std::string> &values, const std::string &separator)
 {
-    std::stringstream stream;
+    std::stringstream stream; // NOLINT(cppcoreguidelines-init-variables)
     stream << VectorStringUtil::join(values, separator);
     stream << std::endl;
     return stream.str();
@@ -54,7 +54,7 @@ std::vector<std::string> ParseCsvFile(const std::string &csvContent)
 {
     std::vector<std::string> lines;
     std::stringstream streamContent(csvContent);
-    std::string line;
+    std::string line; // NOLINT(cppcoreguidelines-init-variables)
 
     while (std::getline(streamContent, line))
     {

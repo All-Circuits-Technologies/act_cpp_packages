@@ -30,7 +30,7 @@ std::optional<std::string> ReadFile(const std::string &path,
         logger.debugStream() << "Failed to open " << path;
         return std::nullopt;
     }
-    std::stringstream buffer;
+    std::stringstream buffer; // NOLINT(cppcoreguidelines-init-variables)
     buffer << file.rdbuf();
     return buffer.str();
 }

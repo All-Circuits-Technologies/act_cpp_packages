@@ -13,7 +13,8 @@ namespace act::logger
 LoggerHelper::LoggerHelper(const std::shared_ptr<AbsExternalLogger> &externalLogger,
                            const std::string &category,
                            LogsLevel::Enum minLevel)
-    : m_categories{category},
+    : AbsLogger(),
+      m_categories{category},
       m_minLevel{minLevel},
       m_externalLogger{externalLogger}
 {
@@ -21,14 +22,16 @@ LoggerHelper::LoggerHelper(const std::shared_ptr<AbsExternalLogger> &externalLog
 
 LoggerHelper::LoggerHelper(const std::shared_ptr<AbsExternalLogger> &externalLogger,
                            LogsLevel::Enum minLevel)
-    : m_categories{},
+    : AbsLogger(),
+      m_categories{},
       m_minLevel{minLevel},
       m_externalLogger{externalLogger}
 {
 }
 
 LoggerHelper::LoggerHelper(const std::vector<std::string> &categories, LogsLevel::Enum minLevel)
-    : m_categories{categories},
+    : AbsLogger(),
+      m_categories{categories},
       m_minLevel{minLevel},
       m_externalLogger{nullptr}
 {
@@ -64,6 +67,7 @@ bool LoggerHelper::wouldBeLogged(LogsLevel::Enum level) const
     return true;
 }
 
+// NOLINTNEXTLINE(misc-unused-parameters)
 void LoggerHelper::log(LogsLevel::Enum level, const std::string &message) const
 {
     if (!testIfLoggable(level))

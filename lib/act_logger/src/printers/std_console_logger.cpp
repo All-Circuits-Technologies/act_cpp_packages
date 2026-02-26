@@ -37,6 +37,7 @@ void StdConsoleLogger::logToExternal(LogsLevel::Enum level,
     }
 }
 
+// NOLINTNEXTLINE(readability-identifier-naming, readability-convert-member-functions-to-static)
 std::string StdConsoleLogger::FormatLogMessage(LogsLevel::Enum level,
                                                const std::string &message,
                                                const std::vector<std::string> &categories)

@@ -139,7 +139,7 @@ bool AreStringEqualNoCase(const std::string &lhs, const std::string &rhs);
 template <typename T>
 std::string IterableToString(const T &iterable, const std::string &delimiter = ",")
 {
-    std::ostringstream oss;
+    std::ostringstream oss; // NOLINT(cppcoreguidelines-init-variables)
     for (const auto &item : iterable)
     {
         oss << item << delimiter;

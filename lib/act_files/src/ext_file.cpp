@@ -15,6 +15,7 @@ namespace act::files
 ExtFile::ExtFile(std::string filePath, const act::logger::AbsLogger &logger, bool isTemp)
     : m_logger{logger},
       m_fstream{new std::fstream()},
+      m_mode{std::nullopt},
       m_filePath(std::move(filePath)),
       m_isTemp(isTemp)
 {
@@ -85,6 +86,7 @@ bool ExtFile::isOpen() const
     return m_fstream->is_open();
 }
 
+// NOLINTNEXTLINE(readability-identifier-naming, readability-convert-member-functions-to-static)
 ExtFile *ExtFile::CreateFileAndTryToOpenIt(const std::string &filePath,
                                            std::ios::openmode mode,
                                            const act::logger::AbsLogger &logger,
@@ -101,6 +103,7 @@ ExtFile *ExtFile::CreateFileAndTryToOpenIt(const std::string &filePath,
     return new ExtFile(fstream, filePath, logger, mode, isTemp);
 }
 
+// NOLINTNEXTLINE(readability-identifier-naming, readability-convert-member-functions-to-static)
 bool ExtFile::OpenFile(std::fstream &fstream,
                        const std::string &filePath,
                        std::ios::openmode mode,
