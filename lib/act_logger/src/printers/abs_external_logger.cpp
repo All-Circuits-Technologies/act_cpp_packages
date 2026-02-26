@@ -7,6 +7,7 @@
 namespace act::logger
 {
 
+// NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
 AbsExternalLogger::AbsExternalLogger(
     LogsLevel::Enum minLevel, const std::map<std::string, LogsLevel::Enum> &minLevelByCategory)
     : m_minLevel{minLevel},

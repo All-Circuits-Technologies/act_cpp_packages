@@ -12,6 +12,7 @@
 namespace act::files
 {
 
+// NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
 ExtFile::ExtFile(std::string filePath, const act::logger::AbsLogger &logger, bool isTemp)
     : m_logger{logger},
       m_fstream{new std::fstream()},
@@ -36,6 +37,7 @@ ExtFile::~ExtFile()
     delete m_fstream;
 }
 
+// NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
 ExtFile::ExtFile(std::fstream *fstream,
                  std::string filePath,
                  const act::logger::AbsLogger &logger,

@@ -10,6 +10,7 @@
 namespace act::logger
 {
 
+// NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
 LoggerHelper::LoggerHelper(const std::shared_ptr<AbsExternalLogger> &externalLogger,
                            const std::string &category,
                            LogsLevel::Enum minLevel)
@@ -20,6 +21,7 @@ LoggerHelper::LoggerHelper(const std::shared_ptr<AbsExternalLogger> &externalLog
 {
 }
 
+// NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
 LoggerHelper::LoggerHelper(const std::shared_ptr<AbsExternalLogger> &externalLogger,
                            LogsLevel::Enum minLevel)
     : AbsLogger(),
@@ -29,6 +31,7 @@ LoggerHelper::LoggerHelper(const std::shared_ptr<AbsExternalLogger> &externalLog
 {
 }
 
+// NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
 LoggerHelper::LoggerHelper(const std::vector<std::string> &categories, LogsLevel::Enum minLevel)
     : AbsLogger(),
       m_categories{categories},
