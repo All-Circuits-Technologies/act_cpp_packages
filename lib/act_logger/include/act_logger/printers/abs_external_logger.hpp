@@ -109,7 +109,7 @@ class AbsExternalLogger
      */
     void error(const std::string &message, const std::vector<std::string> &categories = {})
     {
-        log(LogsLevel::Enum::ERROR, message, categories);
+        log(LogsLevel::Enum::ERR, message, categories);
     }
 
     /**

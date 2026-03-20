@@ -20,7 +20,7 @@ class LoggerManager : public AbsLoggerManager
     /**
      * @brief Constructor
      */
-    explicit LoggerManager(LogsLevel::Enum minLevelToPrintToStdErr = LogsLevel::Enum::ERROR);
+    explicit LoggerManager(LogsLevel::Enum minLevelToPrintToStdErr = LogsLevel::Enum::ERR);
 
     /**
      * @brief Destructor

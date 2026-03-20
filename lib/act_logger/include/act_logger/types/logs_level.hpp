@@ -8,9 +8,6 @@
 
 #include <string>
 
-namespace act::logger
-{
-
 /** @brief This is the status of the Firmware update */
 class LogsLevel : private act::foundation::NotCopiableNotMovable
 {
@@ -23,7 +20,8 @@ class LogsLevel : private act::foundation::NotCopiableNotMovable
         DEBG,
         INFO,
         WARNING,
-        ERROR,
+        // ERROR is a macro defined in some environments (e.g. wingdi.h), so we use ERR instead
+        ERR,
         FATAL,
         NONE
     };
@@ -46,7 +44,7 @@ class LogsLevel : private act::foundation::NotCopiableNotMovable
                 return INFO_STR;
             case LogsLevel::Enum::WARNING:
                 return WARNING_STR;
-            case LogsLevel::Enum::ERROR:
+            case LogsLevel::Enum::ERR:
                 return ERROR_STR;
             case LogsLevel::Enum::FATAL:
                 return FATAL_STR;
