@@ -8,6 +8,9 @@
 
 #include <string>
 
+namespace act::logger
+{
+
 /** @brief This is the status of the Firmware update */
 class LogsLevel : private act::foundation::NotCopiableNotMovable
 {
