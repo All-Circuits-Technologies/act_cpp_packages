@@ -26,7 +26,7 @@ class StdConsoleLogger : public AbsExternalLogger
      */
     explicit StdConsoleLogger(
         LogsLevel::Enum minLevel,
-        LogsLevel::Enum minLevelToPrintToStdErr = LogsLevel::Enum::ERROR,
+        LogsLevel::Enum minLevelToPrintToStdErr = LogsLevel::Enum::ERR,
         const std::map<std::string, LogsLevel::Enum> &minLevelByCategory = {});
 
     /** @brief Class destructor */

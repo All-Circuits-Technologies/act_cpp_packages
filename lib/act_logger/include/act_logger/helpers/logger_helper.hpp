@@ -224,7 +224,7 @@ class LoggerHelper : public AbsLogger
      */
     void error(const std::string &message) const override
     {
-        log(LogsLevel::Enum::ERROR, message);
+        log(LogsLevel::Enum::ERR, message);
     }
 
     /**
@@ -233,7 +233,7 @@ class LoggerHelper : public AbsLogger
      */
     [[nodiscard]] LoggerStream errorStream() const override
     {
-        return logStream(LogsLevel::Enum::ERROR);
+        return logStream(LogsLevel::Enum::ERR);
     }
 
     /**
