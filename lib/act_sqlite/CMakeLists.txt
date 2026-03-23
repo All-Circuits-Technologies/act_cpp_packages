@@ -12,7 +12,9 @@
 # External: SQLiteCpp (libsqlitecpp-dev)
 # -----------------------------------------------------------------------------
 
-find_package(SQLiteCpp REQUIRED)
+if(NOT TARGET SQLiteCpp)
+    find_package(SQLiteCpp REQUIRED)
+endif()
 
 add_library(act_sqlite STATIC
     src/abs_db_manager.cpp
