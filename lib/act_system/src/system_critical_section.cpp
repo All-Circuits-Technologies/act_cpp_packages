@@ -9,12 +9,77 @@
 
 #include <cerrno>  // errno
 #include <cstring> // std::strerror
+
+#ifdef _WIN32
+#include <windows.h>
+#else
 #include <fcntl.h>
 #include <sys/file.h> // flock
 #include <unistd.h>   // close
+#endif
 
 namespace act::system
 {
+
+#ifdef _WIN32
+
+SystemCriticalSection::SystemCriticalSection(const char *slug, const act::logger::AbsLogger &logger)
+    : m_logger(logger)
+{
+    const std::string mutexName = std::string("Global\\") + slug;
+    m_handle = CreateMutexA(nullptr, FALSE, mutexName.c_str());
+
+    if (m_handle == nullptr)
+    {
+        m_logger.errorStream() << "Failed to create mutex '" << mutexName << "': error "
+                               << GetLastError();
+    }
+}
+
+SystemCriticalSection::~SystemCriticalSection()
+{
+    if (m_handle != nullptr)
+    {
+        CloseHandle(m_handle);
+    }
+}
+
+bool SystemCriticalSection::enter() const
+{
+    if (m_handle == nullptr)
+    {
+        m_logger.error("Invalid mutex handle");
+        return false;
+    }
+
+    DWORD result = WaitForSingleObject(m_handle, INFINITE);
+    if (result != WAIT_OBJECT_0)
+    {
+        m_logger.errorStream() << "Failed to lock critical section: error " << GetLastError();
+        return false;
+    }
+
+    return true;
+}
+
+bool SystemCriticalSection::leave() const
+{
+    if (m_handle == nullptr)
+    {
+        m_logger.error("Invalid mutex handle");
+        return false;
+    }
+
+    if (!ReleaseMutex(m_handle))
+    {
+        m_logger.errorStream() << "Failed to unlock critical section: error " << GetLastError();
+        return false;
+    }
+
+    return true;
+}
+
+#else // POSIX
 
 SystemCriticalSection::SystemCriticalSection(const char *slug, const act::logger::AbsLogger &logger)
     : m_logger(logger)
@@ -69,6 +134,8 @@ bool SystemCriticalSection::leave() const
 
     return true;
 }
+
+#endif // _WIN32
 
 std::string SystemCriticalSection::ComputeLockFilePath(const char *slug)
 {

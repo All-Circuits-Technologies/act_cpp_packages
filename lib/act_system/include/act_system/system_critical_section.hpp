@@ -6,6 +6,10 @@
 
 #include <string>
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 namespace act::logger
 {
 class AbsLogger;
@@ -68,8 +72,13 @@ class SystemCriticalSection
     /** @brief Logger instance */
     const act::logger::AbsLogger &m_logger;
 
+#ifdef _WIN32
+    /** @brief Windows mutex handle */
+    void *m_handle{nullptr};
+#else
     /** @brief Lock file file descriptor */
     int m_fd;
+#endif
 };
 
 } // namespace act::system

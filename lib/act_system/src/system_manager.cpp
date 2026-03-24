@@ -10,8 +10,11 @@
 
 #include <array>
 #include <iostream>
+
+#ifndef _WIN32
 #include <sys/reboot.h>
 #include <unistd.h>
+#endif
 
 namespace act::system
 {
@@ -49,7 +52,11 @@ int SystemManager::CallCommand(const std::string &cmd,
     FILE *pipe = nullptr;
     try
     {
+#ifdef _WIN32
+        pipe = _popen(cmd.c_str(), "r");
+#else
         pipe = popen(cmd.c_str(), "r");
+#endif
     }
     catch (const std::exception &e)
     {
@@ -68,7 +75,11 @@ int SystemManager::CallCommand(const std::string &cmd,
         output << buffer.data();
     }
 
+#ifdef _WIN32
+    int returnCode = _pclose(pipe);
+#else
     int returnCode = pclose(pipe);
+#endif
     return returnCode;
 }
 
@@ -84,7 +95,9 @@ void SystemManager::RebootThreadFunction(int delayInSec, SystemManager *systemMa
 {
     auto logger = systemManager->m_logger;
 
+#ifndef _WIN32
     sync();
+#endif
 
     if (delayInSec > 0)
     {

@@ -11,6 +11,10 @@
 #include <fstream>
 #include <iostream>
 
+#ifndef _WIN32
+#include <unistd.h> // sync
+#endif
+
 namespace act::sqlite
 {
 
@@ -65,7 +69,9 @@ bool AbsDbManager::applyMigrationUpdates()
             return false;
         }
 
+#ifndef _WIN32
         (void)sync();
+#endif
 
         currentVersion++;
         versionBumpScript = computeMigrationScriptPath(currentVersion);
