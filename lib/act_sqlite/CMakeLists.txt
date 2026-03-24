@@ -34,7 +34,6 @@ target_link_libraries(act_sqlite
     act_foundation
     act_logger
     act_system
-    PRIVATE
     SQLiteCpp
 )
 
