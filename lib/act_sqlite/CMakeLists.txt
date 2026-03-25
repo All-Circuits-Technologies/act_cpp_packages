@@ -18,6 +18,7 @@ endif()
 
 add_library(act_sqlite STATIC
     src/abs_db_manager.cpp
+    src/abs_db_service.cpp
     src/sqlite_db_manager.cpp
 )
 
