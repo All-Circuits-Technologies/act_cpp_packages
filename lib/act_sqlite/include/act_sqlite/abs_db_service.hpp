@@ -29,18 +29,20 @@ namespace act::sqlite
 class AbsDbService
 {
   public:
-    /** @brief Construct a database service
+    /** @brief Destructor */
+    virtual ~AbsDbService() = default;
+
+  protected:
+    /**
+     * @brief Construct a database service
      * @param db SQLite database handle (must be opened)
      * @param logger Logger helper for this service
      */
     AbsDbService(std::shared_ptr<SQLite::Database> db,
                  std::shared_ptr<act::logger::LoggerHelper> logger);
 
-    /** @brief Destructor */
-    virtual ~AbsDbService() = default;
-
-  protected:
-    /** @brief Execute a query with no return value
+    /**
+     * @brief Execute a query with no return value
      * @param operationName Name used in error logs
      * @param queryFunc Lambda receiving the database handle
      * @return true on success, false if an exception was caught
@@ -48,7 +50,8 @@ class AbsDbService
     bool executeQuery(std::string_view operationName,
                       const std::function<void(SQLite::Database &)> &queryFunc) const;
 
-    /** @brief Execute a query returning a result
+    /**
+     * @brief Execute a query returning a result
      * @tparam T The result type
      * @param operationName Name used in error logs
      * @param queryFunc Lambda receiving the database handle and returning a value
