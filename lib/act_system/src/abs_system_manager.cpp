@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 
-#include "act_system/system_manager.hpp"
+#include "act_system/abs_system_manager.hpp"
 
 #include "act_logger/models/abs_logger.hpp"
 #include "act_text/vector_string_util.hpp"
@@ -11,22 +11,17 @@
 #include <array>
 #include <iostream>
 
-#ifndef _WIN32
-#include <sys/reboot.h>
-#include <unistd.h>
-#endif
-
 namespace act::system
 {
 
-SystemManager::SystemManager(act::logger::AbsLogger &parentLogger)
+AbsSystemManager::AbsSystemManager(act::logger::AbsLogger &parentLogger)
     : AbsManager(),
       m_logger{parentLogger.createAbsSubLogger(LOGGER_CATEGORY, act::logger::LogsLevel::TRACE)},
       m_rebootThread{new act::threading::ReusableThread()}
 {
 }
 
-SystemManager::~SystemManager()
+AbsSystemManager::~AbsSystemManager()
 {
     if (m_rebootThread != nullptr)
     {
@@ -35,28 +30,24 @@ SystemManager::~SystemManager()
     }
 }
 
-bool SystemManager::init()
+bool AbsSystemManager::init()
 {
     return true;
 }
 
-act::threading::ReusableThreadResult::Enum SystemManager::askReboot(int delayInSec)
+act::threading::ReusableThreadResult::Enum AbsSystemManager::askReboot(int delayInSec)
 {
     return m_rebootThread->start(*m_logger, RebootThreadFunction, delayInSec, this);
 }
 
-int SystemManager::CallCommand(const std::string &cmd,
-                               std::ostream &output,
-                               const act::logger::AbsLogger &logger)
+int AbsSystemManager::callCommand(const std::string &cmd,
+                                  std::ostream &output,
+                                  const act::logger::AbsLogger &logger)
 {
     FILE *pipe = nullptr;
     try
     {
-#ifdef _WIN32
-        pipe = _popen(cmd.c_str(), "r");
-#else
-        pipe = popen(cmd.c_str(), "r");
-#endif
+        pipe = openPipe(cmd);
     }
     catch (const std::exception &e)
     {
@@ -75,29 +66,22 @@ int SystemManager::CallCommand(const std::string &cmd,
         output << buffer.data();
     }
 
-#ifdef _WIN32
-    int returnCode = _pclose(pipe);
-#else
-    int returnCode = pclose(pipe);
-#endif
-    return returnCode;
+    return closePipe(pipe);
 }
 
-int SystemManager::CallCommand(const std::vector<std::string> &cmdParts,
-                               std::ostream &output,
-                               const act::logger::AbsLogger &logger)
+int AbsSystemManager::callCommand(const std::vector<std::string> &cmdParts,
+                                  std::ostream &output,
+                                  const act::logger::AbsLogger &logger)
 {
     auto cmd = act::text::VectorStringUtil::join(cmdParts, CMD_PART_SEPARATOR);
-    return CallCommand(cmd, output, logger);
+    return callCommand(cmd, output, logger);
 }
 
-void SystemManager::RebootThreadFunction(int delayInSec, SystemManager *systemManager)
+void AbsSystemManager::RebootThreadFunction(int delayInSec, AbsSystemManager *systemManager)
 {
     auto logger = systemManager->m_logger;
 
-#ifndef _WIN32
-    sync();
-#endif
+    systemManager->syncBeforeReboot();
 
     if (delayInSec > 0)
     {
@@ -108,7 +92,7 @@ void SystemManager::RebootThreadFunction(int delayInSec, SystemManager *systemMa
     {
         logger->infoStream() << "Executing reboot command...";
         auto traceStream = logger->traceStream();
-        cmdReturn = CallCommand(REBOOT_CMD_NAME, traceStream.getStream(), *logger);
+        cmdReturn = systemManager->callCommand(REBOOT_CMD_NAME, traceStream.getStream(), *logger);
     }
 
     if (cmdReturn != 0)

@@ -12,9 +12,20 @@
 # -----------------------------------------------------------------------------
 
 add_library(act_system STATIC
-    src/system_critical_section.cpp
-    src/system_manager.cpp
+    src/abs_system_manager.cpp
 )
+
+if(WIN32)
+    target_sources(act_system PRIVATE
+        src/win/win_system_critical_section.cpp
+        src/win/win_system_manager.cpp
+    )
+else()
+    target_sources(act_system PRIVATE
+        src/linux/linux_system_critical_section.cpp
+        src/linux/linux_system_manager.cpp
+    )
+endif()
 
 target_include_directories(act_system
     PUBLIC
