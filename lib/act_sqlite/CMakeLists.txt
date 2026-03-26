@@ -18,6 +18,7 @@ endif()
 
 add_library(act_sqlite STATIC
     src/abs_db_manager.cpp
+    src/abs_db_service.cpp
     src/sqlite_db_manager.cpp
 )
 
@@ -34,7 +35,6 @@ target_link_libraries(act_sqlite
     act_foundation
     act_logger
     act_system
-    PRIVATE
     SQLiteCpp
 )
 

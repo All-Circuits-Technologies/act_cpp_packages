@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 
-#include "act_system/system_critical_section.hpp"
+#include "act_system/linux/linux_system_critical_section.hpp"
 
 #include "act_foundation/constants/def_soft.hpp"
 #include "act_logger/models/abs_logger.hpp"
@@ -16,8 +16,9 @@
 namespace act::system
 {
 
-SystemCriticalSection::SystemCriticalSection(const char *slug, const act::logger::AbsLogger &logger)
-    : m_logger(logger)
+LinuxSystemCriticalSection::LinuxSystemCriticalSection(const char *slug,
+                                                       const act::logger::AbsLogger &logger)
+    : AbsSystemCriticalSection(slug, logger)
 {
     const std::string lockFilePath = ComputeLockFilePath(slug);
     m_fd = ::open(lockFilePath.c_str(), O_CREAT | O_RDWR, LOCK_FILE_ACCESS_RIGHTS);
@@ -29,12 +30,12 @@ SystemCriticalSection::SystemCriticalSection(const char *slug, const act::logger
     }
 }
 
-SystemCriticalSection::~SystemCriticalSection()
+LinuxSystemCriticalSection::~LinuxSystemCriticalSection()
 {
     UNUSED(leave());
 }
 
-bool SystemCriticalSection::enter() const
+bool LinuxSystemCriticalSection::enter() const
 {
     if (m_fd < 0)
     {
@@ -52,7 +53,7 @@ bool SystemCriticalSection::enter() const
     return true;
 }
 
-bool SystemCriticalSection::leave() const
+bool LinuxSystemCriticalSection::leave() const
 {
     if (m_fd < 0)
     {
@@ -70,7 +71,7 @@ bool SystemCriticalSection::leave() const
     return true;
 }
 
-std::string SystemCriticalSection::ComputeLockFilePath(const char *slug)
+std::string LinuxSystemCriticalSection::ComputeLockFilePath(const char *slug)
 {
     return std::string("/tmp/") + slug + ".lock";
 }
