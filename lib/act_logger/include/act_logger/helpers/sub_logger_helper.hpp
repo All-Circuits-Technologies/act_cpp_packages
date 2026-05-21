@@ -33,6 +33,18 @@ class SubLoggerHelper : public LoggerHelper
     /** @brief Class destructor */
     ~SubLoggerHelper() override = default;
 
+  protected:
+    /**
+     * @brief Constructor for subclasses that supply their own category list but
+     *        still want to delegate getLogger() to a parent.
+     * @param categories Pre-built category list.
+     * @param parentLogger The parent logger to delegate getLogger() to.
+     * @param minLevel Minimum log level.
+     */
+    explicit SubLoggerHelper(std::vector<std::string> categories,
+                             LoggerHelper &parentLogger,
+                             LogsLevel::Enum minLevel);
+
   public:
     /**
      * @brief Get the external logger

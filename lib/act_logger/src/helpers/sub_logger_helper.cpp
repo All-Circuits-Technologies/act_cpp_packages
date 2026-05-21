@@ -7,6 +7,15 @@
 namespace act::logger
 {
 
+
+SubLoggerHelper::SubLoggerHelper(std::vector<std::string> categories,
+                                 LoggerHelper &parentLogger,
+                                 LogsLevel::Enum minLevel)
+    : LoggerHelper(std::move(categories), minLevel),
+      m_parentLogger(parentLogger)
+{
+}
+
 SubLoggerHelper::SubLoggerHelper(const std::string &category,
                                  LoggerHelper &parentLogger,
                                  LogsLevel::Enum minLevel)

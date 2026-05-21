@@ -32,6 +32,14 @@ void LoggerManager::setCslMinLogLevel(LogsLevel::Enum minLevel)
     }
 }
 
+void LoggerManager::setCslCategoryMinLogLevel(const std::string &category, LogsLevel::Enum minLevel)
+{
+    if (m_consoleLogger)
+    {
+        m_consoleLogger->setCategoryMinLevel(category, minLevel);
+    }
+}
+
 std::shared_ptr<AbsExternalLogger> LoggerManager::getExternalLogger() const
 {
     return m_consoleLogger;

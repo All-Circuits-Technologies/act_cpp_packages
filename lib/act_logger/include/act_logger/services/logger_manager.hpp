@@ -7,6 +7,7 @@
 #include "act_logger/services/abs_logger_manager.hpp"
 
 #include <memory>
+#include <string>
 
 namespace act::logger
 {
@@ -39,6 +40,13 @@ class LoggerManager : public AbsLoggerManager
      * @param minLevel The new minimum log level for the console logger
      */
     void setCslMinLogLevel(LogsLevel::Enum minLevel);
+
+    /**
+     * @brief Set the console logger minimum log level for a specific category.
+     * @param category The category name
+     * @param minLevel The minimum log level for this category
+     */
+    void setCslCategoryMinLogLevel(const std::string &category, LogsLevel::Enum minLevel);
 
   protected:
     /**
