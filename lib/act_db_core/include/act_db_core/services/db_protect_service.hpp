@@ -4,9 +4,11 @@
 
 #pragma once
 
+#include <exception>
 #include <functional>
 #include <memory>
 #include <optional>
+#include <string>
 
 #include "act_db_core/db_transaction.hpp"
 #include "act_db_core/services/abs_db_executor.hpp"

@@ -19,7 +19,7 @@ class AbsDbExecutor;
 
 /**
  * @brief Helper class to handle database transactions
- * @note This class will automatically rollback the transaction if it is not commited when
+ * @note This class will automatically rollback the transaction if it is not committed when
  * destructed, so it is recommended to use it with a local scope to ensure proper transaction
  * handling.
  */
@@ -27,7 +27,7 @@ class DbTransaction
 {
   private:
     /**
-     * @brief State of the transaction, to track if it has been started, commited or rolled back
+     * @brief State of the transaction, to track if it has been started, committed or rolled back
      */
     enum class State
     {
@@ -52,15 +52,15 @@ class DbTransaction
   public:
     /**
      * @brief Begin the transaction
-     * @param transactionName An optional name for the transaction, used in logging and as a suffix
-     * for transaction commands (e.g. "BEGIN TRANSACTION <transactionName>")
+     * @param beginExtension This is the extension to the BEGIN statement, which can be used to
+     * specify the transaction type.
      * @return True if the transaction was successfully started, false otherwise
      */
-    bool begin(std::string_view transactionName = DbCoreConstants::TRANSACTION_NAME);
+    bool begin(std::string_view beginExtension = DbCoreConstants::TRANSACTION_NAME);
 
     /**
      * @brief Commit the transaction
-     * @return True if the transaction was successfully commited, false otherwise
+     * @return True if the transaction was successfully committed, false otherwise
      */
     bool commit();
 
@@ -72,13 +72,13 @@ class DbTransaction
 
   private:
     /**
-     * @brief Rollback the transaction if it has not been commited yet, to ensure proper transaction
-     * handling
+     * @brief Rollback the transaction if it has not been committed yet, to ensure proper
+     * transaction handling
      *
-     * @return True if the transaction was successfully rolled back, commited or was not started,
+     * @return True if the transaction was successfully rolled back, committed or was not started,
      * false if the rollback failed
      */
-    bool rollbackIfNotCommited();
+    bool rollbackIfNotCommitted();
 
   private:
     /**
@@ -101,7 +101,7 @@ class DbTransaction
     /** @brief Logger for transaction operations */
     const act::logger::AbsLogger &m_logger;
 
-    /** @brief Flag to indicate if the transaction has been commited or rolled back */
+    /** @brief Flag to indicate if the transaction has been committed or rolled back */
     State m_state;
 };
 } // namespace act::db_core

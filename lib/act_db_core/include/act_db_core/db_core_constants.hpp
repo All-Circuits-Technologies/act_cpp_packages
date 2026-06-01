@@ -6,7 +6,7 @@
 
 #include <string>
 
-/// @brief Set of constants related to SQLite
+/// @brief Set of constants related to SQL transaction statements
 namespace act::db_core::DbCoreConstants
 {
 /**

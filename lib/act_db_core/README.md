@@ -20,14 +20,14 @@ interfaces that concrete database backends (e.g. `act_sqlite`) build upon.
 
 ## Components
 
-| Class/File          | Header                                        | Role                                                        |
-| ------------------- | --------------------------------------------- | ----------------------------------------------------------- |
-| `AbsDbExecutor`     | `act_db_core/services/abs_db_executor.hpp`    | Engine-agnostic query executor interface                    |
-| `AbsDbManager`      | `act_db_core/services/abs_db_manager.hpp`     | Engine-agnostic base: migration runner, script executor     |
-| `DbProtectService`  | `act_db_core/services/db_protect_service.hpp` | Query wrapper with error handling and optional transactions |
-| `DbTransaction`     | `act_db_core/db_transaction.hpp`              | RAII transaction helper (auto-rollback on destruction)      |
-| `DbCoreConstants`   | `act_db_core/db_core_constants.hpp`           | SQL transaction statement constants                         |
-| `db_log_helper.hpp` | `act_db_core/db_log_helper.hpp`               | Convenience macros for early-return error guards            |
+| Class/File            | Header                                        | Role                                                                                                 |
+| --------------------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `AbsDbExecutor`       | `act_db_core/services/abs_db_executor.hpp`    | Engine-agnostic query executor interface                                                             |
+| `AbsDbManager`        | `act_db_core/services/abs_db_manager.hpp`     | Engine-agnostic base: migration runner, script executor                                              |
+| `DbProtectService<T>` | `act_db_core/services/db_protect_service.hpp` | Template query wrapper with error handling and optional transactions. Default `T` = `AbsDbExecutor`. |
+| `DbTransaction`       | `act_db_core/db_transaction.hpp`              | RAII transaction helper (auto-rollback on destruction)                                               |
+| `DbCoreConstants`     | `act_db_core/db_core_constants.hpp`           | SQL transaction statement constants                                                                  |
+| `db_log_helper.hpp`   | `act_db_core/db_log_helper.hpp`               | Convenience macros for early-return error guards                                                     |
 
 ## Usage
 
@@ -126,22 +126,29 @@ bool MyDatabase::setMigrationVersion(int version)
 
 ### 3. Use `DbProtectService` to guard queries
 
-`DbProtectService` wraps a query lambda with exception catching, error logging, and optional
-automatic transaction management. Construct it from any `AbsDbExecutor` reference.
+`DbProtectService<DbExecutor>` is a template that wraps a query lambda with exception catching,
+error logging, and optional automatic transaction management. The default template argument is
+`AbsDbExecutor`, which accepts any executor. Specialize it with a concrete type to receive a
+typed reference inside the lambda — useful when the concrete executor exposes additional methods
+(e.g. a raw database handle).
 
-- `protectQuery(name, lambda)` — runs a `bool`-returning statement; returns `bool`.
-- `protectQueryWithResult<T>(name, lambda)` — runs a statement that returns `std::optional<T>`;
-  returns `std::optional<T>` (`std::nullopt` on any exception or when the lambda returns
-  `std::nullopt`).
+- `protectQuery(name, lambda)` — lambda receives `DbExecutor &`; returns `bool`.
+- `protectQueryWithResult<T>(name, lambda)` — lambda receives `DbExecutor &`; returns
+  `std::optional<T>` (`std::nullopt` on any exception or when the lambda returns `std::nullopt`).
+- `accessDb()` — returns `DbExecutor &` (mutable access to the wrapped executor).
+- `getDb()` — returns `const DbExecutor &`.
 
-Both overloads wrap the query in a transaction by default (pass `false` as third argument to
+Both query overloads wrap the call in a transaction by default (pass `false` as third argument to
 opt out).
 
 ```cpp
 #include "act_db_core/services/db_protect_service.hpp"
 
-// Inside a service class that holds a reference to an AbsDbExecutor:
-act::db_core::DbProtectService protect(m_db, *m_logger);
+// Default instantiation — DbExecutor = AbsDbExecutor
+act::db_core::DbProtectService<> protect(m_db, *m_logger);
+
+// Typed instantiation — lambdas receive MyConcreteExecutor & directly
+act::db_core::DbProtectService<MyConcreteExecutor> typedProtect(m_concreteDb, *m_logger);
 
 // Simple write query (returns bool)
 bool ok = protect.protectQuery(
@@ -157,6 +164,9 @@ std::optional<int> version = protect.protectQueryWithResult<int>(
     },
     "get-version",
     false); // no transaction needed for a read
+
+// Direct access to the underlying executor
+MyConcreteExecutor &executor = typedProtect.accessDb();
 ```
 
 ---

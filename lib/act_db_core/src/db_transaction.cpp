@@ -19,22 +19,28 @@ DbTransaction::DbTransaction(AbsDbExecutor &db, const act::logger::AbsLogger &lo
 
 DbTransaction::~DbTransaction()
 {
-    rollbackIfNotCommited();
+    rollbackIfNotCommitted();
 }
 
-bool DbTransaction::begin(std::string_view transactionName)
+bool DbTransaction::begin(std::string_view beginExtension)
 {
     if (m_state != State::NOT_STARTED)
     {
         m_logger.warningStream() << "Transaction already started, cannot begin again: "
-                                 << transactionName;
+                                 << beginExtension;
         return false;
     }
 
-    auto success = m_db.exec(DbCoreConstants::BEGIN_NAME + " " + std::string(transactionName));
+    std::string query = DbCoreConstants::BEGIN_NAME;
+    if (!beginExtension.empty())
+    {
+        query += " " + std::string(beginExtension);
+    }
+
+    auto success = m_db.exec(query);
     if (!success)
     {
-        m_logger.warningStream() << "Failed to begin transaction " << transactionName;
+        m_logger.warningStream() << "Failed to begin transaction " << beginExtension;
         return false;
     }
 
@@ -54,7 +60,7 @@ bool DbTransaction::commit()
 
     if (m_state != State::STARTED)
     {
-        m_logger.warning("Transaction already commited or rolled back, cannot commit again");
+        m_logger.warning("Transaction already committed or rolled back, cannot commit again");
         return false;
     }
 
@@ -81,7 +87,7 @@ bool DbTransaction::rollback()
 
     if (m_state != State::STARTED)
     {
-        m_logger.warning("Transaction already commited or rolled back, cannot rollback");
+        m_logger.warning("Transaction already committed or rolled back, cannot rollback");
         return false;
     }
 
@@ -97,12 +103,12 @@ bool DbTransaction::rollback()
     return true;
 }
 
-bool DbTransaction::rollbackIfNotCommited()
+bool DbTransaction::rollbackIfNotCommitted()
 {
     if (m_state == State::NOT_STARTED || m_state == State::ROLLED_BACK ||
         m_state == State::COMMITTED)
     {
-        // Nothing to do, transaction is not started or already commited/rolled back
+        // Nothing to do, transaction is not started or already committed/rolled back
         return true;
     }
 
