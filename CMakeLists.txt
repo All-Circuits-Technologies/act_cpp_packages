@@ -8,6 +8,7 @@
 #
 # Modular C++ library collection:
 #
+#   - db_core    : Core database management classes
 #   - foundation : Base classes and design patterns (no dependencies)
 #   - logger     : Logging infrastructure and services
 #   - threading  : Threading utilities and synchronization
@@ -43,6 +44,7 @@ option(BUILD_TESTS "Build tests" OFF)
 # Modules are listed alphabetically for simplicity.
 # -----------------------------------------------------------------------------
 
+add_subdirectory(lib/act_db_core)
 add_subdirectory(lib/act_files)
 add_subdirectory(lib/act_foundation)
 add_subdirectory(lib/act_linux_io)

@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "abs_db_manager.hpp"
+#include "act_db_core/services/abs_db_manager.hpp"
 
 #include <SQLiteCpp/Database.h>
 #include <filesystem>
@@ -22,7 +22,7 @@ namespace act::sqlite
 /**
  * @brief This manager handles SQLite3 databases
  */
-class ASqLiteDbManager : public AbsDbManager
+class ASqLiteDbManager : public db_core::AbsDbManager
 {
   public:
     /** @brief Create the manager

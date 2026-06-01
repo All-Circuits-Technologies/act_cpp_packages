@@ -9,6 +9,7 @@ schema migration, and logging integration.
 
 ## Dependencies
 
+- act_db_core
 - act_foundation
 - act_logger
 - act_system
@@ -22,13 +23,13 @@ sudo apt install libsqlitecpp-dev
 
 ## Components
 
-| Class               | Header                               | Role                                                    |
-| ------------------- | ------------------------------------ | ------------------------------------------------------- |
-| `AbsDbManager`      | `act_sqlite/abs_db_manager.hpp`      | Engine-agnostic base: migration runner, script executor |
-| `ASqLiteDbManager`  | `act_sqlite/sqlite_db_manager.hpp`   | SQLite-specific manager (opens file, provides handle)   |
-| `AbsDbService`      | `act_sqlite/abs_db_service.hpp`      | Base for per-table query services                       |
-| `SQLiteDbConstants` | `act_sqlite/sqlite_db_constants.hpp` | Boolean integer value helpers                           |
-| `db_log_helper.hpp` | `act_sqlite/db_log_helper.hpp`       | Convenience macros for error/guard returns              |
+| Class               | Header                               | Role                                                  |
+| ------------------- | ------------------------------------ | ----------------------------------------------------- |
+| `ASqLiteDbManager`  | `act_sqlite/sqlite_db_manager.hpp`   | SQLite-specific manager (opens file, provides handle) |
+| `SQLiteDbConstants` | `act_sqlite/sqlite_db_constants.hpp` | Boolean integer value helpers                         |
+
+Engine-agnostic base classes (`AbsDbManager`, `AbsDbExecutor`, `DbProtectService`,
+`DbTransaction`) are provided by `act_db_core`. See its README for details.
 
 ---
 
@@ -87,7 +88,7 @@ bool MyDatabase::init()
     if (!setBusyTimeout(BUSY_TIMEOUT_MS))
         return false;
 
-    m_myTableService = std::make_unique<MyTableService>(getHandle(), getLogger());
+    m_myTableService = std::make_unique<MyTableService>(getHandle(), *getLogger());
     return true;
 }
 
@@ -102,6 +103,9 @@ MyTableService &MyDatabase::accessMyTable() const
 }
 ```
 
+> **Note:** `ASqLiteDbManager` automatically registers a `REGEXP` function on the SQLite
+> connection at open time. SQL queries can use `col REGEXP 'pattern'` without any extra setup.
+
 ### 2. Declare table and column names as constants
 
 Avoid raw strings scattered across query lambdas. Centralise all table and column names in a
@@ -114,9 +118,6 @@ readable.
 
 namespace MyDbConstants
 {
-    /** @brief Prefix for named SQL parameters */
-    static constexpr const char *PREFIX_PARAM_KEY = "$";
-
     namespace Table::MyTable
     {
         static constexpr const char *NAME = "my_table"; ///< Table name
@@ -130,34 +131,41 @@ namespace MyDbConstants
 } // namespace MyDbConstants
 ```
 
-### 3. Write per-table services with `AbsDbService`
+### 3. Write per-table services
 
-Each table gets its own service class. Inherit `AbsDbService`, inherit its constructor, and use
-the two query helpers:
+Each table gets its own service class. Receive the `std::shared_ptr<SQLite::Database>` handle
+from `getHandle()` and a logger reference, then use `DbProtectService` (from `act_db_core`) to
+wrap queries with error handling and optional transaction management.
 
-- `executeQuery(name, lambda)` — runs a statement with no return value; returns `bool`.
-- `executeQueryWithResult<T>(name, lambda)` — runs a statement that returns `T`; returns
-  `std::optional<T>` (`std::nullopt` on any `SQLite::Exception`).
+- `protectQuery(name, lambda)` — runs a `bool`-returning statement; returns `bool`.
+- `protectQueryWithResult<T>(name, lambda)` — runs a statement that returns `T`; returns
+  `std::optional<T>` (`std::nullopt` on any exception).
 
-Both helpers log the error and operation name automatically on failure.
+Both helpers wrap the query in a transaction by default.
 
 ```cpp
 // my_table_service.hpp
-#include "act_sqlite/abs_db_service.hpp"
+#include "act_db_core/services/db_protect_service.hpp"
+#include <SQLiteCpp/Database.h>
+#include <memory>
 #include <optional>
 #include <vector>
 
 struct MyRow { int id; std::string name; };
 
-class MyTableService : public act::sqlite::AbsDbService
+class MyTableService
 {
   public:
-    using act::sqlite::AbsDbService::AbsDbService; // inherit constructor
-
-    ~MyTableService() override = default;
+    explicit MyTableService(std::shared_ptr<SQLite::Database> db,
+                            act::logger::AbsLogger &parentLogger);
+    ~MyTableService() = default;
 
     [[nodiscard]] std::optional<std::vector<MyRow>> getAll() const;
     bool insert(const MyRow &row);
+
+  private:
+    std::shared_ptr<SQLite::Database> m_db;
+    act::db_core::DbProtectService m_protect;
 };
 ```
 
@@ -183,34 +191,46 @@ namespace
         " (" + Col::ID + ", " + Col::NAME + ") VALUES (?, ?)";
 } // namespace
 
+MyTableService::MyTableService(std::shared_ptr<SQLite::Database> db,
+                               act::logger::AbsLogger &parentLogger)
+    : m_db(std::move(db)), m_protect(*m_db, parentLogger)
+{
+}
+
 std::optional<std::vector<MyRow>> MyTableService::getAll() const
 {
-    return executeQueryWithResult<std::vector<MyRow>>(
-        "getAll", [](SQLite::Database &db) -> std::vector<MyRow> {
-            SQLite::Statement query(db, SELECT_ALL);
+    return m_protect.protectQueryWithResult<std::vector<MyRow>>(
+        "getAll",
+        [this](act::db_core::AbsDbExecutor &) -> std::optional<std::vector<MyRow>> {
+            SQLite::Statement query(*m_db, SELECT_ALL);
             std::vector<MyRow> rows;
             while (query.executeStep())
                 rows.push_back({query.getColumn(Col::ID).getInt(),
                                 query.getColumn(Col::NAME).getString()});
             return rows;
-        });
+        },
+        false); // read-only: no transaction needed
 }
 
 bool MyTableService::insert(const MyRow &row)
 {
-    return executeQuery("insert", [&row](SQLite::Database &db) {
-        SQLite::Statement stmt(db, INSERT_ROW);
-        stmt.bind(1, row.id);
-        stmt.bind(2, row.name);
-        stmt.exec();
-    });
+    return m_protect.protectQuery(
+        "insert",
+        [this, &row](act::db_core::AbsDbExecutor &) {
+            SQLite::Statement stmt(*m_db, INSERT_ROW);
+            stmt.bind(1, row.id);
+            stmt.bind(2, row.name);
+            stmt.exec();
+            return true;
+        });
 }
 ```
 
-### 3. Wire the migration scripts
+### 4. Wire the migration scripts
 
-Migration scripts must be named `<slug>-db-<version>.sql` (e.g. `my-db-1.sql`, `my-db-2.sql`)
-and placed in the directory passed as `migrationDir`. The manager runs them in order on `open()`.
+Migration scripts must be named `<slug>-db-v<N>-to-v<N+1>.sql`
+(e.g. `my-db-db-v0-to-v1.sql`, `my-db-db-v1-to-v2.sql`) and placed in the directory passed as
+`migrationDir`. The manager runs them in version order when `open(true)` is called.
 
 ---
 

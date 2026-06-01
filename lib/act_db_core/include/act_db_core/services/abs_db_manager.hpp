@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "act_db_core/services/abs_db_executor.hpp"
 #include "act_foundation/abs_manager.hpp"
 
 #include <filesystem>
@@ -15,13 +16,12 @@ class LoggerHelper;
 class LoggerManager;
 } // namespace act::logger
 
-namespace act::sqlite
+namespace act::db_core
 {
-
 /**
  * @brief This abstract manager contains db-engine-agnostic shared code
  */
-class AbsDbManager : public act::foundation::AbsManager
+class AbsDbManager : public act::foundation::AbsManager, public AbsDbExecutor
 {
   public:
     /** @brief Create the manager
@@ -45,9 +45,6 @@ class AbsDbManager : public act::foundation::AbsManager
      * @return True if the database was opened successfully, false otherwise
      */
     bool open(bool autoMigrate = true);
-
-    /** @brief Tells if database is opened */
-    [[nodiscard]] virtual bool isOpened() const = 0;
 
     /** @brief Apply migration upgrades if some updates exists
      * More or less equivalent to applying schema updates, but a migration may
@@ -80,20 +77,7 @@ class AbsDbManager : public act::foundation::AbsManager
      * @note Default implementation reads entire file and call @ref exec
      * @return True upon success, false otherwise
      */
-    virtual bool runScript(const std::filesystem::path &scriptPath);
-
-    /** @brief Execute a simple statement with no requets result
-     * @param sql SQL query to execute, or PRAGMA query, etc
-     * @return True if executed successfully, false otherwise
-     */
-    virtual bool exec(const std::string &sql) = 0;
-
-    /** @brief Helper for queries returning a simple integer
-     * @param sql Query to execute
-     * @return The integer result (first column of first result row),
-     *         or empty optional if error
-     */
-    virtual std::optional<int> execAndGetInt(const std::string &sql) = 0;
+    bool runScript(const std::filesystem::path &scriptPath) override;
 
     /** @brief Change busy timeout.
      * Ask database to wait a bit if it is busy at the time of a request
@@ -135,6 +119,7 @@ class AbsDbManager : public act::foundation::AbsManager
      */
     [[nodiscard]] std::filesystem::path computeMigrationScriptPath(int currentVersion) const;
 
+  public:
   private:
     /** @brief Database slug with added "-db" suffix */
     const std::string m_dbSlug;
@@ -146,4 +131,4 @@ class AbsDbManager : public act::foundation::AbsManager
     std::shared_ptr<act::logger::LoggerHelper> m_logger;
 };
 
-} // namespace act::sqlite
+} // namespace act::db_core
