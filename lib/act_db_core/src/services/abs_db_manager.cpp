@@ -23,7 +23,6 @@ AbsDbManager::AbsDbManager(const std::string &dbSlug,
                            const std::optional<std::filesystem::path> &migrationDataDir,
                            const act::logger::LoggerManager &loggerManager)
     : act::foundation::AbsManager(),
-      AbsDbExecutor(),
       m_dbSlug(dbSlug + "-db"),
       m_migrationDataDir(migrationDataDir),
       m_logger{loggerManager.createSubLogger(dbSlug + "-db")}
@@ -57,7 +56,7 @@ bool AbsDbManager::applyMigrationUpdates()
         m_logger->debugStream() << "Applying migration script " << versionBumpScript.filename();
 
         allSucceed &= protectService.protectQuery(
-            [&versionBumpScript, this](AbsDbExecutor &db) {
+            [&versionBumpScript, this](AbsDbManager &db) {
                 return db.runScript(versionBumpScript);
             },
             "Migration script");

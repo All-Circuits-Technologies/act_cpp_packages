@@ -15,7 +15,7 @@ class AbsLogger;
 
 namespace act::db::core
 {
-class AbsDbExecutor;
+class AbsDbManager;
 
 /**
  * @brief Helper class to handle database transactions
@@ -41,10 +41,10 @@ class DbTransaction
     /**
      * @brief Construct a new Db Transaction object
      *
-     * @param db Shared database provider to use for executing transaction commands
+     * @param db Shared database manager to use for executing transaction commands
      * @param logger The logger to use for logging transaction operations
      */
-    explicit DbTransaction(AbsDbExecutor &db, const act::logger::AbsLogger &logger);
+    explicit DbTransaction(AbsDbManager &db, const act::logger::AbsLogger &logger);
 
     /** @brief Destructor */
     virtual ~DbTransaction();
@@ -95,8 +95,8 @@ class DbTransaction
         DbCoreConstants::ROLLBACK_NAME + " " + DbCoreConstants::TRANSACTION_NAME;
 
   private:
-    /** @brief Shared database handle */
-    AbsDbExecutor &m_db;
+    /** @brief Shared database manager */
+    AbsDbManager &m_db;
 
     /** @brief Logger for transaction operations */
     const act::logger::AbsLogger &m_logger;

@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include "act_db_core/services/abs_db_executor.hpp"
 #include "act_foundation/abs_manager.hpp"
 
 #include <filesystem>
@@ -21,7 +20,7 @@ namespace act::db::core
 /**
  * @brief This abstract manager contains db-engine-agnostic shared code
  */
-class AbsDbManager : public act::foundation::AbsManager, public AbsDbExecutor
+class AbsDbManager : public act::foundation::AbsManager
 {
   public:
     /** @brief Create the manager
@@ -45,6 +44,9 @@ class AbsDbManager : public act::foundation::AbsManager, public AbsDbExecutor
      * @return True if the database was opened successfully, false otherwise
      */
     bool open(bool autoMigrate = true);
+
+    /** @brief Tells if database is opened */
+    [[nodiscard]] virtual bool isOpened() const = 0;
 
     /** @brief Apply migration upgrades if some updates exists
      * More or less equivalent to applying schema updates, but a migration may
@@ -77,7 +79,20 @@ class AbsDbManager : public act::foundation::AbsManager, public AbsDbExecutor
      * @note Default implementation reads entire file and call @ref exec
      * @return True upon success, false otherwise
      */
-    bool runScript(const std::filesystem::path &scriptPath) override;
+    virtual bool runScript(const std::filesystem::path &scriptPath);
+
+    /** @brief Execute a simple statement with no requets result
+     * @param sql SQL query to execute, or PRAGMA query, etc
+     * @return True if executed successfully, false otherwise
+     */
+    virtual bool exec(const std::string &sql) = 0;
+
+    /** @brief Helper for queries returning a simple integer
+     * @param sql Query to execute
+     * @return The integer result (first column of first result row),
+     *         or empty optional if error
+     */
+    virtual std::optional<int> execAndGetInt(const std::string &sql) = 0;
 
     /** @brief Change busy timeout.
      * Ask database to wait a bit if it is busy at the time of a request

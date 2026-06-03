@@ -20,40 +20,17 @@ interfaces that concrete database backends (e.g. `act_db_sqlite`) build upon.
 
 ## Components
 
-| Class/File            | Header                                        | Role                                                                                                 |
-| --------------------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| `AbsDbExecutor`       | `act_db_core/services/abs_db_executor.hpp`    | Engine-agnostic query executor interface                                                             |
-| `AbsDbManager`        | `act_db_core/services/abs_db_manager.hpp`     | Engine-agnostic base: migration runner, script executor                                              |
-| `DbProtectService<T>` | `act_db_core/services/db_protect_service.hpp` | Template query wrapper with error handling and optional transactions. Default `T` = `AbsDbExecutor`. |
-| `DbTransaction`       | `act_db_core/db_transaction.hpp`              | RAII transaction helper (auto-rollback on destruction)                                               |
-| `DbCoreConstants`     | `act_db_core/db_core_constants.hpp`           | SQL transaction statement constants                                                                  |
-| `db_log_helper.hpp`   | `act_db_core/db_log_helper.hpp`               | Convenience macros for early-return error guards                                                     |
+| Class/File            | Header                                        | Role                                                                                                |
+| --------------------- | --------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `AbsDbManager`        | `act_db_core/services/abs_db_manager.hpp`     | Engine-agnostic base: migration runner, script executor                                             |
+| `DbProtectService<T>` | `act_db_core/services/db_protect_service.hpp` | Template query wrapper with error handling and optional transactions. Default `T` = `AbsDbManager`. |
+| `DbTransaction`       | `act_db_core/db_transaction.hpp`              | RAII transaction helper (auto-rollback on destruction)                                              |
+| `DbCoreConstants`     | `act_db_core/db_core_constants.hpp`           | SQL transaction statement constants                                                                 |
+| `db_log_helper.hpp`   | `act_db_core/db_log_helper.hpp`               | Convenience macros for early-return error guards                                                    |
 
 ## Usage
 
-### 1. Implement `AbsDbExecutor` for your database engine
-
-`AbsDbExecutor` is the lowest-level interface. Concrete backends may implement it to provide
-actual query execution. Better to implement `AbsDbManager` (next step) which inherits from
-`AbsDbExecutor` and provides migration management and logging integration out of the box.
-
-```cpp
-// my_engine_executor.hpp
-#include "act_db_core/services/abs_db_executor.hpp"
-
-class MyEngineExecutor : public act::db::core::AbsDbExecutor
-{
-  public:
-    [[nodiscard]] bool isOpened() const override;
-    bool exec(const std::string &sql) override;
-    bool runScript(const std::filesystem::path &scriptPath) override;
-    std::optional<int> execAndGetInt(const std::string &sql) override;
-};
-```
-
----
-
-### 2. Subclass `AbsDbManager` to own the database lifecycle
+### 1. Subclass `AbsDbManager` to own the database lifecycle
 
 `AbsDbManager` is the base class for all concrete database managers. It handles opening the
 database, running migration scripts in order, and logging. You must implement several pure
@@ -72,7 +49,10 @@ class MyDatabase : public act::db::core::AbsDbManager
 
     bool init() override;
 
-    // Pure virtuals from AbsDbManager - engine-specific implementations
+    // Pure virtuals from AbsDbManager — engine-specific implementations
+    [[nodiscard]] bool isOpened() const override;
+    bool exec(const std::string &sql) override;
+    std::optional<int> execAndGetInt(const std::string &sql) override;
     [[nodiscard]] int getMigrationVersion() const override;
     bool setMigrationVersion(int version) override;
     bool defrag() override;
@@ -124,19 +104,19 @@ bool MyDatabase::setMigrationVersion(int version)
 
 ---
 
-### 3. Use `DbProtectService` to guard queries
+### 2. Use `DbProtectService` to guard queries
 
-`DbProtectService<DbExecutor>` is a template that wraps a query lambda with exception catching,
+`DbProtectService<DbManager>` is a template that wraps a query lambda with exception catching,
 error logging, and optional automatic transaction management. The default template argument is
-`AbsDbExecutor`, which accepts any executor. Specialize it with a concrete type to receive a
-typed reference inside the lambda - useful when the concrete executor exposes additional methods
+`AbsDbManager`, which accepts any manager. Specialize it with a concrete type to receive a
+typed reference inside the lambda — useful when the concrete manager exposes additional methods
 (e.g. a raw database handle).
 
-- `protectQuery(name, lambda)` - lambda receives `DbExecutor &`; returns `bool`.
-- `protectQueryWithResult<T>(name, lambda)` - lambda receives `DbExecutor &`; returns
+- `protectQuery(name, lambda)` — lambda receives `DbManager &`; returns `bool`.
+- `protectQueryWithResult<T>(name, lambda)` — lambda receives `DbManager &`; returns
   `std::optional<T>` (`std::nullopt` on any exception or when the lambda returns `std::nullopt`).
-- `accessDb()` - returns `DbExecutor &` (mutable access to the wrapped executor).
-- `getDb()` - returns `const DbExecutor &`.
+- `accessDb()` — returns `DbManager &` (mutable access to the wrapped manager).
+- `getDb()` — returns `const DbManager &`.
 
 Both query overloads wrap the call in a transaction by default (pass `false` as third argument to
 opt out).
@@ -144,34 +124,34 @@ opt out).
 ```cpp
 #include "act_db_core/services/db_protect_service.hpp"
 
-// Default instantiation - DbExecutor = AbsDbExecutor
+// Default instantiation — DbManager = AbsDbManager
 act::db::core::DbProtectService<> protect(m_db, *m_logger);
 
-// Typed instantiation - lambdas receive MyConcreteExecutor & directly
-act::db::core::DbProtectService<MyConcreteExecutor> typedProtect(m_concreteDb, *m_logger);
+// Typed instantiation — lambdas receive MyConcreteManager & directly
+act::db::core::DbProtectService<MyConcreteManager> typedProtect(m_concreteDb, *m_logger);
 
 // Simple write query (returns bool)
 bool ok = protect.protectQuery(
-    [&row](act::db::core::AbsDbExecutor &db) {
+    [&row](act::db::core::AbsDbManager &db) {
         return db.exec("INSERT INTO my_table VALUES (1, 'hello')");
     },
     "insert-my-row");
 
 // Read query returning a value (returns std::optional<T>)
 std::optional<int> version = protect.protectQueryWithResult<int>(
-    [](act::db::core::AbsDbExecutor &db) -> std::optional<int> {
+    [](act::db::core::AbsDbManager &db) -> std::optional<int> {
         return db.execAndGetInt("PRAGMA user_version");
     },
     "get-version",
     false); // no transaction needed for a read
 
-// Direct access to the underlying executor
-MyConcreteExecutor &executor = typedProtect.accessDb();
+// Direct access to the underlying manager
+MyConcreteManager &manager = typedProtect.accessDb();
 ```
 
 ---
 
-### 4. Use `DbTransaction` for manual transaction control
+### 3. Use `DbTransaction` for manual transaction control
 
 `DbTransaction` is a RAII helper. If `commit()` is never called before the object goes out of
 scope, the destructor calls `rollback()` automatically.
@@ -195,7 +175,7 @@ return tx.commit();
 
 ---
 
-### 5. Use `db_log_helper.hpp` macros for early-return guards
+### 4. Use `db_log_helper.hpp` macros for early-return guards
 
 These macros provide concise checks at the top of query methods. They log an error and return
 immediately if the database is not open or if a statement throws.
@@ -229,7 +209,7 @@ bool MyService::insertRow(const MyRow &row)
 
 ---
 
-### 6. Wire migration scripts
+### 5. Wire migration scripts
 
 Migration scripts must be named `<slug>-db-v<N>-to-v<N+1>.sql`
 (e.g. `my-db-db-v0-to-v1.sql`, `my-db-db-v1-to-v2.sql`) and placed in the directory passed as

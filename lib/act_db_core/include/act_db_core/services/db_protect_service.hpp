@@ -11,7 +11,7 @@
 #include <string>
 
 #include "act_db_core/db_transaction.hpp"
-#include "act_db_core/services/abs_db_executor.hpp"
+#include "act_db_core/services/abs_db_manager.hpp"
 #include "act_foundation/abs_manager.hpp"
 #include "act_logger/models/abs_logger.hpp"
 
@@ -20,17 +20,17 @@ namespace act::db::core
 /**
  * @brief Service to help protecting database queries with error handling and optional transactions
  */
-template <typename DbExecutor = AbsDbExecutor>
+template <typename DbManager = AbsDbManager>
 class DbProtectService : public foundation::AbsManager
 {
   public:
     /**
      * @brief Construct a new Db Protect Service object
      *
-     * @param db Shared database provider to use for executing queries
+     * @param db Shared database manager to use for executing queries
      * @param parentLogger The parent logger to use for creating the service logger
      */
-    explicit DbProtectService(DbExecutor &db, act::logger::AbsLogger &parentLogger)
+    explicit DbProtectService(DbManager &db, act::logger::AbsLogger &parentLogger)
         : AbsManager(),
           m_db(db),
           m_logger(parentLogger.createAbsSubLogger(SUB_LOGGER_CATEGORY,
@@ -62,7 +62,7 @@ class DbProtectService : public foundation::AbsManager
      * @param useTransaction Whether to execute the query within a transaction (default: true)
      * @return True if the query executed successfully, false otherwise
      */
-    bool protectQuery(const std::function<bool(DbExecutor &db)> &queryFunc,
+    bool protectQuery(const std::function<bool(DbManager &db)> &queryFunc,
                       const std::string &queryName = {},
                       bool useTransaction = true);
 
@@ -81,15 +81,15 @@ class DbProtectService : public foundation::AbsManager
      */
     template <typename T>
     std::optional<T> protectQueryWithResult(
-        const std::function<std::optional<T>(DbExecutor &db)> &queryFunc,
+        const std::function<std::optional<T>(DbManager &db)> &queryFunc,
         const std::string &queryName = {},
         bool useTransaction = true);
 
     /**
-     * @brief Access the db executor
-     * @return The database executor
+     * @brief Access the db manager
+     * @return The database manager
      */
-    DbExecutor &accessDb() const
+    DbManager &accessDb() const
     {
         return m_db;
     }
@@ -98,7 +98,7 @@ class DbProtectService : public foundation::AbsManager
      * @brief Get the db executor
      * @return The database executor
      */
-    const DbExecutor &getDb() const
+    const DbManager &getDb() const
     {
         return m_db;
     }
@@ -118,7 +118,7 @@ class DbProtectService : public foundation::AbsManager
      */
     template <typename T>
     std::optional<T> protectQueryWithTransactionNotSafe(
-        const std::function<std::optional<T>(DbExecutor &db)> &queryFunc,
+        const std::function<std::optional<T>(DbManager &db)> &queryFunc,
         const std::string &queryName);
 
   private:
@@ -127,7 +127,7 @@ class DbProtectService : public foundation::AbsManager
 
   private:
     /** @brief Shared database handle */
-    DbExecutor &m_db;
+    DbManager &m_db;
 
     /** @brief Logger helper */
     std::shared_ptr<act::logger::AbsLogger> m_logger;
