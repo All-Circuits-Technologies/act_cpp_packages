@@ -29,7 +29,7 @@
     {                                                                                              \
         cmd;                                                                                       \
     }                                                                                              \
-    catch (const SQLite::Exception &e)                                                             \
+    catch (const std::exception &e)                                                                \
     {                                                                                              \
         logger->errorStream() << "Error occurred: " << e.what() << " upon " #name;                 \
         return xxx;                                                                                \

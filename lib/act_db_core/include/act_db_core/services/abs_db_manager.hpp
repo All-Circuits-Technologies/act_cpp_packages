@@ -15,9 +15,8 @@ class LoggerHelper;
 class LoggerManager;
 } // namespace act::logger
 
-namespace act::sqlite
+namespace act::db::core
 {
-
 /**
  * @brief This abstract manager contains db-engine-agnostic shared code
  */
@@ -146,4 +145,4 @@ class AbsDbManager : public act::foundation::AbsManager
     std::shared_ptr<act::logger::LoggerHelper> m_logger;
 };
 
-} // namespace act::sqlite
+} // namespace act::db::core

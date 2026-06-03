@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "abs_db_manager.hpp"
+#include "act_db_core/services/abs_db_manager.hpp"
 
 #include <SQLiteCpp/Database.h>
 #include <filesystem>
@@ -16,13 +16,13 @@ namespace act::logger
 class LoggerManager;
 } // namespace act::logger
 
-namespace act::sqlite
+namespace act::db::sqlite
 {
 
 /**
  * @brief This manager handles SQLite3 databases
  */
-class ASqLiteDbManager : public AbsDbManager
+class ASqLiteDbManager : public act::db::core::AbsDbManager
 {
   public:
     /** @brief Create the manager
@@ -106,4 +106,4 @@ class ASqLiteDbManager : public AbsDbManager
     std::shared_ptr<SQLite::Database> m_db;
 };
 
-} // namespace act::sqlite
+} // namespace act::db::sqlite

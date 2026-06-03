@@ -2,25 +2,24 @@
 //
 // SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 
-#include "act_sqlite/sqlite_db_manager.hpp"
+#include "act_db_sqlite/sqlite_db_manager.hpp"
 
+#include "act_db_core/db_log_helper.hpp"
 // NOLINTNEXTLINE: this include is actually needed
 #include "act_logger/helpers/logger_helper.hpp"
-#include "act_sqlite/abs_db_manager.hpp"
-#include "act_sqlite/db_log_helper.hpp"
 
 #include <SQLiteCpp/SQLiteCpp.h>
 #include <regex>
 #include <sqlite3.h>
 
-namespace act::sqlite
+namespace act::db::sqlite
 {
 
 ASqLiteDbManager::ASqLiteDbManager(std::filesystem::path dbFilePath,
                                    const std::string &dbSlug,
                                    const std::optional<std::filesystem::path> &migrationDataDir,
                                    const act::logger::LoggerManager &loggerManager)
-    : AbsDbManager(dbSlug, migrationDataDir, loggerManager),
+    : act::db::core::AbsDbManager(dbSlug, migrationDataDir, loggerManager),
       m_dbFilePath(std::move(dbFilePath))
 {
 }
@@ -149,4 +148,4 @@ bool ASqLiteDbManager::openImpl()
     return true;
 }
 
-} // namespace act::sqlite
+} // namespace act::db::sqlite

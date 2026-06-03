@@ -2,8 +2,9 @@
 //
 // SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
 
-#include "act_sqlite/abs_db_manager.hpp"
+#include "act_db_core/services/abs_db_manager.hpp"
 
+#include "act_db_core/services/db_protect_service.hpp"
 #include "act_logger/services/logger_manager.hpp"
 #include "act_system/system_critical_section.hpp"
 #include "act_system/system_critical_section_guard.hpp"
@@ -15,13 +16,13 @@
 #include <unistd.h> // sync
 #endif
 
-namespace act::sqlite
+namespace act::db::core
 {
 
 AbsDbManager::AbsDbManager(const std::string &dbSlug,
                            const std::optional<std::filesystem::path> &migrationDataDir,
                            const act::logger::LoggerManager &loggerManager)
-    : AbsManager(),
+    : act::foundation::AbsManager(),
       m_dbSlug(dbSlug + "-db"),
       m_migrationDataDir(migrationDataDir),
       m_logger{loggerManager.createSubLogger(dbSlug + "-db")}
@@ -33,6 +34,7 @@ bool AbsDbManager::applyMigrationUpdates()
     act::system::SystemCriticalSection criticalSection(getDbSlug() + "-database-migration",
                                                        *m_logger);
     act::system::SystemCriticalSectionGuard guard(criticalSection);
+    DbProtectService protectService(*this, *m_logger);
 
     if (!m_migrationDataDir.has_value())
     {
@@ -53,7 +55,12 @@ bool AbsDbManager::applyMigrationUpdates()
     {
         m_logger->debugStream() << "Applying migration script " << versionBumpScript.filename();
 
-        allSucceed &= runScript(versionBumpScript);
+        allSucceed &= protectService.protectQuery(
+            [&versionBumpScript, this](AbsDbManager &db) {
+                return db.runScript(versionBumpScript);
+            },
+            "Migration script");
+
         if (!allSucceed)
         {
             m_logger->errorStream()
@@ -137,4 +144,4 @@ bool AbsDbManager::open(bool autoMigrate)
     return allSucceed;
 }
 
-} // namespace act::sqlite
+} // namespace act::db::core

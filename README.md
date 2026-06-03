@@ -31,17 +31,18 @@ general-purpose applications developed by All-Circuits Technologies.
 
 ## Libraries
 
-| Library                                          | Description                                                                               |
-| ------------------------------------------------ | ----------------------------------------------------------------------------------------- |
-| [`act_files`](lib/act_files/README.md)           | File system operations and file management utilities.                                     |
-| [`act_foundation`](lib/act_foundation/README.md) | Foundational base classes, constants, and design patterns (no dependencies).              |
-| [`act_linux_io`](lib/act_linux_io/README.md)     | Linux-specific I/O for GPIO control and LED management.                                   |
-| [`act_logger`](lib/act_logger/README.md)         | Logging infrastructure with flexible output backends.                                     |
-| [`act_sqlite`](lib/act_sqlite/README.md)         | SQLite database management with abstraction layer.                                        |
-| [`act_system`](lib/act_system/README.md)         | System-level utilities for multi-process synchronization, reboots, and command execution. |
-| [`act_text`](lib/act_text/README.md)             | Text and string processing utilities.                                                     |
-| [`act_threading`](lib/act_threading/README.md)   | Threading utilities and synchronization primitives.                                       |
-| [`act_time`](lib/act_time/README.md)             | Date, time, and timing utilities with timers and delays.                                  |
+| Library                                          | Description                                                                                  |
+| ------------------------------------------------ | -------------------------------------------------------------------------------------------- |
+| [`act_db_core`](lib/act_db_core/README.md)       | Database engine-agnostic core with connection management, query execution, and transactions. |
+| [`act_db_sqlite`](lib/act_db_sqlite/README.md)   | SQLite database management with abstraction layer.                                           |
+| [`act_files`](lib/act_files/README.md)           | File system operations and file management utilities.                                        |
+| [`act_foundation`](lib/act_foundation/README.md) | Foundational base classes, constants, and design patterns (no dependencies).                 |
+| [`act_linux_io`](lib/act_linux_io/README.md)     | Linux-specific I/O for GPIO control and LED management.                                      |
+| [`act_logger`](lib/act_logger/README.md)         | Logging infrastructure with flexible output backends.                                        |
+| [`act_system`](lib/act_system/README.md)         | System-level utilities for multi-process synchronization, reboots, and command execution.    |
+| [`act_text`](lib/act_text/README.md)             | Text and string processing utilities.                                                        |
+| [`act_threading`](lib/act_threading/README.md)   | Threading utilities and synchronization primitives.                                          |
+| [`act_time`](lib/act_time/README.md)             | Date, time, and timing utilities with timers and delays.                                     |
 
 ## Requirements
 
@@ -57,7 +58,7 @@ Each library has its own dependencies. Refer to individual library READMEs for s
 Common external dependencies:
 
 - libgpiod v2.x (for `act_linux_io`)
-- SQLiteCpp (for `act_sqlite`)
+- SQLiteCpp (for `act_db_sqlite`)
 
 ## Building
 
