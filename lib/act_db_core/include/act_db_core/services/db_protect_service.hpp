@@ -15,7 +15,7 @@
 #include "act_foundation/abs_manager.hpp"
 #include "act_logger/models/abs_logger.hpp"
 
-namespace act::db_core
+namespace act::db::core
 {
 /**
  * @brief Service to help protecting database queries with error handling and optional transactions
@@ -221,4 +221,4 @@ inline std::optional<T> DbProtectService<DbExecutor>::protectQueryWithTransactio
 
     return result;
 }
-} // namespace act::db_core
+} // namespace act::db::core

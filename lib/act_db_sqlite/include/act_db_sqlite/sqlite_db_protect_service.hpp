@@ -5,11 +5,11 @@
 #pragma once
 
 #include "act_db_core/services/db_protect_service.hpp"
-#include "act_sqlite/sqlite_db_manager.hpp"
+#include "act_db_sqlite/sqlite_db_manager.hpp"
 
-namespace act::sqlite
+namespace act::db::sqlite
 {
-class SQLiteDbProtectService : public db_core::DbProtectService<ASqLiteDbManager>
+class SQLiteDbProtectService : public act::db::core::DbProtectService<ASqLiteDbManager>
 {
   public:
     explicit SQLiteDbProtectService(ASqLiteDbManager &db, act::logger::AbsLogger &parentLogger)
@@ -17,4 +17,4 @@ class SQLiteDbProtectService : public db_core::DbProtectService<ASqLiteDbManager
     {
     }
 };
-} // namespace act::sqlite
+} // namespace act::db::sqlite

@@ -8,7 +8,7 @@
 #include <optional>
 #include <string>
 
-namespace act::db_core
+namespace act::db::core
 {
 /**
  * @brief Abstract database executor interface, to be implemented by database engine specific
@@ -33,23 +33,25 @@ class AbsDbExecutor
      */
     [[nodiscard]] virtual bool isOpened() const = 0;
 
-    /** @brief Execute a simple statement with no request result
+    /**
+     * @brief Execute a simple statement with no request result
      * @param sql SQL query to execute, or PRAGMA query, etc
      * @return True if executed successfully, false otherwise
      */
     virtual bool exec(const std::string &sql) = 0;
 
-    /** @brief Script execution helper
-     * @note Default implementation reads entire file and call @ref exec
+    /**
+     * @brief Script execution helper
      * @return True upon success, false otherwise
      */
     virtual bool runScript(const std::filesystem::path &scriptPath) = 0;
 
-    /** @brief Helper for queries returning a simple integer
+    /**
+     * @brief Helper for queries returning a simple integer
      * @param sql Query to execute
      * @return The integer result (first column of first result row),
      *         or empty optional if error
      */
     virtual std::optional<int> execAndGetInt(const std::string &sql) = 0;
 };
-} // namespace act::db_core
+} // namespace act::db::core

@@ -13,15 +13,15 @@ namespace act::logger
 class AbsLogger;
 }
 
-namespace act::db_core
+namespace act::db::core
 {
 class AbsDbExecutor;
 
 /**
  * @brief Helper class to handle database transactions
  * @note This class will automatically rollback the transaction if it is not committed when
- * destructed, so it is recommended to use it with a local scope to ensure proper transaction
- * handling.
+ *       destructed, so it is recommended to use it with a local scope to ensure proper transaction
+ *       handling.
  */
 class DbTransaction
 {
@@ -52,6 +52,7 @@ class DbTransaction
   public:
     /**
      * @brief Begin the transaction
+     * @note If the transaction has been committed or rolled back, it can be started again.
      * @param beginExtension This is the extension to the BEGIN statement, which can be used to
      * specify the transaction type.
      * @return True if the transaction was successfully started, false otherwise
@@ -74,7 +75,6 @@ class DbTransaction
     /**
      * @brief Rollback the transaction if it has not been committed yet, to ensure proper
      * transaction handling
-     *
      * @return True if the transaction was successfully rolled back, committed or was not started,
      * false if the rollback failed
      */
@@ -104,4 +104,4 @@ class DbTransaction
     /** @brief Flag to indicate if the transaction has been committed or rolled back */
     State m_state;
 };
-} // namespace act::db_core
+} // namespace act::db::core

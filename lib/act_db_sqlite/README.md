@@ -2,7 +2,7 @@
 
 <!-- SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1 -->
 
-# act_sqlite
+# act_db_sqlite
 
 SQLite database management library providing a database abstraction layer, connection management,
 schema migration, and logging integration.
@@ -23,11 +23,11 @@ sudo apt install libsqlitecpp-dev
 
 ## Components
 
-| Class                    | Header                                     | Role                                                                                 |
-| ------------------------ | ------------------------------------------ | ------------------------------------------------------------------------------------ |
-| `ASqLiteDbManager`       | `act_sqlite/sqlite_db_manager.hpp`         | SQLite-specific manager (opens file, provides handle)                                |
-| `SQLiteDbProtectService` | `act_sqlite/sqlite_db_protect_service.hpp` | `DbProtectService<ASqLiteDbManager>` — lambdas receive `ASqLiteDbManager &` directly |
-| `SQLiteDbConstants`      | `act_sqlite/sqlite_db_constants.hpp`       | Boolean integer value helpers                                                        |
+| Class                    | Header                                        | Role                                                                                 |
+| ------------------------ | --------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `ASqLiteDbManager`       | `act_db_sqlite/sqlite_db_manager.hpp`         | SQLite-specific manager (opens file, provides handle)                                |
+| `SQLiteDbProtectService` | `act_db_sqlite/sqlite_db_protect_service.hpp` | `DbProtectService<ASqLiteDbManager>` - lambdas receive `ASqLiteDbManager &` directly |
+| `SQLiteDbConstants`      | `act_db_sqlite/sqlite_db_constants.hpp`       | Boolean integer value helpers                                                        |
 
 Engine-agnostic base classes (`AbsDbManager`, `AbsDbExecutor`, `DbProtectService<T>`,
 `DbTransaction`) are provided by `act_db_core`. See its README for details.
@@ -47,11 +47,11 @@ and instantiate per-table services using the shared handle exposed by `getHandle
 
 ```cpp
 // my_database.hpp
-#include "act_sqlite/sqlite_db_manager.hpp"
+#include "act_db_sqlite/sqlite_db_manager.hpp"
 
 class MyTableService; // forward declaration
 
-class MyDatabase : public act::sqlite::ASqLiteDbManager
+class MyDatabase : public act::db::sqlite::ASqLiteDbManager
 {
   public:
     explicit MyDatabase(std::filesystem::path dbFilePath,
@@ -137,17 +137,17 @@ namespace MyDbConstants
 Each table gets its own service class. Pass an `ASqLiteDbManager &` reference from the database
 manager (i.e. `*this`) and use `SQLiteDbProtectService` to wrap queries. Because
 `SQLiteDbProtectService` is `DbProtectService<ASqLiteDbManager>`, lambdas receive an
-`ASqLiteDbManager &` directly — use `db.getHandle()` for any SQLite-specific query.
+`ASqLiteDbManager &` directly - use `db.getHandle()` for any SQLite-specific query.
 
-- `protectQuery(name, lambda)` — lambda receives `ASqLiteDbManager &`; returns `bool`.
-- `protectQueryWithResult<T>(name, lambda)` — lambda receives `ASqLiteDbManager &`; returns
+- `protectQuery(name, lambda)` - lambda receives `ASqLiteDbManager &`; returns `bool`.
+- `protectQueryWithResult<T>(name, lambda)` - lambda receives `ASqLiteDbManager &`; returns
   `std::optional<T>` (`std::nullopt` on any exception).
 
 Both helpers wrap the query in a transaction by default.
 
 ```cpp
 // my_table_service.hpp
-#include "act_sqlite/sqlite_db_protect_service.hpp"
+#include "act_db_sqlite/sqlite_db_protect_service.hpp"
 #include <optional>
 #include <vector>
 
@@ -156,7 +156,7 @@ struct MyRow { int id; std::string name; };
 class MyTableService
 {
   public:
-    explicit MyTableService(act::sqlite::ASqLiteDbManager &db,
+    explicit MyTableService(act::db::sqlite::ASqLiteDbManager &db,
                             act::logger::AbsLogger &parentLogger);
     ~MyTableService() = default;
 
@@ -164,7 +164,7 @@ class MyTableService
     bool insert(const MyRow &row);
 
   private:
-    act::sqlite::SQLiteDbProtectService m_protect;
+    act::db::sqlite::SQLiteDbProtectService m_protect;
 };
 ```
 
@@ -179,7 +179,7 @@ namespace
 {
     namespace Col = MyDbConstants::Table::MyTable::Column;
 
-    // Build the query once at startup — no raw strings in the query logic below.
+    // Build the query once at startup - no raw strings in the query logic below.
     // NOLINTNEXTLINE(cert-err58-cpp)
     const std::string SELECT_ALL =
         std::string("SELECT ") + Col::ID + ", " + Col::NAME +
@@ -190,7 +190,7 @@ namespace
         " (" + Col::ID + ", " + Col::NAME + ") VALUES (?, ?)";
 } // namespace
 
-MyTableService::MyTableService(act::sqlite::ASqLiteDbManager &db,
+MyTableService::MyTableService(act::db::sqlite::ASqLiteDbManager &db,
                                act::logger::AbsLogger &parentLogger)
     : m_protect(db, parentLogger)
 {
@@ -200,7 +200,7 @@ std::optional<std::vector<MyRow>> MyTableService::getAll() const
 {
     return m_protect.protectQueryWithResult<std::vector<MyRow>>(
         "getAll",
-        [](act::sqlite::ASqLiteDbManager &db) -> std::optional<std::vector<MyRow>> {
+        [](act::db::sqlite::ASqLiteDbManager &db) -> std::optional<std::vector<MyRow>> {
             SQLite::Statement query(*db.getHandle(), SELECT_ALL);
             std::vector<MyRow> rows;
             while (query.executeStep())
@@ -215,7 +215,7 @@ bool MyTableService::insert(const MyRow &row)
 {
     return m_protect.protectQuery(
         "insert",
-        [&row](act::sqlite::ASqLiteDbManager &db) {
+        [&row](act::db::sqlite::ASqLiteDbManager &db) {
             SQLite::Statement stmt(*db.getHandle(), INSERT_ROW);
             stmt.bind(1, row.id);
             stmt.bind(2, row.name);
@@ -236,5 +236,5 @@ Migration scripts must be named `<slug>-db-v<N>-to-v<N+1>.sql`
 ## CMake integration
 
 ```cmake
-target_link_libraries(my_target PRIVATE act_sqlite)
+target_link_libraries(my_target PRIVATE act_db_sqlite)
 ```

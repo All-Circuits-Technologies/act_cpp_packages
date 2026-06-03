@@ -10,7 +10,7 @@ Engine-agnostic database management library providing a database abstraction lay
 management, schema migration, transaction handling, and logging integration.
 
 This library is not used directly by application code. It provides the base classes and
-interfaces that concrete database backends (e.g. `act_sqlite`) build upon.
+interfaces that concrete database backends (e.g. `act_db_sqlite`) build upon.
 
 ## Dependencies
 
@@ -41,7 +41,7 @@ actual query execution. Better to implement `AbsDbManager` (next step) which inh
 // my_engine_executor.hpp
 #include "act_db_core/services/abs_db_executor.hpp"
 
-class MyEngineExecutor : public act::db_core::AbsDbExecutor
+class MyEngineExecutor : public act::db::core::AbsDbExecutor
 {
   public:
     [[nodiscard]] bool isOpened() const override;
@@ -63,7 +63,7 @@ virtual methods that are engine-specific.
 // my_database.hpp
 #include "act_db_core/services/abs_db_manager.hpp"
 
-class MyDatabase : public act::db_core::AbsDbManager
+class MyDatabase : public act::db::core::AbsDbManager
 {
   public:
     explicit MyDatabase(std::filesystem::path migrationDir,
@@ -72,7 +72,7 @@ class MyDatabase : public act::db_core::AbsDbManager
 
     bool init() override;
 
-    // Pure virtuals from AbsDbManager — engine-specific implementations
+    // Pure virtuals from AbsDbManager - engine-specific implementations
     [[nodiscard]] int getMigrationVersion() const override;
     bool setMigrationVersion(int version) override;
     bool defrag() override;
@@ -129,14 +129,14 @@ bool MyDatabase::setMigrationVersion(int version)
 `DbProtectService<DbExecutor>` is a template that wraps a query lambda with exception catching,
 error logging, and optional automatic transaction management. The default template argument is
 `AbsDbExecutor`, which accepts any executor. Specialize it with a concrete type to receive a
-typed reference inside the lambda — useful when the concrete executor exposes additional methods
+typed reference inside the lambda - useful when the concrete executor exposes additional methods
 (e.g. a raw database handle).
 
-- `protectQuery(name, lambda)` — lambda receives `DbExecutor &`; returns `bool`.
-- `protectQueryWithResult<T>(name, lambda)` — lambda receives `DbExecutor &`; returns
+- `protectQuery(name, lambda)` - lambda receives `DbExecutor &`; returns `bool`.
+- `protectQueryWithResult<T>(name, lambda)` - lambda receives `DbExecutor &`; returns
   `std::optional<T>` (`std::nullopt` on any exception or when the lambda returns `std::nullopt`).
-- `accessDb()` — returns `DbExecutor &` (mutable access to the wrapped executor).
-- `getDb()` — returns `const DbExecutor &`.
+- `accessDb()` - returns `DbExecutor &` (mutable access to the wrapped executor).
+- `getDb()` - returns `const DbExecutor &`.
 
 Both query overloads wrap the call in a transaction by default (pass `false` as third argument to
 opt out).
@@ -144,22 +144,22 @@ opt out).
 ```cpp
 #include "act_db_core/services/db_protect_service.hpp"
 
-// Default instantiation — DbExecutor = AbsDbExecutor
-act::db_core::DbProtectService<> protect(m_db, *m_logger);
+// Default instantiation - DbExecutor = AbsDbExecutor
+act::db::core::DbProtectService<> protect(m_db, *m_logger);
 
-// Typed instantiation — lambdas receive MyConcreteExecutor & directly
-act::db_core::DbProtectService<MyConcreteExecutor> typedProtect(m_concreteDb, *m_logger);
+// Typed instantiation - lambdas receive MyConcreteExecutor & directly
+act::db::core::DbProtectService<MyConcreteExecutor> typedProtect(m_concreteDb, *m_logger);
 
 // Simple write query (returns bool)
 bool ok = protect.protectQuery(
-    [&row](act::db_core::AbsDbExecutor &db) {
+    [&row](act::db::core::AbsDbExecutor &db) {
         return db.exec("INSERT INTO my_table VALUES (1, 'hello')");
     },
     "insert-my-row");
 
 // Read query returning a value (returns std::optional<T>)
 std::optional<int> version = protect.protectQueryWithResult<int>(
-    [](act::db_core::AbsDbExecutor &db) -> std::optional<int> {
+    [](act::db::core::AbsDbExecutor &db) -> std::optional<int> {
         return db.execAndGetInt("PRAGMA user_version");
     },
     "get-version",
@@ -179,7 +179,7 @@ scope, the destructor calls `rollback()` automatically.
 ```cpp
 #include "act_db_core/db_transaction.hpp"
 
-act::db_core::DbTransaction tx(m_db, *m_logger);
+act::db::core::DbTransaction tx(m_db, *m_logger);
 
 if (!tx.begin())
     return false;

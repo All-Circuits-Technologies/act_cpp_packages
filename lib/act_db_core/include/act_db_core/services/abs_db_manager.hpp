@@ -16,7 +16,7 @@ class LoggerHelper;
 class LoggerManager;
 } // namespace act::logger
 
-namespace act::db_core
+namespace act::db::core
 {
 /**
  * @brief This abstract manager contains db-engine-agnostic shared code
@@ -119,7 +119,6 @@ class AbsDbManager : public act::foundation::AbsManager, public AbsDbExecutor
      */
     [[nodiscard]] std::filesystem::path computeMigrationScriptPath(int currentVersion) const;
 
-  public:
   private:
     /** @brief Database slug with added "-db" suffix */
     const std::string m_dbSlug;
@@ -131,4 +130,4 @@ class AbsDbManager : public act::foundation::AbsManager, public AbsDbExecutor
     std::shared_ptr<act::logger::LoggerHelper> m_logger;
 };
 
-} // namespace act::db_core
+} // namespace act::db::core

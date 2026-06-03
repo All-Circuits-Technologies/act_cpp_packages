@@ -8,7 +8,7 @@
 #include "act_db_core/services/abs_db_executor.hpp"
 #include "act_logger/models/abs_logger.hpp"
 
-namespace act::db_core
+namespace act::db::core
 {
 DbTransaction::DbTransaction(AbsDbExecutor &db, const act::logger::AbsLogger &logger)
     : m_db(db),
@@ -24,7 +24,7 @@ DbTransaction::~DbTransaction()
 
 bool DbTransaction::begin(std::string_view beginExtension)
 {
-    if (m_state != State::NOT_STARTED)
+    if (m_state == State::STARTED)
     {
         m_logger.warningStream() << "Transaction already started, cannot begin again: "
                                  << beginExtension;
@@ -105,8 +105,7 @@ bool DbTransaction::rollback()
 
 bool DbTransaction::rollbackIfNotCommitted()
 {
-    if (m_state == State::NOT_STARTED || m_state == State::ROLLED_BACK ||
-        m_state == State::COMMITTED)
+    if (m_state != State::STARTED)
     {
         // Nothing to do, transaction is not started or already committed/rolled back
         return true;
@@ -115,4 +114,4 @@ bool DbTransaction::rollbackIfNotCommitted()
     return rollback();
 }
 
-} // namespace act::db_core
+} // namespace act::db::core

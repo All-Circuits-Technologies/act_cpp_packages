@@ -7,7 +7,7 @@
 #include <string>
 
 /// @brief Set of constants related to SQL transaction statements
-namespace act::db_core::DbCoreConstants
+namespace act::db::core::DbCoreConstants
 {
 /**
  * @brief The SQL TRANSACTION statement name
@@ -28,4 +28,4 @@ static inline const std::string COMMIT_NAME = "COMMIT";
  * @brief The SQL ROLLBACK statement name
  */
 static inline const std::string ROLLBACK_NAME = "ROLLBACK";
-} // namespace act::db_core::DbCoreConstants
+} // namespace act::db::core::DbCoreConstants

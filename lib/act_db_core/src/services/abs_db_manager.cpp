@@ -16,7 +16,7 @@
 #include <unistd.h> // sync
 #endif
 
-namespace act::db_core
+namespace act::db::core
 {
 
 AbsDbManager::AbsDbManager(const std::string &dbSlug,
@@ -145,4 +145,4 @@ bool AbsDbManager::open(bool autoMigrate)
     return allSucceed;
 }
 
-} // namespace act::db_core
+} // namespace act::db::core
