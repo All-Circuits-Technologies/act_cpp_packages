@@ -44,6 +44,16 @@ class AbsExternalLogger
     }
 
     /**
+     * @brief Set (or override) the minimum log level for a specific category.
+     * @param category The category name.
+     * @param minLevel The minimum log level for this category.
+     */
+    void setCategoryMinLevel(const std::string &category, LogsLevel::Enum minLevel)
+    {
+        m_minLevelByCategory[category] = minLevel;
+    }
+
+    /**
      * @brief Test if a log message with the given level and categories should be logged
      * @param level The logs level
      * @param categories The categories associated to the log message
