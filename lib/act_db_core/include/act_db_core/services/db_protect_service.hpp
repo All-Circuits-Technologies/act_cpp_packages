@@ -12,7 +12,7 @@
 
 #include "act_db_core/db_transaction.hpp"
 #include "act_db_core/services/abs_db_manager.hpp"
-#include "act_foundation/abs_manager.hpp"
+#include "act_foundation/services/abs_manager.hpp"
 #include "act_logger/models/abs_logger.hpp"
 
 namespace act::db::core

@@ -14,7 +14,7 @@ the foundation layer.
 
 ## Contents
 
-- **Base Classes:** NotCopiableNotMovable, AbsManager
+- **Base Classes:** NotCopiableNotMovable, AbsManager, AbsService, AbsWithLifeCycle
 - **Constants:** Software-wide constants and macros (def_soft.hpp)
 - **Patterns:** Singleton pattern, Finally (RAII guard)
 
@@ -25,8 +25,10 @@ None - this is a foundational module.
 ## Usage
 
 ```cpp
-#include "act_foundation/abs_manager.hpp"
 #include "act_foundation/constants/def_soft.hpp"
+#include "act_foundation/services/abs_manager.hpp"
+#include "act_foundation/services/abs_service.hpp"
+#include "act_foundation/services/abs_with_life_cycle.hpp"
 #include "act_foundation/not_copiable_not_movable.hpp"
 ```
 
