@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "act_foundation/abs_manager.hpp"
+#include "act_foundation/services/abs_manager.hpp"
 #include "act_threading/types/reusable_thread_result.hpp"
 
 #include <cstdio>

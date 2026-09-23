@@ -7,21 +7,26 @@
 # -----------------------------------------------------------------------------
 # Foundational types and design patterns used across all modules.
 # Provides base classes, constants, and common patterns (singleton, RAII).
+#
 # This module has no internal dependencies.
 # -----------------------------------------------------------------------------
 
-# Header-only library
-add_library(act_foundation INTERFACE)
+add_library(act_foundation STATIC
+    # Services
+    src/services/abs_manager.cpp
+    src/services/abs_service.cpp
+    src/services/abs_with_life_cycle.cpp
+)
 
 # Public headers are exposed via include/<module_name>/
 target_include_directories(act_foundation
-    INTERFACE
+    PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )
 
 # C++20 required
-target_compile_features(act_foundation INTERFACE cxx_std_20)
+target_compile_features(act_foundation PUBLIC cxx_std_20)
 
 # Install targets
 install(TARGETS act_foundation DESTINATION lib)

@@ -1,0 +1,5 @@
+// SPDX-FileCopyrightText: 2025 Anthony Loiseau <anthony.loiseau@allcircuits.com>
+//
+// SPDX-License-Identifier: LicenseRef-ALLCircuits-ACT-1.1
+
+#include "act_foundation/services/abs_manager.hpp"
